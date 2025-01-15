@@ -56,8 +56,31 @@ const Player: React.FC<PlayerProps> = ({
           const deltaX = (e.clientX - dragStartPos.current.x) / courtRect.width * 100;
           const deltaY = (e.clientY - dragStartPos.current.y) / courtRect.height * 100;
           
-          const newX = Math.max(0, Math.min(100, initialPlayerPos.current.x + deltaX));
-          const newY = Math.max(0, Math.min(100, initialPlayerPos.current.y + deltaY));
+          let newX = initialPlayerPos.current.x + deltaX;
+          let newY = initialPlayerPos.current.y + deltaY;
+
+          // Special handling for goalies
+          if (isGoalie) {
+            const goalWidth = 23; // Width of goal in percentage
+            const goalHeight = 6; // Height of goal in percentage
+            const halfGoalWidth = goalWidth / 2;
+            
+            if (team === 1) {
+              // Top goalie
+              if (newY < -goalHeight) newY = -goalHeight;
+              if (newY > goalHeight) newY = goalHeight;
+              newX = Math.max(50 - halfGoalWidth, Math.min(50 + halfGoalWidth, newX));
+            } else {
+              // Bottom goalie
+              if (newY < (100 - goalHeight)) newY = 100 - goalHeight;
+              if (newY > (100 + goalHeight)) newY = 100 + goalHeight;
+              newX = Math.max(50 - halfGoalWidth, Math.min(50 + halfGoalWidth, newX));
+            }
+          } else {
+            // Regular players stay within court bounds
+            newX = Math.max(0, Math.min(100, newX));
+            newY = Math.max(0, Math.min(100, newY));
+          }
           
           setPosition({ x: newX, y: newY });
         });
@@ -90,6 +113,7 @@ const Player: React.FC<PlayerProps> = ({
         top: `${position.y}%`,
         cursor: isDragging ? 'grabbing' : 'grab',
         transform: `translate(-50%, -50%) ${isDragging ? 'scale(1.05)' : 'scale(1)'}`,
+        zIndex: isDragging ? 100 : isGoalie ? 50 : 1,
         ...style
       }}
       onMouseDown={handleMouseDown}

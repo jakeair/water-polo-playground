@@ -234,8 +234,12 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
         const deltaX = (e.clientX - ballStartPos.current.x) / courtRect.width * 100;
         const deltaY = (e.clientY - ballStartPos.current.y) / courtRect.height * 100;
         
-        const newX = Math.max(0, Math.min(100, initialBallPos.current.x + deltaX));
-        const newY = Math.max(0, Math.min(100, initialBallPos.current.y + deltaY));
+        let newX = initialBallPos.current.x + deltaX;
+        let newY = initialBallPos.current.y + deltaY;
+
+        // Allow ball to move slightly outside court bounds and into goals
+        newX = Math.max(-5, Math.min(105, newX));
+        newY = Math.max(-8, Math.min(108, newY));
         
         setBallPosition({ x: newX, y: newY });
       }
@@ -265,7 +269,8 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
         style={{ 
           width: dimensions.width, 
           height: dimensions.height,
-          margin: '60px auto'
+          margin: '60px auto',
+          overflow: 'visible'
         }}
       >
         <DrawingCanvas 

@@ -58,10 +58,12 @@ const Toolbar: React.FC<ToolbarProps> = ({
                 <ColorPicker
                   color={team1Color}
                   onChange={onTeam1ColorChange}
+                  label="Team 1"
                 />
                 <ColorPicker
                   color={team2Color}
                   onChange={onTeam2ColorChange}
+                  label="Team 2"
                 />
               </div>
             </div>
@@ -85,6 +87,7 @@ const Toolbar: React.FC<ToolbarProps> = ({
                   <ColorPicker
                     color={strokeColor}
                     onChange={onStrokeColorChange}
+                    label="Stroke"
                   />
                   <div className="px-1 sm:px-2 py-1 bg-black/20 rounded-lg">
                     <Slider

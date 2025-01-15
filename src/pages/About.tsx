@@ -1,6 +1,7 @@
 import React from "react";
 import { Target, Trophy, MessageSquare, Lightbulb, Users, ClipboardList } from "lucide-react";
 import Navigation from "@/components/Navigation";
+import OlympicRings from "@/components/OlympicRings";
 
 const AboutPage = () => {
   return (
@@ -18,9 +19,12 @@ const AboutPage = () => {
       {/* Vision Section */}
       <section className="relative py-16 px-4">
         <div className="max-w-6xl mx-auto">
-          <h1 className="text-5xl md:text-6xl font-bold text-center bg-gradient-to-r from-white via-white/90 to-white/70 text-transparent bg-clip-text mb-8">
-            Our Vision
-          </h1>
+          <div className="flex flex-col items-center mb-12">
+            <OlympicRings className="mb-8 opacity-90" />
+            <h1 className="text-5xl md:text-6xl font-bold text-center bg-gradient-to-r from-white via-white/90 to-white/70 text-transparent bg-clip-text mb-8">
+              Our Vision
+            </h1>
+          </div>
           <div className="text-center mb-12">
             <p className="text-lg text-white/60 leading-relaxed max-w-3xl mx-auto mb-8">
               We are a dedicated team of water polo players and coaches committed to revolutionizing 

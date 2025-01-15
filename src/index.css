@@ -125,8 +125,8 @@
 
 .player {
   position: absolute;
-  width: 44px;
-  height: 44px;
+  width: 46px;  /* Increased by 5% from 44px */
+  height: 46px; /* Increased by 5% from 44px */
   border-radius: 50%;
   display: flex;
   justify-content: center;
@@ -159,7 +159,7 @@
 
 .ball {
   position: absolute;
-  width: 3.125%;
+  width: 3.90625%;  /* Increased by 25% from 3.125% */
   aspect-ratio: 1;
   background: linear-gradient(145deg, #FFA500, #FF8C00);
   border: 2px solid #FFD700;

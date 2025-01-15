@@ -21,18 +21,26 @@ const Index = () => {
       </div>
 
       <Navigation />
-      <div className="relative p-2 sm:p-3 md:p-4 lg:p-6">
-        <div className="max-w-7xl mx-auto space-y-4">
-          <header className="text-center mb-4">
-            <div className="inline-block px-4 py-1.5 bg-white/10 backdrop-blur rounded-full text-sm font-medium text-white/80">
+      <div className="relative px-4 py-8 sm:px-6 sm:py-12">
+        <div className="max-w-7xl mx-auto space-y-8">
+          <header className="text-center space-y-6">
+            <div className="inline-block px-6 py-2 bg-white/10 backdrop-blur-sm rounded-full 
+                          text-sm font-medium text-white/90 shadow-lg 
+                          transform hover:scale-105 transition-transform duration-200">
               Interactive Whiteboard
             </div>
-            <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold bg-gradient-to-r from-white via-white/90 to-white/70 text-transparent bg-clip-text">
-              Design Your Plays
-            </h1>
-            <p className="text-lg sm:text-xl text-white/60 max-w-2xl mx-auto">
-              Create, animate, and share your water polo strategies with our interactive whiteboard
-            </p>
+            <div className="space-y-4">
+              <h1 className="text-5xl sm:text-6xl md:text-7xl font-bold 
+                           bg-gradient-to-r from-white via-white/90 to-white/70 
+                           text-transparent bg-clip-text 
+                           tracking-tight leading-none">
+                Design Your Plays
+              </h1>
+              <p className="text-lg sm:text-xl text-white/70 max-w-2xl mx-auto 
+                          font-medium leading-relaxed">
+                Create, animate, and share your water polo strategies with our interactive whiteboard
+              </p>
+            </div>
           </header>
           
           <WaterPoloCourt

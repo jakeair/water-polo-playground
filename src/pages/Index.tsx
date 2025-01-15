@@ -32,11 +32,11 @@ const Index = () => {
         />
         <div className="flex-1 p-2 sm:p-4 md:p-6 lg:p-8 xl:p-12 overflow-y-auto">
           <div className="max-w-7xl mx-auto space-y-6 sm:space-y-8 pb-24">
-            <header className="text-center space-y-3 sm:space-y-4 px-2 sm:px-4">
-              <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold bg-gradient-to-r from-white to-white/60 text-transparent bg-clip-text break-words">
+            <header className="text-center space-y-4 sm:space-y-6 px-4 sm:px-6 py-8 sm:py-12 rounded-2xl bg-gradient-to-b from-purple-900/30 to-transparent backdrop-blur-sm border border-purple-500/20">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold bg-gradient-to-r from-purple-300 via-white to-purple-300 text-transparent bg-clip-text break-words tracking-tight">
                 Water Polo Whiteboard
               </h1>
-              <p className="text-base sm:text-lg md:text-xl text-white/60 max-w-2xl mx-auto">
+              <p className="text-base sm:text-lg md:text-xl text-purple-200/80 max-w-2xl mx-auto font-medium">
                 Design and animate your water polo plays with our interactive court builder
               </p>
             </header>

@@ -216,7 +216,7 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
   }, [isDraggingBall.current]);
 
   return (
-    <div className="space-y-24 bg-black/20 backdrop-blur-sm p-16 rounded-3xl shadow-2xl border border-white/10">
+    <div className="space-y-24 bg-black/20 backdrop-blur-sm px-4 sm:px-8 md:px-12 lg:px-16 py-16 rounded-3xl shadow-2xl border border-white/10">
       <div 
         ref={courtRef}
         className="court"

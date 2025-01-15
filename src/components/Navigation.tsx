@@ -29,7 +29,7 @@ const Navigation = () => {
         } backdrop-blur-md border border-white/20 transition-all`}
       >
         <Layout className="h-5 w-5" />
-        <span className="hidden sm:inline">Playground</span>
+        <span className="hidden sm:inline">Whiteboard</span>
       </Link>
       <Link 
         to="/about" 

@@ -24,7 +24,7 @@ const Home = () => {
         
         <main className="relative flex flex-col items-center justify-center min-h-screen p-4 sm:p-8 md:p-12 lg:p-16">
           <div className="max-w-7xl w-full space-y-12 md:space-y-16">
-            <div className="space-y-6 text-center">
+            <div className="space-y-6 text-center animate-fade-in">
               <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold bg-gradient-to-r from-white via-white/90 to-white/70 text-transparent bg-clip-text break-words leading-tight px-4">
                 Water Polo Strategy
               </h1>
@@ -33,7 +33,7 @@ const Home = () => {
               </p>
             </div>
             
-            <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
+            <div className="flex flex-col sm:flex-row gap-6 justify-center items-center animate-fade-in" style={{ animationDelay: '200ms' }}>
               <Link to="/plays">
                 <Button size="lg" className="group bg-white/10 backdrop-blur-md border border-white/20 hover:bg-white/20 text-white gap-3 px-8 py-6 text-lg">
                   <Play className="w-6 h-6" />
@@ -49,13 +49,13 @@ const Home = () => {
               </Link>
             </div>
 
-            {/* Whiteboard Preview */}
-            <div className="relative mx-auto max-w-5xl rounded-2xl overflow-hidden shadow-2xl border border-white/10">
+            {/* Whiteboard Preview with Animation */}
+            <div className="relative mx-auto max-w-5xl rounded-2xl overflow-hidden shadow-2xl border border-white/10 animate-fade-in" style={{ animationDelay: '400ms' }}>
               <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-transparent to-transparent pointer-events-none" />
               <img 
-                src="https://images.unsplash.com/photo-1488590528505-98d2b5aba04b"
-                alt="Water Polo Whiteboard Preview"
-                className="w-full aspect-[16/9] object-cover"
+                src="https://images.unsplash.com/photo-1483058712412-4245e9b90334"
+                alt="Water Polo Strategy Platform"
+                className="w-full aspect-[16/9] object-cover transform hover:scale-105 transition-transform duration-700"
               />
             </div>
 

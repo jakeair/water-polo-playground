@@ -155,7 +155,7 @@ const WaterPoloCourt: React.FC = () => {
   };
 
   return (
-    <div className="space-y-8 bg-gradient-to-b from-black/30 to-black/10 backdrop-blur-sm p-12 rounded-3xl shadow-2xl border border-white/10 mt-12">
+    <div className="space-y-6 bg-black/20 backdrop-blur-sm p-8 rounded-2xl shadow-2xl border border-white/10">
       <div 
         ref={courtRef}
         className="court"

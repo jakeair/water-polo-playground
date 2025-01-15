@@ -22,7 +22,7 @@ const Toolbar: React.FC<ToolbarProps> = ({
   onTeam2ColorChange
 }) => {
   return (
-    <Sidebar variant="floating" className="w-[80px] bg-black/5 backdrop-blur-md border-r border-white/10">
+    <Sidebar variant="floating" className="w-[80px] bg-white/5 backdrop-blur-md border-r border-white/10">
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupContent className="space-y-8 p-4">

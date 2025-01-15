@@ -30,7 +30,7 @@ const Home = () => {
                 🎯 Professional Water Polo Strategy Platform
               </div>
               <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold bg-gradient-to-r from-white via-white/90 to-white/70 text-transparent bg-clip-text break-words leading-tight px-4">
-                Elevate Your Water Polo Game
+                Elevate Your Water Polo Strategy
               </h1>
               <p className="text-xl sm:text-2xl text-white/60 max-w-3xl mx-auto leading-relaxed">
                 Create, animate, and share professional water polo strategies. Used by top coaches and teams worldwide.
@@ -96,12 +96,12 @@ const Home = () => {
                 Join the elite teams using our platform to develop winning strategies.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-4">
-                <Link to="/signup">
+                <Link to="/pricing">
                   <Button size="lg" className="bg-white text-slate-900 hover:bg-white/90 gap-2 px-8">
                     Start Free Trial
                   </Button>
                 </Link>
-                <Link to="/demo">
+                <Link to="/pricing">
                   <Button variant="outline" size="lg" className="border-white/20 bg-white text-slate-900 hover:bg-white/10 hover:text-white gap-2">
                     Watch Demo
                   </Button>

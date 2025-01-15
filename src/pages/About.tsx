@@ -73,9 +73,8 @@ const AboutPage = () => {
               creates stronger athletes.
             </p>
           </div>
-          <div className="flex justify-center items-center gap-8 mt-8">
+          <div className="flex justify-center items-center mt-8">
             <OlympicRings className="opacity-90" size={180} />
-            <NcaaLogo className="opacity-90" size={180} />
           </div>
         </div>
       </section>

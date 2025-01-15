@@ -1,7 +1,7 @@
 import React from 'react';
 import { Slider } from "@/components/ui/slider";
 import { Button } from "@/components/ui/button";
-import { PlayCircle, PauseCircle, Record } from "lucide-react";
+import { PlayCircle, PauseCircle, CircleDot } from "lucide-react";
 
 interface TimelineProps {
   currentTime: number;
@@ -45,7 +45,7 @@ const Timeline: React.FC<TimelineProps> = ({
           size="icon"
           onClick={onRecordKeyframe}
         >
-          <Record className="h-4 w-4" />
+          <CircleDot className="h-4 w-4" />
         </Button>
       </div>
 

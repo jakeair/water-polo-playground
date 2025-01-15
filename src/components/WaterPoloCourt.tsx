@@ -14,6 +14,10 @@ interface KeyframeData {
   positions: {
     [key: string]: PlayerPosition;
   };
+  ballPosition?: {
+    x: number;
+    y: number;
+  };
 }
 
 interface WaterPoloCourtProps {
@@ -78,7 +82,8 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
   const recordKeyframe = () => {
     const newKeyframe: KeyframeData = {
       time: currentTime,
-      positions: { ...playerPositions }
+      positions: { ...playerPositions },
+      ballPosition: { ...ballPosition }
     };
 
     setKeyframes(prev => {
@@ -99,11 +104,29 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
       .find(kf => kf.time > time);
 
     if (!prevKeyframe && !nextKeyframe) return;
-    if (!prevKeyframe) return nextKeyframe?.positions;
-    if (!nextKeyframe) return prevKeyframe.positions;
+    if (!prevKeyframe) {
+      if (nextKeyframe?.ballPosition) {
+        setBallPosition(nextKeyframe.ballPosition);
+      }
+      return nextKeyframe?.positions;
+    }
+    if (!nextKeyframe) {
+      if (prevKeyframe?.ballPosition) {
+        setBallPosition(prevKeyframe.ballPosition);
+      }
+      return prevKeyframe.positions;
+    }
 
     const factor = (time - prevKeyframe.time) / (nextKeyframe.time - prevKeyframe.time);
 
+    // Interpolate ball position
+    if (prevKeyframe.ballPosition && nextKeyframe.ballPosition) {
+      const interpolatedBallX = prevKeyframe.ballPosition.x + (nextKeyframe.ballPosition.x - prevKeyframe.ballPosition.x) * factor;
+      const interpolatedBallY = prevKeyframe.ballPosition.y + (nextKeyframe.ballPosition.y - prevKeyframe.ballPosition.y) * factor;
+      setBallPosition({ x: interpolatedBallX, y: interpolatedBallY });
+    }
+
+    // Interpolate player positions
     const interpolated: {[key: string]: PlayerPosition} = {};
     Object.keys(prevKeyframe.positions).forEach(playerId => {
       const prev = prevKeyframe.positions[playerId];

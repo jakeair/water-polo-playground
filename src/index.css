@@ -146,6 +146,7 @@
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
   transition: transform 0.1s cubic-bezier(0.2, 0, 0, 1);
+  animation: player-float 4s ease-in-out infinite;
 }
 
 .player.team1 {
@@ -189,5 +190,14 @@
   }
   50% {
     transform: translate(-50%, -50%) translateY(-10px);
+  }
+}
+
+@keyframes player-float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-5px);
   }
 }

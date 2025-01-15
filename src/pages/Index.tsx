@@ -8,6 +8,8 @@ const Index = () => {
   const [team2Color, setTeam2Color] = useState('#ef4444');
   const [isDrawing, setIsDrawing] = useState(false);
   const [isErasing, setIsErasing] = useState(false);
+  const [strokeColor, setStrokeColor] = useState('#9b87f5');
+  const [strokeWidth, setStrokeWidth] = useState(2);
 
   return (
     <SidebarProvider>
@@ -21,6 +23,10 @@ const Index = () => {
           isErasing={isErasing}
           onDrawingChange={setIsDrawing}
           onErasingChange={setIsErasing}
+          strokeColor={strokeColor}
+          onStrokeColorChange={setStrokeColor}
+          strokeWidth={strokeWidth}
+          onStrokeWidthChange={setStrokeWidth}
         />
         <div className="flex-1 p-4 md:p-8 lg:p-12 overflow-y-auto">
           <div className="max-w-7xl mx-auto space-y-8 pb-24">
@@ -40,6 +46,8 @@ const Index = () => {
               onTeam2ColorChange={setTeam2Color}
               isDrawing={isDrawing}
               isErasing={isErasing}
+              strokeColor={strokeColor}
+              strokeWidth={strokeWidth}
             />
           </div>
         </div>

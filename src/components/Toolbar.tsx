@@ -1,6 +1,7 @@
 import React from 'react';
 import ColorPicker from './ColorPicker';
 import { Palette, Pencil, Eraser } from 'lucide-react';
+import { Slider } from "@/components/ui/slider";
 import {
   Sidebar,
   SidebarContent,
@@ -17,6 +18,10 @@ interface ToolbarProps {
   isErasing: boolean;
   onDrawingChange: (isDrawing: boolean) => void;
   onErasingChange: (isErasing: boolean) => void;
+  strokeColor: string;
+  onStrokeColorChange: (color: string) => void;
+  strokeWidth: number;
+  onStrokeWidthChange: (width: number) => void;
 }
 
 const Toolbar: React.FC<ToolbarProps> = ({
@@ -27,7 +32,11 @@ const Toolbar: React.FC<ToolbarProps> = ({
   isDrawing,
   isErasing,
   onDrawingChange,
-  onErasingChange
+  onErasingChange,
+  strokeColor,
+  onStrokeColorChange,
+  strokeWidth,
+  onStrokeWidthChange
 }) => {
   const handleDrawingClick = () => {
     if (isErasing) onErasingChange(false);
@@ -37,6 +46,10 @@ const Toolbar: React.FC<ToolbarProps> = ({
   const handleErasingClick = () => {
     if (isDrawing) onDrawingChange(false);
     onErasingChange(!isErasing);
+  };
+
+  const handleStrokeWidthChange = (value: number[]) => {
+    onStrokeWidthChange(value[0]);
   };
 
   return (
@@ -59,6 +72,25 @@ const Toolbar: React.FC<ToolbarProps> = ({
                   onChange={onTeam2ColorChange}
                   label="Team 2"
                 />
+                {isDrawing && (
+                  <>
+                    <ColorPicker
+                      color={strokeColor}
+                      onChange={onStrokeColorChange}
+                      label="Stroke"
+                    />
+                    <div className="w-full px-2">
+                      <Slider
+                        value={[strokeWidth]}
+                        onValueChange={handleStrokeWidthChange}
+                        min={1}
+                        max={10}
+                        step={1}
+                        className="w-full"
+                      />
+                    </div>
+                  </>
+                )}
               </div>
             </div>
             <div className="space-y-4">

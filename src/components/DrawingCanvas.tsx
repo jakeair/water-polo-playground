@@ -5,12 +5,22 @@ interface DrawingCanvasProps {
   isErasing: boolean;
   width: number;
   height: number;
+  strokeColor: string;
+  strokeWidth: number;
 }
 
-const DrawingCanvas: React.FC<DrawingCanvasProps> = ({ isDrawing, isErasing, width, height }) => {
+const DrawingCanvas: React.FC<DrawingCanvasProps> = ({ 
+  isDrawing, 
+  isErasing, 
+  width, 
+  height,
+  strokeColor,
+  strokeWidth 
+}) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const isDrawingRef = useRef(false);
   const lastPosRef = useRef({ x: 0, y: 0 });
+  const points = useRef<{ x: number; y: number }[]>([]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -31,9 +41,34 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({ isDrawing, isErasing, wid
         ctx.lineWidth = 20;
       } else {
         ctx.globalCompositeOperation = 'source-over';
-        ctx.strokeStyle = '#9b87f5'; // Changed to Primary Purple
-        ctx.lineWidth = 2; // Reduced stroke width for finer lines
+        ctx.strokeStyle = strokeColor;
+        ctx.lineWidth = strokeWidth;
       }
+    };
+
+    const drawSmoothLine = (points: { x: number; y: number }[]) => {
+      if (!ctx || points.length < 2) return;
+      
+      ctx.beginPath();
+      ctx.moveTo(points[0].x, points[0].y);
+      
+      for (let i = 1; i < points.length - 2; i++) {
+        const xc = (points[i].x + points[i + 1].x) / 2;
+        const yc = (points[i].y + points[i + 1].y) / 2;
+        ctx.quadraticCurveTo(points[i].x, points[i].y, xc, yc);
+      }
+      
+      if (points.length > 2) {
+        const last = points.length - 1;
+        ctx.quadraticCurveTo(
+          points[last - 1].x,
+          points[last - 1].y,
+          points[last].x,
+          points[last].y
+        );
+      }
+      
+      ctx.stroke();
     };
 
     const handleMouseDown = (e: MouseEvent) => {
@@ -44,6 +79,7 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({ isDrawing, isErasing, wid
       const y = e.clientY - rect.top;
       
       isDrawingRef.current = true;
+      points.current = [{ x, y }];
       lastPosRef.current = { x, y };
       
       updateBrushStyle();
@@ -56,16 +92,18 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({ isDrawing, isErasing, wid
       const x = e.clientX - rect.left;
       const y = e.clientY - rect.top;
       
-      ctx.beginPath();
-      ctx.moveTo(lastPosRef.current.x, lastPosRef.current.y);
-      ctx.lineTo(x, y);
-      ctx.stroke();
+      points.current.push({ x, y });
+      if (points.current.length > 3) {
+        drawSmoothLine(points.current);
+        points.current = points.current.slice(-2);
+      }
       
       lastPosRef.current = { x, y };
     };
 
     const handleMouseUp = () => {
       isDrawingRef.current = false;
+      points.current = [];
     };
 
     canvas.addEventListener('mousedown', handleMouseDown);
@@ -81,7 +119,7 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({ isDrawing, isErasing, wid
       canvas.removeEventListener('mouseup', handleMouseUp);
       canvas.removeEventListener('mouseleave', handleMouseUp);
     };
-  }, [isDrawing, isErasing]);
+  }, [isDrawing, isErasing, strokeColor, strokeWidth]);
 
   return (
     <canvas

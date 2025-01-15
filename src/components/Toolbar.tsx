@@ -1,6 +1,6 @@
 import React from 'react';
 import ColorPicker from './ColorPicker';
-import { Palette, Swatch } from 'lucide-react';
+import { Palette, Droplet } from 'lucide-react';
 import {
   Sidebar,
   SidebarContent,
@@ -33,7 +33,7 @@ const Toolbar: React.FC<ToolbarProps> = ({
           <SidebarGroupContent className="space-y-4 p-4">
             <div className="space-y-2">
               <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                <Swatch className="w-4 h-4" />
+                <Droplet className="w-4 h-4" />
                 Team 1
               </div>
               <ColorPicker
@@ -44,7 +44,7 @@ const Toolbar: React.FC<ToolbarProps> = ({
             </div>
             <div className="space-y-2">
               <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                <Swatch className="w-4 h-4" />
+                <Droplet className="w-4 h-4" />
                 Team 2
               </div>
               <ColorPicker

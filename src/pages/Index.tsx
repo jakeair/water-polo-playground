@@ -11,9 +11,6 @@ const Index = () => {
   const [isErasing, setIsErasing] = useState(false);
   const [strokeColor, setStrokeColor] = useState('#9b87f5');
   const [strokeWidth, setStrokeWidth] = useState(2);
-  const [team1Logo, setTeam1Logo] = useState<string>();
-  const [team2Logo, setTeam2Logo] = useState<string>();
-  const [ballImage, setBallImage] = useState<string>();
 
   return (
     <SidebarProvider>
@@ -42,12 +39,6 @@ const Index = () => {
             onStrokeColorChange={setStrokeColor}
             strokeWidth={strokeWidth}
             onStrokeWidthChange={setStrokeWidth}
-            team1Logo={team1Logo}
-            team2Logo={team2Logo}
-            ballImage={ballImage}
-            onTeam1LogoChange={setTeam1Logo}
-            onTeam2LogoChange={setTeam2Logo}
-            onBallImageChange={setBallImage}
           />
           
           <main className="flex-1 overflow-x-hidden overflow-y-auto px-2 sm:px-4 md:px-6 lg:px-8">

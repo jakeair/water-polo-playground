@@ -2,7 +2,6 @@ import React from 'react';
 import ColorPicker from './ColorPicker';
 import { Palette, Pencil } from 'lucide-react';
 import { Slider } from "@/components/ui/slider";
-import ImageUpload from './ImageUpload';
 import {
   Sidebar,
   SidebarContent,
@@ -24,12 +23,6 @@ interface ToolbarProps {
   onStrokeColorChange: (color: string) => void;
   strokeWidth: number;
   onStrokeWidthChange: (width: number) => void;
-  team1Logo?: string;
-  team2Logo?: string;
-  ballImage?: string;
-  onTeam1LogoChange: (url: string) => void;
-  onTeam2LogoChange: (url: string) => void;
-  onBallImageChange: (url: string) => void;
 }
 
 const Toolbar: React.FC<ToolbarProps> = ({
@@ -42,13 +35,7 @@ const Toolbar: React.FC<ToolbarProps> = ({
   strokeColor,
   onStrokeColorChange,
   strokeWidth,
-  onStrokeWidthChange,
-  team1Logo,
-  team2Logo,
-  ballImage,
-  onTeam1LogoChange,
-  onTeam2LogoChange,
-  onBallImageChange
+  onStrokeWidthChange
 }) => {
   const handleDrawingClick = () => {
     onDrawingChange(!isDrawing);
@@ -68,34 +55,15 @@ const Toolbar: React.FC<ToolbarProps> = ({
                 <Palette className="w-4 h-4 sm:w-5 sm:h-5 text-white/60" />
               </div>
               <div className="flex flex-col items-center gap-3 sm:gap-4">
-                <div className="flex flex-col items-center gap-2">
-                  <ColorPicker
-                    color={team1Color}
-                    onChange={onTeam1ColorChange}
-                    label="Team 1"
-                  />
-                  <ImageUpload
-                    onImageUploaded={onTeam1LogoChange}
-                    currentImage={team1Logo}
-                    label="Logo"
-                  />
-                </div>
-                <div className="flex flex-col items-center gap-2">
-                  <ColorPicker
-                    color={team2Color}
-                    onChange={onTeam2ColorChange}
-                    label="Team 2"
-                  />
-                  <ImageUpload
-                    onImageUploaded={onTeam2LogoChange}
-                    currentImage={team2Logo}
-                    label="Logo"
-                  />
-                </div>
-                <ImageUpload
-                  onImageUploaded={onBallImageChange}
-                  currentImage={ballImage}
-                  label="Ball"
+                <ColorPicker
+                  color={team1Color}
+                  onChange={onTeam1ColorChange}
+                  label="Team 1"
+                />
+                <ColorPicker
+                  color={team2Color}
+                  onChange={onTeam2ColorChange}
+                  label="Team 2"
                 />
               </div>
             </div>

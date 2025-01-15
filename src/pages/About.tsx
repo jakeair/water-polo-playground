@@ -20,7 +20,6 @@ const AboutPage = () => {
       <section className="relative py-16 px-4">
         <div className="max-w-6xl mx-auto">
           <div className="flex flex-col items-center mb-12">
-            <OlympicRings className="mb-8 opacity-90" />
             <h1 className="text-5xl md:text-6xl font-bold text-center bg-gradient-to-r from-white via-white/90 to-white/70 text-transparent bg-clip-text mb-8">
               Our Vision
             </h1>
@@ -72,6 +71,9 @@ const AboutPage = () => {
               We believe that better tools lead to better coaching, and better coaching 
               creates stronger athletes.
             </p>
+          </div>
+          <div className="flex justify-center mt-8">
+            <OlympicRings className="opacity-90" size={180} />
           </div>
         </div>
       </section>

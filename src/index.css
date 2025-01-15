@@ -26,6 +26,7 @@
     --radius: 0.5rem;
     --team1-color: #3b82f6;
     --team2-color: #ef4444;
+    --goalie-color: #ef4444;
   }
 }
 
@@ -53,7 +54,7 @@
   width: 20%;
   height: 6%;
   border: 4px solid #FF4D4D;
-  background: linear-gradient(to right, #ee9ca7, #ffdde1);
+  background-color: #ffdde1;
   border-radius: 8px;
   display: flex;
   justify-content: center;

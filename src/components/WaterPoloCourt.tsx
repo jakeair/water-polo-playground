@@ -27,10 +27,11 @@ const WaterPoloCourt: React.FC = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [keyframes, setKeyframes] = useState<KeyframeData[]>([]);
   const animationRef = useRef<number>();
-  const ANIMATION_DURATION = 1000; // 10 seconds in deciseconds
+  const ANIMATION_DURATION = 1000;
 
   // Store current positions of all players
   const [playerPositions, setPlayerPositions] = useState<{[key: string]: PlayerPosition}>({});
+  const lastInterpolatedPositions = useRef<{[key: string]: PlayerPosition}>({});
 
   useEffect(() => {
     const updateDimensions = () => {
@@ -65,7 +66,9 @@ const WaterPoloCourt: React.FC = () => {
       return [...filtered, newKeyframe].sort((a, b) => a.time - b.time);
     });
 
-    toast.success('Keyframe recorded');
+    toast.success('Keyframe recorded', {
+      description: `Saved positions at ${currentTime/100} seconds`
+    });
   };
 
   const interpolatePositions = (time: number) => {
@@ -76,6 +79,7 @@ const WaterPoloCourt: React.FC = () => {
     const nextKeyframe = keyframes
       .find(kf => kf.time > time);
 
+    if (!prevKeyframe && !nextKeyframe) return;
     if (!prevKeyframe) return nextKeyframe?.positions;
     if (!nextKeyframe) return prevKeyframe.positions;
 
@@ -129,6 +133,19 @@ const WaterPoloCourt: React.FC = () => {
   useEffect(() => {
     const interpolated = interpolatePositions(currentTime);
     if (interpolated) {
+      // Use GSAP to animate the position changes
+      Object.entries(interpolated).forEach(([playerId, position]) => {
+        const lastPos = lastInterpolatedPositions.current[playerId];
+        if (lastPos && (lastPos.x !== position.x || lastPos.y !== position.y)) {
+          gsap.to(`#player-${playerId}`, {
+            left: `${position.x}%`,
+            top: `${position.y}%`,
+            duration: 0.1,
+            ease: "power2.out"
+          });
+        }
+      });
+      lastInterpolatedPositions.current = interpolated;
       setPlayerPositions(interpolated);
     }
   }, [currentTime]);
@@ -138,13 +155,12 @@ const WaterPoloCourt: React.FC = () => {
   };
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 bg-white/5 backdrop-blur-sm p-6 rounded-lg shadow-xl">
       <div 
         ref={courtRef}
         className="court"
         style={{ width: dimensions.width, height: dimensions.height }}
       >
-        {/* Goals with nets */}
         <div className="goal goal-top">
           <div ref={topGoalNetRef} className="goal-net" />
         </div>
@@ -152,7 +168,6 @@ const WaterPoloCourt: React.FC = () => {
           <div ref={bottomGoalNetRef} className="goal-net" />
         </div>
 
-        {/* Lines */}
         <div className="line two-meter-line" style={{ top: '8%' }}></div>
         <div className="line five-meter-line" style={{ top: '20%' }}></div>
         <div className="line six-meter-line" style={{ top: '24%' }}></div>
@@ -162,22 +177,22 @@ const WaterPoloCourt: React.FC = () => {
         <div className="line halfway-line" style={{ top: '50%' }}></div>
 
         {/* Team 1 Players (Top) */}
-        <Player team={1} number="G" initialX={50} initialY={5} isGoalie onPositionChange={(pos) => updatePlayerPosition('1G', pos)} />
-        <Player team={1} number={1} initialX={20} initialY={20} onPositionChange={(pos) => updatePlayerPosition('11', pos)} />
-        <Player team={1} number={2} initialX={40} initialY={20} onPositionChange={(pos) => updatePlayerPosition('12', pos)} />
-        <Player team={1} number={3} initialX={60} initialY={20} onPositionChange={(pos) => updatePlayerPosition('13', pos)} />
-        <Player team={1} number={4} initialX={30} initialY={30} onPositionChange={(pos) => updatePlayerPosition('14', pos)} />
-        <Player team={1} number={5} initialX={50} initialY={30} onPositionChange={(pos) => updatePlayerPosition('15', pos)} />
-        <Player team={1} number={6} initialX={70} initialY={30} onPositionChange={(pos) => updatePlayerPosition('16', pos)} />
+        <Player team={1} number="G" initialX={50} initialY={5} isGoalie onPositionChange={(pos) => updatePlayerPosition('1G', pos)} id="player-1G" />
+        <Player team={1} number={1} initialX={20} initialY={20} onPositionChange={(pos) => updatePlayerPosition('11', pos)} id="player-11" />
+        <Player team={1} number={2} initialX={40} initialY={20} onPositionChange={(pos) => updatePlayerPosition('12', pos)} id="player-12" />
+        <Player team={1} number={3} initialX={60} initialY={20} onPositionChange={(pos) => updatePlayerPosition('13', pos)} id="player-13" />
+        <Player team={1} number={4} initialX={30} initialY={30} onPositionChange={(pos) => updatePlayerPosition('14', pos)} id="player-14" />
+        <Player team={1} number={5} initialX={50} initialY={30} onPositionChange={(pos) => updatePlayerPosition('15', pos)} id="player-15" />
+        <Player team={1} number={6} initialX={70} initialY={30} onPositionChange={(pos) => updatePlayerPosition('16', pos)} id="player-16" />
 
         {/* Team 2 Players (Bottom) */}
-        <Player team={2} number="G" initialX={50} initialY={95} isGoalie onPositionChange={(pos) => updatePlayerPosition('2G', pos)} />
-        <Player team={2} number={1} initialX={20} initialY={70} onPositionChange={(pos) => updatePlayerPosition('21', pos)} />
-        <Player team={2} number={2} initialX={40} initialY={70} onPositionChange={(pos) => updatePlayerPosition('22', pos)} />
-        <Player team={2} number={3} initialX={60} initialY={70} onPositionChange={(pos) => updatePlayerPosition('23', pos)} />
-        <Player team={2} number={4} initialX={30} initialY={80} onPositionChange={(pos) => updatePlayerPosition('24', pos)} />
-        <Player team={2} number={5} initialX={50} initialY={80} onPositionChange={(pos) => updatePlayerPosition('25', pos)} />
-        <Player team={2} number={6} initialX={70} initialY={80} onPositionChange={(pos) => updatePlayerPosition('26', pos)} />
+        <Player team={2} number="G" initialX={50} initialY={95} isGoalie onPositionChange={(pos) => updatePlayerPosition('2G', pos)} id="player-2G" />
+        <Player team={2} number={1} initialX={20} initialY={70} onPositionChange={(pos) => updatePlayerPosition('21', pos)} id="player-21" />
+        <Player team={2} number={2} initialX={40} initialY={70} onPositionChange={(pos) => updatePlayerPosition('22', pos)} id="player-22" />
+        <Player team={2} number={3} initialX={60} initialY={70} onPositionChange={(pos) => updatePlayerPosition('23', pos)} id="player-23" />
+        <Player team={2} number={4} initialX={30} initialY={80} onPositionChange={(pos) => updatePlayerPosition('24', pos)} id="player-24" />
+        <Player team={2} number={5} initialX={50} initialY={80} onPositionChange={(pos) => updatePlayerPosition('25', pos)} id="player-25" />
+        <Player team={2} number={6} initialX={70} initialY={80} onPositionChange={(pos) => updatePlayerPosition('26', pos)} id="player-26" />
       </div>
 
       <Timeline

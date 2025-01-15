@@ -7,6 +7,7 @@ interface PlayerProps {
   initialY: number;
   isGoalie?: boolean;
   onPositionChange?: (position: { x: number; y: number }) => void;
+  id: string;
 }
 
 const Player: React.FC<PlayerProps> = ({ 
@@ -15,7 +16,8 @@ const Player: React.FC<PlayerProps> = ({
   initialX, 
   initialY, 
   isGoalie = false,
-  onPositionChange 
+  onPositionChange,
+  id 
 }) => {
   const [position, setPosition] = useState({ x: initialX, y: initialY });
   const playerRef = useRef<HTMLDivElement>(null);
@@ -65,7 +67,7 @@ const Player: React.FC<PlayerProps> = ({
     setIsDragging(false);
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (isDragging) {
       window.addEventListener('mousemove', handleMouseMove, { passive: true });
       window.addEventListener('mouseup', handleMouseUp);
@@ -78,6 +80,7 @@ const Player: React.FC<PlayerProps> = ({
 
   return (
     <div
+      id={id}
       ref={playerRef}
       className={`player ${isGoalie ? 'goalie' : team === 1 ? 'team1' : 'team2'}`}
       style={{
@@ -86,7 +89,7 @@ const Player: React.FC<PlayerProps> = ({
         cursor: isDragging ? 'grabbing' : 'grab',
         transform: `translate(-50%, -50%) ${isDragging ? 'scale(1.05)' : 'scale(1)'}`,
         position: 'absolute',
-        transition: isDragging ? 'none' : 'all 0.2s ease-out'
+        transition: isDragging ? 'none' : 'transform 0.2s ease-out'
       }}
       onMouseDown={handleMouseDown}
     >

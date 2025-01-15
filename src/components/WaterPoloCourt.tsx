@@ -173,6 +173,7 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
   useEffect(() => {
     const interpolated = interpolatePositions(currentTime);
     if (interpolated) {
+      // Animate players
       Object.entries(interpolated).forEach(([playerId, position]) => {
         const lastPos = lastInterpolatedPositions.current[playerId];
         if (lastPos && (lastPos.x !== position.x || lastPos.y !== position.y)) {
@@ -186,8 +187,18 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
       });
       lastInterpolatedPositions.current = interpolated;
       setPlayerPositions(interpolated);
+
+      // Animate ball with GSAP
+      if (ballRef.current) {
+        gsap.to(ballRef.current, {
+          left: `${ballPosition.x}%`,
+          top: `${ballPosition.y}%`,
+          duration: 0.1,
+          ease: "power2.out"
+        });
+      }
     }
-  }, [currentTime]);
+  }, [currentTime, ballPosition]);
 
   const togglePlayPause = () => {
     setIsPlaying(!isPlaying);

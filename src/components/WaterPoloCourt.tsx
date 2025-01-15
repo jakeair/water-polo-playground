@@ -50,58 +50,11 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
     }));
   };
 
-  const interpolatePositions = (time: number) => {
-    // Find the surrounding keyframes
-    const prevKeyframe = [...keyframes]
-      .reverse()
-      .find(kf => kf.time <= time);
-    const nextKeyframe = keyframes
-      .find(kf => kf.time > time);
-
-    if (!prevKeyframe && !nextKeyframe) return;
-    if (!prevKeyframe) return nextKeyframe?.positions;
-    if (!nextKeyframe) return prevKeyframe.positions;
-
-    // Calculate interpolation factor
-    const factor = (time - prevKeyframe.time) / (nextKeyframe.time - prevKeyframe.time);
-
-    // Interpolate between positions
-    const interpolated: {[key: string]: PlayerPosition} = {};
-    Object.keys(prevKeyframe.positions).forEach(playerId => {
-      const prev = prevKeyframe.positions[playerId];
-      const next = nextKeyframe.positions[playerId];
-      
-      interpolated[playerId] = {
-        x: prev.x + (next.x - prev.x) * factor,
-        y: prev.y + (next.y - prev.y) * factor
-      };
-    });
-
-    return interpolated;
-  };
-
-  const animate = () => {
-    if (!isPlaying) return;
-
-    setCurrentTime(prev => {
-      const next = prev + 1;
-      if (next >= ANIMATION_DURATION) {
-        setIsPlaying(false);
-        return prev;
-      }
-      return next;
-    });
-
-    animationRef.current = requestAnimationFrame(animate);
-  };
-
   useEffect(() => {
-    const interpolated = interpolatePositions(currentTime);
-    if (interpolated) {
+    if (playerPositions && Object.keys(playerPositions).length > 0) {
       // Use GSAP to animate the position changes
-      Object.entries(interpolated).forEach(([playerId, position]) => {
-        const lastPos = lastInterpolatedPositions.current[playerId];
-        if (lastPos && (lastPos.x !== position.x || lastPos.y !== position.y)) {
+      Object.entries(playerPositions).forEach(([playerId, position]) => {
+        if (position) {
           gsap.to(`#player-${playerId}`, {
             left: `${position.x}%`,
             top: `${position.y}%`,
@@ -110,10 +63,9 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
           });
         }
       });
-      lastInterpolatedPositions.current = interpolated;
-      setPlayerPositions(interpolated);
+      lastInterpolatedPositions.current = playerPositions;
     }
-  }, [currentTime]);
+  }, [currentTime, playerPositions]);
 
   return (
     <div className="space-y-6 bg-black/20 backdrop-blur-sm p-8 rounded-2xl shadow-2xl border border-white/10">

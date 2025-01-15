@@ -22,24 +22,26 @@ const Toolbar: React.FC<ToolbarProps> = ({
   onTeam2ColorChange
 }) => {
   return (
-    <Sidebar variant="floating" className="w-[180px] bg-white/50 backdrop-blur-sm border-r">
+    <Sidebar variant="floating" className="w-[80px] bg-black/5 backdrop-blur-md border-r border-white/10">
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupContent className="space-y-6 p-4">
+          <SidebarGroupContent className="space-y-8 p-4">
             <div className="space-y-6">
               <div className="flex items-center justify-center">
-                <Palette className="w-5 h-5 text-gray-500" />
+                <Palette className="w-5 h-5 text-white/60" />
               </div>
-              <ColorPicker
-                color={team1Color}
-                onChange={onTeam1ColorChange}
-                label="Team 1"
-              />
-              <ColorPicker
-                color={team2Color}
-                onChange={onTeam2ColorChange}
-                label="Team 2"
-              />
+              <div className="flex flex-col items-center gap-4">
+                <ColorPicker
+                  color={team1Color}
+                  onChange={onTeam1ColorChange}
+                  label="Team 1"
+                />
+                <ColorPicker
+                  color={team2Color}
+                  onChange={onTeam2ColorChange}
+                  label="Team 2"
+                />
+              </div>
             </div>
           </SidebarGroupContent>
         </SidebarGroup>

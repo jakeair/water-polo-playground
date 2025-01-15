@@ -59,22 +59,22 @@ const WaterPoloCourt: React.FC = () => {
       <div className="line halfway-line" style={{ top: '50%' }}></div>
 
       {/* Team 1 Players (Top) */}
-      <Player team={1} number={1} initialX={dimensions.width / 2 - 25} initialY={50} isGoalie />
-      <Player team={1} number={2} initialX={dimensions.width * 0.2} initialY={dimensions.height * 0.2} />
-      <Player team={1} number={3} initialX={dimensions.width * 0.4} initialY={dimensions.height * 0.2} />
-      <Player team={1} number={4} initialX={dimensions.width * 0.6} initialY={dimensions.height * 0.2} />
-      <Player team={1} number={5} initialX={dimensions.width * 0.3} initialY={dimensions.height * 0.3} />
-      <Player team={1} number={6} initialX={dimensions.width * 0.5} initialY={dimensions.height * 0.3} />
-      <Player team={1} number={7} initialX={dimensions.width * 0.7} initialY={dimensions.height * 0.3} />
+      <Player team={1} number={1} initialX={50} initialY={5} isGoalie />
+      <Player team={1} number={2} initialX={20} initialY={20} />
+      <Player team={1} number={3} initialX={40} initialY={20} />
+      <Player team={1} number={4} initialX={60} initialY={20} />
+      <Player team={1} number={5} initialX={30} initialY={30} />
+      <Player team={1} number={6} initialX={50} initialY={30} />
+      <Player team={1} number={7} initialX={70} initialY={30} />
 
       {/* Team 2 Players (Bottom) */}
-      <Player team={2} number={1} initialX={dimensions.width / 2 - 25} initialY={dimensions.height - 100} isGoalie />
-      <Player team={2} number={2} initialX={dimensions.width * 0.2} initialY={dimensions.height * 0.7} />
-      <Player team={2} number={3} initialX={dimensions.width * 0.4} initialY={dimensions.height * 0.7} />
-      <Player team={2} number={4} initialX={dimensions.width * 0.6} initialY={dimensions.height * 0.7} />
-      <Player team={2} number={5} initialX={dimensions.width * 0.3} initialY={dimensions.height * 0.8} />
-      <Player team={2} number={6} initialX={dimensions.width * 0.5} initialY={dimensions.height * 0.8} />
-      <Player team={2} number={7} initialX={dimensions.width * 0.7} initialY={dimensions.height * 0.8} />
+      <Player team={2} number={1} initialX={50} initialY={95} isGoalie />
+      <Player team={2} number={2} initialX={20} initialY={70} />
+      <Player team={2} number={3} initialX={40} initialY={70} />
+      <Player team={2} number={4} initialX={60} initialY={70} />
+      <Player team={2} number={5} initialX={30} initialY={80} />
+      <Player team={2} number={6} initialX={50} initialY={80} />
+      <Player team={2} number={7} initialX={70} initialY={80} />
     </div>
   );
 };

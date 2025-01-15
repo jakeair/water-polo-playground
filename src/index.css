@@ -70,10 +70,13 @@
   width: 100%;
   height: 100%;
   background-image: 
-    linear-gradient(to right, rgba(0, 0, 0, 0.15) 2px, transparent 2px),
-    linear-gradient(to bottom, rgba(0, 0, 0, 0.15) 2px, transparent 2px);
-  background-size: 10% 10%;
-  opacity: 0.9;
+    linear-gradient(to right, rgba(0, 0, 0, 0.15) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.15) 1px, transparent 1px),
+    linear-gradient(45deg, rgba(255, 255, 255, 0.1) 25%, transparent 25%),
+    linear-gradient(-45deg, rgba(255, 255, 255, 0.1) 25%, transparent 25%);
+  background-size: 8% 8%, 8% 8%, 16px 16px, 16px 16px;
+  opacity: 0.95;
+  box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.1);
 }
 
 .goal-top {

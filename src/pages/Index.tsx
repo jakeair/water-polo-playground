@@ -1,7 +1,8 @@
+import { useState } from 'react';
 import WaterPoloCourt from '@/components/WaterPoloCourt';
 import Toolbar from '@/components/Toolbar';
 import { SidebarProvider } from '@/components/ui/sidebar';
-import { useState } from 'react';
+import Navigation from '@/components/Navigation';
 
 const Index = () => {
   const [team1Color, setTeam1Color] = useState('#3b82f6');
@@ -14,6 +15,7 @@ const Index = () => {
   return (
     <SidebarProvider>
       <div className="min-h-screen flex w-full bg-gradient-to-br from-slate-900 to-slate-800">
+        <Navigation />
         <Toolbar
           team1Color={team1Color}
           team2Color={team2Color}
@@ -32,7 +34,7 @@ const Index = () => {
           <div className="max-w-7xl mx-auto space-y-6 sm:space-y-8 pb-24">
             <header className="text-center space-y-3 sm:space-y-4 px-2 sm:px-4">
               <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold bg-gradient-to-r from-white to-white/60 text-transparent bg-clip-text break-words">
-                Water Polo Playground
+                Water Polo Strategy
               </h1>
               <p className="text-base sm:text-lg md:text-xl text-white/60 max-w-2xl mx-auto">
                 Design and animate your water polo plays with our interactive court builder

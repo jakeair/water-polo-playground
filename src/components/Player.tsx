@@ -12,16 +12,23 @@ const Player: React.FC<PlayerProps> = ({ team, number, initialX, initialY, isGoa
   const [position, setPosition] = useState({ x: initialX, y: initialY });
   const playerRef = useRef<HTMLDivElement>(null);
   const [isDragging, setIsDragging] = useState(false);
-  const dragOffset = useRef({ x: 0, y: 0 });
+  const dragStartPos = useRef({ x: 0, y: 0 });
+  const initialPlayerPos = useRef({ x: 0, y: 0 });
 
   const handleMouseDown = (e: React.MouseEvent) => {
     if (playerRef.current) {
       setIsDragging(true);
-      const rect = playerRef.current.getBoundingClientRect();
-      dragOffset.current = {
-        x: e.clientX - rect.left,
-        y: e.clientY - rect.top,
+      dragStartPos.current = {
+        x: e.clientX,
+        y: e.clientY
       };
+      initialPlayerPos.current = {
+        x: position.x,
+        y: position.y
+      };
+      
+      // Prevent text selection during drag
+      e.preventDefault();
     }
   };
 
@@ -29,13 +36,15 @@ const Player: React.FC<PlayerProps> = ({ team, number, initialX, initialY, isGoa
     if (isDragging && playerRef.current) {
       const courtRect = playerRef.current.parentElement?.getBoundingClientRect();
       if (courtRect) {
-        const newX = ((e.clientX - courtRect.left) / courtRect.width) * 100;
-        const newY = ((e.clientY - courtRect.top) / courtRect.height) * 100;
+        // Calculate the change in position
+        const deltaX = (e.clientX - dragStartPos.current.x) / courtRect.width * 100;
+        const deltaY = (e.clientY - dragStartPos.current.y) / courtRect.height * 100;
         
-        const x = Math.max(0, Math.min(newX, 100));
-        const y = Math.max(0, Math.min(newY, 100));
+        // Update position based on initial position plus delta
+        const newX = Math.max(0, Math.min(100, initialPlayerPos.current.x + deltaX));
+        const newY = Math.max(0, Math.min(100, initialPlayerPos.current.y + deltaY));
         
-        setPosition({ x, y });
+        setPosition({ x: newX, y: newY });
       }
     }
   };
@@ -62,6 +71,10 @@ const Player: React.FC<PlayerProps> = ({ team, number, initialX, initialY, isGoa
       style={{
         left: `${position.x}%`,
         top: `${position.y}%`,
+        cursor: isDragging ? 'grabbing' : 'grab',
+        willChange: 'transform',
+        transform: `translate(-50%, -50%)`,
+        position: 'absolute',
       }}
       onMouseDown={handleMouseDown}
     >

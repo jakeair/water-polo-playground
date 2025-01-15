@@ -27,9 +27,8 @@ const WaterPoloCourt: React.FC = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [keyframes, setKeyframes] = useState<KeyframeData[]>([]);
   const animationRef = useRef<number>();
-  const ANIMATION_DURATION = 1000;
+  const ANIMATION_DURATION = 2500; // Changed to 25 seconds * 100
 
-  // Store current positions of all players
   const [playerPositions, setPlayerPositions] = useState<{[key: string]: PlayerPosition}>({});
   const lastInterpolatedPositions = useRef<{[key: string]: PlayerPosition}>({});
 

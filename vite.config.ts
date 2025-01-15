@@ -10,9 +10,31 @@ export default defineConfig({
     },
   },
   server: {
-    historyApiFallback: true,
+    port: 8080,
+    host: "::",
+    proxy: {
+      // Redirect all 404s to index.html for SPA routing
+      '*': {
+        target: '/',
+        bypass: (req) => {
+          if (req.headers.accept?.includes('text/html')) {
+            return '/index.html';
+          }
+        },
+      },
+    },
   },
   preview: {
-    historyApiFallback: true,
+    port: 8080,
+    proxy: {
+      '*': {
+        target: '/',
+        bypass: (req) => {
+          if (req.headers.accept?.includes('text/html')) {
+            return '/index.html';
+          }
+        },
+      },
+    },
   },
 });

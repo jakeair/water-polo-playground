@@ -22,9 +22,9 @@ const Home = () => {
 
         <Navigation />
         
-        <main className="relative flex-1 flex flex-col items-center justify-center p-4 sm:p-8 md:p-12 lg:p-16 pb-72">
-          <div className="max-w-5xl w-full space-y-16 text-center">
-            <div className="space-y-8">
+        <main className="relative flex flex-col items-center justify-center min-h-screen p-4 sm:p-8 md:p-12 lg:p-16">
+          <div className="max-w-7xl w-full space-y-12 md:space-y-16">
+            <div className="space-y-6 text-center">
               <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold bg-gradient-to-r from-white via-white/90 to-white/70 text-transparent bg-clip-text break-words leading-tight px-4">
                 Water Polo Strategy
               </h1>
@@ -49,7 +49,17 @@ const Home = () => {
               </Link>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-24">
+            {/* Whiteboard Preview */}
+            <div className="relative mx-auto max-w-5xl rounded-2xl overflow-hidden shadow-2xl border border-white/10">
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-transparent to-transparent pointer-events-none" />
+              <img 
+                src="https://images.unsplash.com/photo-1488590528505-98d2b5aba04b"
+                alt="Water Polo Whiteboard Preview"
+                className="w-full aspect-[16/9] object-cover"
+              />
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
               <div className="group bg-white/5 hover:bg-white/10 backdrop-blur-md border border-white/10 rounded-2xl p-8 text-left transition-all hover:scale-105">
                 <div className="bg-white/10 rounded-xl p-3 w-fit mb-4">
                   <svg className="w-8 h-8 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">

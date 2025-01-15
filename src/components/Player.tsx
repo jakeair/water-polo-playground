@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react';
 
 interface PlayerProps {
   team: 1 | 2;
-  number: number;
+  number: number | "G";
   initialX: number;  // percentage value (0-100)
   initialY: number;  // percentage value (0-100)
   isGoalie?: boolean;

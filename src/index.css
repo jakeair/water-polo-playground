@@ -121,6 +121,15 @@
   user-select: none;
   transition: transform 0.2s;
   font-size: clamp(12px, 1.5vw, 20px);
+  transform-origin: center;
+}
+
+.player::after {
+  content: attr(data-number);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 .player:hover {

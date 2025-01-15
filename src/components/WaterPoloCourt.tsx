@@ -59,22 +59,22 @@ const WaterPoloCourt: React.FC = () => {
       <div className="line halfway-line" style={{ top: '50%' }}></div>
 
       {/* Team 1 Players (Top) */}
-      <Player team={1} number={1} initialX={50} initialY={5} isGoalie />
-      <Player team={1} number={2} initialX={20} initialY={20} />
-      <Player team={1} number={3} initialX={40} initialY={20} />
-      <Player team={1} number={4} initialX={60} initialY={20} />
-      <Player team={1} number={5} initialX={30} initialY={30} />
-      <Player team={1} number={6} initialX={50} initialY={30} />
-      <Player team={1} number={7} initialX={70} initialY={30} />
+      <Player team={1} number="G" initialX={50} initialY={5} isGoalie />
+      <Player team={1} number={1} initialX={20} initialY={20} />
+      <Player team={1} number={2} initialX={40} initialY={20} />
+      <Player team={1} number={3} initialX={60} initialY={20} />
+      <Player team={1} number={4} initialX={30} initialY={30} />
+      <Player team={1} number={5} initialX={50} initialY={30} />
+      <Player team={1} number={6} initialX={70} initialY={30} />
 
       {/* Team 2 Players (Bottom) */}
-      <Player team={2} number={1} initialX={50} initialY={95} isGoalie />
-      <Player team={2} number={2} initialX={20} initialY={70} />
-      <Player team={2} number={3} initialX={40} initialY={70} />
-      <Player team={2} number={4} initialX={60} initialY={70} />
-      <Player team={2} number={5} initialX={30} initialY={80} />
-      <Player team={2} number={6} initialX={50} initialY={80} />
-      <Player team={2} number={7} initialX={70} initialY={80} />
+      <Player team={2} number="G" initialX={50} initialY={95} isGoalie />
+      <Player team={2} number={1} initialX={20} initialY={70} />
+      <Player team={2} number={2} initialX={40} initialY={70} />
+      <Player team={2} number={3} initialX={60} initialY={70} />
+      <Player team={2} number={4} initialX={30} initialY={80} />
+      <Player team={2} number={5} initialX={50} initialY={80} />
+      <Player team={2} number={6} initialX={70} initialY={80} />
     </div>
   );
 };

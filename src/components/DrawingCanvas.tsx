@@ -19,25 +19,36 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({ isDrawing, isErasing, wid
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    ctx.strokeStyle = isErasing ? '#000' : 'rgba(255, 255, 255, 0.7)';
-    ctx.lineWidth = isErasing ? 20 : 3;
+    // Set initial drawing styles
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';
-    
-    if (isErasing) {
-      ctx.globalCompositeOperation = 'destination-out';
-    } else {
-      ctx.globalCompositeOperation = 'source-over';
-    }
+
+    const updateBrushStyle = () => {
+      if (!ctx) return;
+      
+      if (isErasing) {
+        ctx.globalCompositeOperation = 'destination-out';
+        ctx.strokeStyle = 'rgba(0,0,0,1)';
+        ctx.lineWidth = 20;
+      } else {
+        ctx.globalCompositeOperation = 'source-over';
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.7)';
+        ctx.lineWidth = 3;
+      }
+    };
 
     const handleMouseDown = (e: MouseEvent) => {
       if (!isDrawing && !isErasing) return;
+      
       const rect = canvas.getBoundingClientRect();
       const x = e.clientX - rect.left;
       const y = e.clientY - rect.top;
       
       isDrawingRef.current = true;
       lastPosRef.current = { x, y };
+      
+      // Update brush style before starting to draw
+      updateBrushStyle();
     };
 
     const handleMouseMove = (e: MouseEvent) => {
@@ -63,6 +74,9 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({ isDrawing, isErasing, wid
     canvas.addEventListener('mousemove', handleMouseMove);
     canvas.addEventListener('mouseup', handleMouseUp);
     canvas.addEventListener('mouseleave', handleMouseUp);
+
+    // Update brush style whenever drawing/erasing mode changes
+    updateBrushStyle();
 
     return () => {
       canvas.removeEventListener('mousedown', handleMouseDown);

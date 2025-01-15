@@ -14,7 +14,15 @@ const Index = () => {
 
   return (
     <SidebarProvider>
-      <div className="min-h-screen flex w-full bg-gradient-to-br from-slate-900 to-slate-800">
+      <div className="relative min-h-screen w-full bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+        {/* Background pattern */}
+        <div className="absolute inset-0 opacity-5">
+          <div className="absolute inset-0" style={{
+            backgroundImage: `radial-gradient(circle at 2px 2px, white 1px, transparent 0)`,
+            backgroundSize: '40px 40px'
+          }} />
+        </div>
+
         <Navigation />
         <Toolbar
           team1Color={team1Color}
@@ -30,7 +38,7 @@ const Index = () => {
           strokeWidth={strokeWidth}
           onStrokeWidthChange={setStrokeWidth}
         />
-        <div className="flex-1 p-2 sm:p-3 md:p-4 lg:p-6 xl:p-8 overflow-y-auto">
+        <div className="relative flex-1 p-2 sm:p-3 md:p-4 lg:p-6 xl:p-8 overflow-y-auto">
           <div className="max-w-7xl mx-auto space-y-4 sm:space-y-6 pb-16">
             <header className="text-center space-y-3 px-4 py-6 sm:py-8 md:py-10 mt-12 sm:mt-14 md:mt-16">
               <div className="inline-block px-4 py-1.5 bg-white/10 backdrop-blur rounded-full text-sm font-medium text-white/80 mb-2">

@@ -25,12 +25,11 @@ const Player: React.FC<PlayerProps> = ({
   const dragStartPos = useRef({ x: 0, y: 0 });
   const initialPlayerPos = useRef({ x: 0, y: 0 });
 
-  // Only notify parent of position changes when dragging ends
   useEffect(() => {
-    if (!isDragging && onPositionChange) {
+    if (onPositionChange) {
       onPositionChange(position);
     }
-  }, [isDragging, position, onPositionChange]);
+  }, [position, onPositionChange]);
 
   const handleMouseDown = (e: React.MouseEvent) => {
     if (playerRef.current) {
@@ -51,13 +50,15 @@ const Player: React.FC<PlayerProps> = ({
     if (isDragging && playerRef.current) {
       const courtRect = playerRef.current.parentElement?.getBoundingClientRect();
       if (courtRect) {
-        const deltaX = (e.clientX - dragStartPos.current.x) / courtRect.width * 100;
-        const deltaY = (e.clientY - dragStartPos.current.y) / courtRect.height * 100;
-        
-        const newX = Math.max(0, Math.min(100, initialPlayerPos.current.x + deltaX));
-        const newY = Math.max(0, Math.min(100, initialPlayerPos.current.y + deltaY));
-        
-        setPosition({ x: newX, y: newY });
+        requestAnimationFrame(() => {
+          const deltaX = (e.clientX - dragStartPos.current.x) / courtRect.width * 100;
+          const deltaY = (e.clientY - dragStartPos.current.y) / courtRect.height * 100;
+          
+          const newX = Math.max(0, Math.min(100, initialPlayerPos.current.x + deltaX));
+          const newY = Math.max(0, Math.min(100, initialPlayerPos.current.y + deltaY));
+          
+          setPosition({ x: newX, y: newY });
+        });
       }
     }
   };
@@ -68,7 +69,7 @@ const Player: React.FC<PlayerProps> = ({
 
   useEffect(() => {
     if (isDragging) {
-      window.addEventListener('mousemove', handleMouseMove);
+      window.addEventListener('mousemove', handleMouseMove, { passive: true });
       window.addEventListener('mouseup', handleMouseUp);
     }
     return () => {

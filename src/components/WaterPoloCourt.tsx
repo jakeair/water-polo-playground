@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import Player from './Player';
+import Timeline from './Timeline';
 import { toast } from 'sonner';
 
 interface PlayerPosition {
@@ -8,22 +9,26 @@ interface PlayerPosition {
   y: number;
 }
 
-interface WaterPoloCourtProps {
-  currentTime: number;
-  isPlaying: boolean;
-  keyframes: number[];
+interface KeyframeData {
+  time: number;
+  positions: {
+    [key: string]: PlayerPosition;
+  };
 }
 
-const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
-  currentTime,
-  isPlaying,
-  keyframes
-}) => {
+const WaterPoloCourt: React.FC = () => {
   const courtRef = useRef<HTMLDivElement>(null);
   const topGoalNetRef = useRef<HTMLDivElement>(null);
   const bottomGoalNetRef = useRef<HTMLDivElement>(null);
   const [dimensions, setDimensions] = useState({ width: 1000, height: 1400 });
   
+  // Animation state
+  const [currentTime, setCurrentTime] = useState(0);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [keyframes, setKeyframes] = useState<KeyframeData[]>([]);
+  const animationRef = useRef<number>();
+  const ANIMATION_DURATION = 1000;
+
   // Store current positions of all players
   const [playerPositions, setPlayerPositions] = useState<{[key: string]: PlayerPosition}>({});
   const lastInterpolatedPositions = useRef<{[key: string]: PlayerPosition}>({});
@@ -50,11 +55,88 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
     }));
   };
 
+  const recordKeyframe = () => {
+    const newKeyframe: KeyframeData = {
+      time: currentTime,
+      positions: { ...playerPositions }
+    };
+
+    setKeyframes(prev => {
+      const filtered = prev.filter(kf => kf.time !== currentTime);
+      return [...filtered, newKeyframe].sort((a, b) => a.time - b.time);
+    });
+
+    toast.success('Keyframe recorded', {
+      description: `Saved positions at ${currentTime/100} seconds`
+    });
+  };
+
+  const interpolatePositions = (time: number) => {
+    // Find the surrounding keyframes
+    const prevKeyframe = [...keyframes]
+      .reverse()
+      .find(kf => kf.time <= time);
+    const nextKeyframe = keyframes
+      .find(kf => kf.time > time);
+
+    if (!prevKeyframe && !nextKeyframe) return;
+    if (!prevKeyframe) return nextKeyframe?.positions;
+    if (!nextKeyframe) return prevKeyframe.positions;
+
+    // Calculate interpolation factor
+    const factor = (time - prevKeyframe.time) / (nextKeyframe.time - prevKeyframe.time);
+
+    // Interpolate between positions
+    const interpolated: {[key: string]: PlayerPosition} = {};
+    Object.keys(prevKeyframe.positions).forEach(playerId => {
+      const prev = prevKeyframe.positions[playerId];
+      const next = nextKeyframe.positions[playerId];
+      
+      interpolated[playerId] = {
+        x: prev.x + (next.x - prev.x) * factor,
+        y: prev.y + (next.y - prev.y) * factor
+      };
+    });
+
+    return interpolated;
+  };
+
+  const animate = () => {
+    if (!isPlaying) return;
+
+    setCurrentTime(prev => {
+      const next = prev + 1;
+      if (next >= ANIMATION_DURATION) {
+        setIsPlaying(false);
+        return prev;
+      }
+      return next;
+    });
+
+    animationRef.current = requestAnimationFrame(animate);
+  };
+
   useEffect(() => {
-    if (playerPositions && Object.keys(playerPositions).length > 0) {
+    if (isPlaying) {
+      animationRef.current = requestAnimationFrame(animate);
+    } else if (animationRef.current) {
+      cancelAnimationFrame(animationRef.current);
+    }
+
+    return () => {
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current);
+      }
+    };
+  }, [isPlaying]);
+
+  useEffect(() => {
+    const interpolated = interpolatePositions(currentTime);
+    if (interpolated) {
       // Use GSAP to animate the position changes
-      Object.entries(playerPositions).forEach(([playerId, position]) => {
-        if (position) {
+      Object.entries(interpolated).forEach(([playerId, position]) => {
+        const lastPos = lastInterpolatedPositions.current[playerId];
+        if (lastPos && (lastPos.x !== position.x || lastPos.y !== position.y)) {
           gsap.to(`#player-${playerId}`, {
             left: `${position.x}%`,
             top: `${position.y}%`,
@@ -63,9 +145,14 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
           });
         }
       });
-      lastInterpolatedPositions.current = playerPositions;
+      lastInterpolatedPositions.current = interpolated;
+      setPlayerPositions(interpolated);
     }
-  }, [currentTime, playerPositions]);
+  }, [currentTime]);
+
+  const togglePlayPause = () => {
+    setIsPlaying(!isPlaying);
+  };
 
   return (
     <div className="space-y-6 bg-black/20 backdrop-blur-sm p-8 rounded-2xl shadow-2xl border border-white/10">
@@ -107,6 +194,16 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
         <Player team={2} number={5} initialX={50} initialY={80} onPositionChange={(pos) => updatePlayerPosition('25', pos)} id="player-25" />
         <Player team={2} number={6} initialX={70} initialY={80} onPositionChange={(pos) => updatePlayerPosition('26', pos)} id="player-26" />
       </div>
+
+      <Timeline
+        currentTime={currentTime}
+        duration={ANIMATION_DURATION}
+        keyframes={keyframes.map(kf => kf.time)}
+        isPlaying={isPlaying}
+        onTimeChange={setCurrentTime}
+        onPlayPause={togglePlayPause}
+        onRecordKeyframe={recordKeyframe}
+      />
     </div>
   );
 };

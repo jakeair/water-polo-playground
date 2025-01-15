@@ -118,23 +118,31 @@
   color: white;
   font-weight: bold;
   user-select: none;
-  transition: transform 0.2s;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   font-size: clamp(12px, 1.5vw, 20px);
   transform-origin: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  border: 2px solid rgba(255, 255, 255, 0.2);
 }
 
 .player:hover {
   transform: scale(1.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.player:active {
+  transform: scale(1.05);
+  cursor: grabbing;
 }
 
 .player.team1 {
-  background-color: #0044CC;
+  background: linear-gradient(145deg, #0055ff, #0044CC);
 }
 
 .player.team2 {
-  background-color: #8B4513;
+  background: linear-gradient(145deg, #9b5e3d, #8B4513);
 }
 
 .player.goalie {
-  background-color: #FF4444;
+  background: linear-gradient(145deg, #ff5555, #FF4444);
 }

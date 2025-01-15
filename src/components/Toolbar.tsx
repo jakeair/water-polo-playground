@@ -46,51 +46,47 @@ const Toolbar: React.FC<ToolbarProps> = ({
   };
 
   return (
-    <Sidebar variant="floating" className="w-[100px] bg-white/5 backdrop-blur-md border-r border-white/10">
+    <Sidebar variant="floating" className="w-[80px] sm:w-[90px] md:w-[100px] bg-white/5 backdrop-blur-md border-r border-white/10">
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupContent className="space-y-8 p-4">
-            <div className="space-y-6">
+          <SidebarGroupContent className="space-y-6 p-2 sm:p-3 md:p-4">
+            <div className="space-y-4 sm:space-y-5 md:space-y-6">
               <div className="flex justify-center">
-                <Palette className="w-5 h-5 text-white/60" />
+                <Palette className="w-4 h-4 sm:w-5 sm:h-5 text-white/60" />
               </div>
-              <div className="flex flex-col items-center gap-4">
+              <div className="flex flex-col items-center gap-3 sm:gap-4">
                 <ColorPicker
                   color={team1Color}
                   onChange={onTeam1ColorChange}
-                  label="Team 1"
                 />
                 <ColorPicker
                   color={team2Color}
                   onChange={onTeam2ColorChange}
-                  label="Team 2"
                 />
               </div>
             </div>
 
             <Separator className="bg-white/10" />
 
-            <div className="space-y-6">
-              <div className="flex flex-col items-center gap-4">
+            <div className="space-y-4 sm:space-y-5 md:space-y-6">
+              <div className="flex flex-col items-center gap-3 sm:gap-4">
                 <button
                   onClick={handleDrawingClick}
-                  className={`w-10 h-10 rounded-lg flex items-center justify-center transition-colors ${
+                  className={`w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 rounded-lg flex items-center justify-center transition-colors ${
                     isDrawing ? 'bg-white/20 ring-2 ring-white/30' : 'hover:bg-white/10'
                   }`}
-                  title="Drawing Tool"
                 >
-                  <Pencil className="w-5 h-5 text-white/60" />
+                  <Pencil className="w-4 h-4 sm:w-5 sm:h-5 text-white/60" />
                 </button>
               </div>
 
               {isDrawing && (
-                <div className="space-y-4">
+                <div className="space-y-3 sm:space-y-4">
                   <ColorPicker
                     color={strokeColor}
                     onChange={onStrokeColorChange}
-                    label="Stroke"
                   />
-                  <div className="px-2 py-1 bg-black/20 rounded-lg">
+                  <div className="px-1 sm:px-2 py-1 bg-black/20 rounded-lg">
                     <Slider
                       value={[strokeWidth]}
                       onValueChange={handleStrokeWidthChange}

@@ -51,7 +51,7 @@
 
 .goal {
   position: absolute;
-  width: 20%;
+  width: 27.5%; /* Updated from 20% to 27.5% */
   height: 6%;
   border: 4px solid #FF4D4D;
   background-color: #ffdde1;

@@ -30,7 +30,7 @@ const Index = () => {
           strokeWidth={strokeWidth}
           onStrokeWidthChange={setStrokeWidth}
         />
-        <div className="flex-1 p-2 sm:p-4 md:p-6 lg:p-8 xl:p-12 overflow-y-auto">
+        <div className="flex-1 p-2 sm:p-3 md:p-4 lg:p-6 xl:p-8 overflow-y-auto">
           <div className="max-w-7xl mx-auto space-y-4 sm:space-y-6 pb-16">
             <header className="text-center space-y-2 px-4 py-4 rounded-lg bg-sky-500/10 border border-sky-200/20">
               <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-sky-100 tracking-tight">

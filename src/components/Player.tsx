@@ -86,6 +86,7 @@ const Player: React.FC<PlayerProps> = ({
         cursor: isDragging ? 'grabbing' : 'grab',
         transform: `translate(-50%, -50%) ${isDragging ? 'scale(1.05)' : 'scale(1)'}`,
         position: 'absolute',
+        transition: isDragging ? 'none' : 'all 0.2s ease-out'
       }}
       onMouseDown={handleMouseDown}
     >

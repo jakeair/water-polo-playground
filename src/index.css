@@ -57,6 +57,8 @@
   align-items: center;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
   overflow: hidden;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 .goal-net {
@@ -72,12 +74,10 @@
 
 .goal-top {
   top: 0;
-  left: 0;
 }
 
 .goal-bottom {
   bottom: 0;
-  right: 0;
 }
 
 .line {

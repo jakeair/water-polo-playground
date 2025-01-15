@@ -7,6 +7,7 @@ const Index = () => {
   const [team1Color, setTeam1Color] = useState('#3b82f6');
   const [team2Color, setTeam2Color] = useState('#ef4444');
   const [isDrawing, setIsDrawing] = useState(false);
+  const [isErasing, setIsErasing] = useState(false);
 
   return (
     <SidebarProvider>
@@ -17,7 +18,9 @@ const Index = () => {
           onTeam1ColorChange={setTeam1Color}
           onTeam2ColorChange={setTeam2Color}
           isDrawing={isDrawing}
+          isErasing={isErasing}
           onDrawingChange={setIsDrawing}
+          onErasingChange={setIsErasing}
         />
         <div className="flex-1 p-4 md:p-8 lg:p-12 overflow-y-auto">
           <div className="max-w-7xl mx-auto space-y-8 pb-24">
@@ -36,6 +39,7 @@ const Index = () => {
               onTeam1ColorChange={setTeam1Color}
               onTeam2ColorChange={setTeam2Color}
               isDrawing={isDrawing}
+              isErasing={isErasing}
             />
           </div>
         </div>

@@ -27,6 +27,7 @@ interface WaterPoloCourtProps {
   onTeam1ColorChange: (color: string) => void;
   onTeam2ColorChange: (color: string) => void;
   isDrawing: boolean;
+  isErasing: boolean;
 }
 
 const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
@@ -34,7 +35,8 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
   team2Color,
   onTeam1ColorChange,
   onTeam2ColorChange,
-  isDrawing
+  isDrawing,
+  isErasing
 }) => {
   const courtRef = useRef<HTMLDivElement>(null);
   const topGoalNetRef = useRef<HTMLDivElement>(null);
@@ -264,6 +266,7 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
       >
         <DrawingCanvas 
           isDrawing={isDrawing}
+          isErasing={isErasing}
           width={dimensions.width}
           height={dimensions.height}
         />

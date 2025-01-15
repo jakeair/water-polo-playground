@@ -65,6 +65,11 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
   const [team1Logo, setTeam1Logo] = useState<string>();
   const [team2Logo, setTeam2Logo] = useState<string>();
   const [ballImage, setBallImage] = useState<string>();
+  
+  const [localIsDrawing, setIsDrawing] = useState(isDrawing);
+  const [localIsErasing, setIsErasing] = useState(isErasing);
+  const [localStrokeColor, setStrokeColor] = useState(strokeColor);
+  const [localStrokeWidth, setStrokeWidth] = useState(strokeWidth);
 
   useEffect(() => {
     const updateDimensions = () => {
@@ -133,12 +138,10 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
 
     const factor = (time - prevKeyframe.time) / (nextKeyframe.time - prevKeyframe.time);
 
-    // Interpolate ball position
     if (prevKeyframe.ballPosition && nextKeyframe.ballPosition) {
       const interpolatedBallX = prevKeyframe.ballPosition.x + (nextKeyframe.ballPosition.x - prevKeyframe.ballPosition.x) * factor;
       const interpolatedBallY = prevKeyframe.ballPosition.y + (nextKeyframe.ballPosition.y - prevKeyframe.ballPosition.y) * factor;
       
-      // Use GSAP to animate the ball smoothly
       if (ballRef.current) {
         gsap.to(ballRef.current, {
           left: `${interpolatedBallX}%`,
@@ -150,7 +153,6 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
       }
     }
 
-    // Interpolate player positions
     const interpolated: {[key: string]: PlayerPosition} = {};
     Object.keys(prevKeyframe.positions).forEach(playerId => {
       const prev = prevKeyframe.positions[playerId];
@@ -242,7 +244,6 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
         let newX = initialBallPos.current.x + deltaX;
         let newY = initialBallPos.current.y + deltaY;
 
-        // Allow ball to move slightly outside court bounds and into goals
         newX = Math.max(-5, Math.min(105, newX));
         newY = Math.max(-8, Math.min(108, newY));
         
@@ -283,13 +284,13 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
           team2Color={team2Color}
           onTeam1ColorChange={onTeam1ColorChange}
           onTeam2ColorChange={onTeam2ColorChange}
-          isDrawing={isDrawing}
-          isErasing={isErasing}
+          isDrawing={localIsDrawing}
+          isErasing={localIsErasing}
           onDrawingChange={setIsDrawing}
           onErasingChange={setIsErasing}
-          strokeColor={strokeColor}
+          strokeColor={localStrokeColor}
           onStrokeColorChange={setStrokeColor}
-          strokeWidth={strokeWidth}
+          strokeWidth={localStrokeWidth}
           onStrokeWidthChange={setStrokeWidth}
           team1Logo={team1Logo}
           team2Logo={team2Logo}
@@ -300,12 +301,12 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
         />
 
         <DrawingCanvas 
-          isDrawing={isDrawing}
-          isErasing={isErasing}
+          isDrawing={localIsDrawing}
+          isErasing={localIsErasing}
           width={dimensions.width}
           height={dimensions.height}
-          strokeColor={strokeColor}
-          strokeWidth={strokeWidth}
+          strokeColor={localStrokeColor}
+          strokeWidth={localStrokeWidth}
         />
         
         <div className="goal goal-top">

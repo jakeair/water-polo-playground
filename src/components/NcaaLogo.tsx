@@ -14,17 +14,16 @@ const NcaaLogo = ({ className = "", size = 120 }: { className?: string; size?: n
         y="50"
         textAnchor="middle"
         dominantBaseline="middle"
-        fill="#33C3F0"
+        fill="#0033A0"
         fontSize="48"
-        fontWeight="900"
-        fontFamily="system-ui, -apple-system, sans-serif"
-        letterSpacing="2"
+        fontWeight="bold"
+        fontFamily="Arial, sans-serif"
       >
         NCAA
       </text>
       {/* Decorative Lines */}
-      <line x1="30" y1="20" x2="170" y2="20" stroke="#33C3F0" strokeWidth="6"/>
-      <line x1="30" y1="60" x2="170" y2="60" stroke="#33C3F0" strokeWidth="6"/>
+      <line x1="30" y1="20" x2="170" y2="20" stroke="#0033A0" strokeWidth="4"/>
+      <line x1="30" y1="60" x2="170" y2="60" stroke="#0033A0" strokeWidth="4"/>
     </svg>
   );
 };

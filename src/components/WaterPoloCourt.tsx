@@ -151,6 +151,35 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
     return interpolated;
   };
 
+  const animate = () => {
+    if (!isPlaying) return;
+
+    setCurrentTime(prev => {
+      const next = prev + 1;
+      if (next >= ANIMATION_DURATION) {
+        setIsPlaying(false);
+        return prev;
+      }
+      return next;
+    });
+
+    animationRef.current = requestAnimationFrame(animate);
+  };
+
+  useEffect(() => {
+    if (isPlaying) {
+      animationRef.current = requestAnimationFrame(animate);
+    } else if (animationRef.current) {
+      cancelAnimationFrame(animationRef.current);
+    }
+
+    return () => {
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current);
+      }
+    };
+  }, [isPlaying]);
+
   useEffect(() => {
     const interpolated = interpolatePositions(currentTime);
     if (interpolated) {

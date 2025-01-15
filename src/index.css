@@ -42,20 +42,22 @@
 .court {
   position: relative;
   background-color: #d9f0ff;
-  border: 5px solid #0044CC;
-  border-radius: 12px;
-  margin: 20px auto;
+  border: clamp(2px, 0.5vw, 5px) solid #0044CC;
+  border-radius: clamp(6px, 1vw, 12px);
+  margin: clamp(10px, 2vw, 20px) auto;
   overflow: visible;
-  padding: 40px 0;
+  padding: clamp(20px, 4vw, 40px) 0;
+  width: min(95vw, 1000px);
+  aspect-ratio: 5/7;
 }
 
 .goal {
   position: absolute;
-  width: 23%;
-  height: 6%;
-  border: 4px solid #FF4D4D;
+  width: clamp(20%, 23%, 25%);
+  height: clamp(4%, 6%, 8%);
+  border: clamp(2px, 0.4vw, 4px) solid #FF4D4D;
   background-color: #ffdde1;
-  border-radius: 8px;
+  border-radius: clamp(4px, 0.8vw, 8px);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -104,7 +106,7 @@
 .line {
   position: absolute;
   width: 100%;
-  height: 3px;
+  height: clamp(1px, 0.3vw, 3px);
 }
 
 .two-meter-line {
@@ -125,8 +127,8 @@
 
 .player {
   position: absolute;
-  width: 46px;  /* Increased by 5% from 44px */
-  height: 46px; /* Increased by 5% from 44px */
+  width: clamp(30px, 4.6vw, 46px);
+  height: clamp(30px, 4.6vw, 46px);
   border-radius: 50%;
   display: flex;
   justify-content: center;
@@ -134,10 +136,10 @@
   color: white;
   font-weight: bold;
   user-select: none;
-  font-size: clamp(12px, 1.5vw, 20px);
+  font-size: clamp(10px, 1.5vw, 20px);
   transform-origin: center;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  border: 2px solid rgba(255, 255, 255, 0.2);
+  border: clamp(1px, 0.2vw, 2px) solid rgba(255, 255, 255, 0.2);
   will-change: transform, left, top;
   touch-action: none;
   -webkit-user-select: none;
@@ -159,17 +161,17 @@
 
 .ball {
   position: absolute;
-  width: 3.90625%;  /* Increased by 25% from 3.125% */
+  width: clamp(20px, 3.9vw, 40px);
   aspect-ratio: 1;
   background: linear-gradient(145deg, #FFA500, #FF8C00);
-  border: 2px solid #FFD700;
+  border: clamp(1px, 0.2vw, 2px) solid #FFD700;
   border-radius: 50%;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   cursor: grab;
   will-change: transform, left, top;
   touch-action: none;
   transform: translate(-50%, -50%);
-  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  transition: transform 0.2s ease-out;
   animation: float 3s ease-in-out infinite;
 }
 

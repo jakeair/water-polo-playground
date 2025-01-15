@@ -26,7 +26,7 @@ const Home = () => {
           <div className="max-w-5xl w-full space-y-12 text-center">
             <div className="space-y-6">
               <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold bg-gradient-to-r from-white via-white/90 to-white/70 text-transparent bg-clip-text break-words leading-tight">
-                Water Polo Strategy
+                Water Polo Playground
               </h1>
               <p className="text-xl sm:text-2xl md:text-3xl text-white/60 max-w-3xl mx-auto leading-relaxed">
                 Design, animate, and share your water polo plays with our interactive court builder
@@ -42,7 +42,7 @@ const Home = () => {
                 </Button>
               </Link>
               <Link to="/about">
-                <Button variant="outline" size="lg" className="border-white/20 text-white hover:bg-white/10 gap-3 px-8 py-6 text-lg">
+                <Button variant="outline" size="lg" className="border-white/20 text-slate-900 bg-white/90 hover:bg-white gap-3 px-8 py-6 text-lg">
                   <Info className="w-6 h-6" />
                   Learn More
                 </Button>

@@ -44,7 +44,7 @@ const Home = () => {
                   </Button>
                 </Link>
                 <Link to="/pricing">
-                  <Button variant="outline" size="lg" className="border-white/20 text-white hover:bg-white/10 gap-3 px-8 py-6 text-lg">
+                  <Button variant="outline" size="lg" className="border-white/20 text-slate-900 bg-white hover:bg-white/10 hover:text-white gap-3 px-8 py-6 text-lg">
                     View Pricing
                   </Button>
                 </Link>
@@ -102,7 +102,7 @@ const Home = () => {
                   </Button>
                 </Link>
                 <Link to="/demo">
-                  <Button variant="outline" size="lg" className="border-white/20 text-white hover:bg-white/10 gap-2">
+                  <Button variant="outline" size="lg" className="border-white/20 bg-white text-slate-900 hover:bg-white/10 hover:text-white gap-2">
                     Watch Demo
                   </Button>
                 </Link>

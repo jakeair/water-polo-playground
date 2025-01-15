@@ -36,9 +36,6 @@ const Index = () => {
               <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-sky-100 tracking-tight">
                 Water Polo Whiteboard
               </h1>
-              <p className="text-sm sm:text-base text-sky-200/80 max-w-lg mx-auto">
-                Design and animate your water polo plays with our interactive court builder
-              </p>
             </header>
             
             <WaterPoloCourt

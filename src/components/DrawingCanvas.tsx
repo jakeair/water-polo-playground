@@ -19,7 +19,6 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({ isDrawing, isErasing, wid
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    // Set initial drawing styles
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';
 
@@ -32,8 +31,8 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({ isDrawing, isErasing, wid
         ctx.lineWidth = 20;
       } else {
         ctx.globalCompositeOperation = 'source-over';
-        ctx.strokeStyle = 'rgba(255, 255, 255, 0.7)';
-        ctx.lineWidth = 3;
+        ctx.strokeStyle = '#9b87f5'; // Changed to Primary Purple
+        ctx.lineWidth = 2; // Reduced stroke width for finer lines
       }
     };
 
@@ -47,7 +46,6 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({ isDrawing, isErasing, wid
       isDrawingRef.current = true;
       lastPosRef.current = { x, y };
       
-      // Update brush style before starting to draw
       updateBrushStyle();
     };
 
@@ -75,7 +73,6 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({ isDrawing, isErasing, wid
     canvas.addEventListener('mouseup', handleMouseUp);
     canvas.addEventListener('mouseleave', handleMouseUp);
 
-    // Update brush style whenever drawing/erasing mode changes
     updateBrushStyle();
 
     return () => {

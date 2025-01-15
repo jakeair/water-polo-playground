@@ -1,6 +1,6 @@
 import React from 'react';
 import ColorPicker from './ColorPicker';
-import { Palette, PenTool, Eraser } from 'lucide-react';
+import { Palette, Pencil, Eraser } from 'lucide-react';
 import {
   Sidebar,
   SidebarContent,
@@ -69,7 +69,7 @@ const Toolbar: React.FC<ToolbarProps> = ({
                 }`}
                 title="Drawing Tool"
               >
-                <PenTool className="w-5 h-5 text-white/60" />
+                <Pencil className="w-5 h-5 text-white/60" />
               </button>
               <button
                 onClick={handleErasingClick}

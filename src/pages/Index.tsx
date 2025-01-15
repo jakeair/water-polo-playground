@@ -14,7 +14,7 @@ const Index = () => {
 
   return (
     <SidebarProvider>
-      <div className="min-h-screen flex w-full bg-gradient-to-br from-slate-900 to-slate-800">
+      <div className="min-h-screen flex w-full bg-gradient-to-br from-slate-900 to-slate-800 pt-20">
         <Navigation />
         <Toolbar
           team1Color={team1Color}

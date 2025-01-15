@@ -2,6 +2,7 @@ import { Check, DollarSign, Award, Star, Zap, Shield, Users } from "lucide-react
 import { Link } from "react-router-dom";
 import Navigation from "@/components/Navigation";
 import { Card } from "@/components/ui/card";
+import VideoDemo from "@/components/VideoDemo";
 
 const PricingPage = () => {
   return (
@@ -18,6 +19,9 @@ const PricingPage = () => {
             Join coaches and teams worldwide using our platform to elevate their game planning and team performance
           </p>
         </div>
+
+        {/* Video Demo Section */}
+        <VideoDemo />
 
         {/* Pricing Cards */}
         <div className="grid md:grid-cols-3 gap-8 max-w-7xl mx-auto">

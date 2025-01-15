@@ -9,12 +9,6 @@ interface PlayerPosition {
   y: number;
 }
 
-interface DrawingElement {
-  type: 'pen' | 'ellipse' | 'rectangle' | 'dottedLine' | 'straightLine';
-  points: { x: number; y: number; }[];
-  color: string;
-}
-
 interface KeyframeData {
   time: number;
   positions: {
@@ -27,15 +21,13 @@ interface WaterPoloCourtProps {
   team2Color: string;
   onTeam1ColorChange: (color: string) => void;
   onTeam2ColorChange: (color: string) => void;
-  activeTool?: 'pen' | 'ellipse' | 'rectangle' | 'dottedLine' | 'straightLine';
 }
 
 const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
   team1Color,
   team2Color,
   onTeam1ColorChange,
-  onTeam2ColorChange,
-  activeTool = 'pen'
+  onTeam2ColorChange
 }) => {
   const courtRef = useRef<HTMLDivElement>(null);
   const topGoalNetRef = useRef<HTMLDivElement>(null);
@@ -55,178 +47,6 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
   const [keyframes, setKeyframes] = useState<KeyframeData[]>([]);
   const animationRef = useRef<number>();
   const ANIMATION_DURATION = 2500;
-
-  const [isDrawing, setIsDrawing] = useState(false);
-  const [drawings, setDrawings] = useState<DrawingElement[]>([]);
-  const [currentDrawing, setCurrentDrawing] = useState<DrawingElement | null>(null);
-  const drawingCanvasRef = useRef<HTMLCanvasElement>(null);
-  const startPoint = useRef<{ x: number; y: number } | null>(null);
-
-  const getRelativeCoordinates = (e: React.MouseEvent | MouseEvent) => {
-    const rect = drawingCanvasRef.current?.getBoundingClientRect();
-    if (!rect) return { x: 0, y: 0 };
-    return {
-      x: ((e.clientX - rect.left) / rect.width) * 100,
-      y: ((e.clientY - rect.top) / rect.height) * 100
-    };
-  };
-
-  const handleDrawingStart = (e: React.MouseEvent) => {
-    if (!activeTool) return;
-    
-    const point = getRelativeCoordinates(e);
-    startPoint.current = point;
-    
-    setIsDrawing(true);
-    setCurrentDrawing({
-      type: activeTool,
-      points: [point],
-      color: team1Color // Using team1Color as drawing color
-    });
-  };
-
-  const handleDrawingMove = (e: MouseEvent) => {
-    if (!isDrawing || !currentDrawing) return;
-
-    const point = getRelativeCoordinates(e);
-    
-    if (currentDrawing.type === 'pen') {
-      setCurrentDrawing(prev => prev ? {
-        ...prev,
-        points: [...prev.points, point]
-      } : null);
-    } else {
-      setCurrentDrawing(prev => prev ? {
-        ...prev,
-        points: [startPoint.current!, point]
-      } : null);
-    }
-  };
-
-  const handleDrawingEnd = () => {
-    if (currentDrawing) {
-      setDrawings(prev => [...prev, currentDrawing]);
-    }
-    setIsDrawing(false);
-    setCurrentDrawing(null);
-    startPoint.current = null;
-  };
-
-  useEffect(() => {
-    if (isDrawing) {
-      window.addEventListener('mousemove', handleDrawingMove);
-      window.addEventListener('mouseup', handleDrawingEnd);
-    }
-    return () => {
-      window.removeEventListener('mousemove', handleDrawingMove);
-      window.removeEventListener('mouseup', handleDrawingEnd);
-    };
-  }, [isDrawing, currentDrawing]);
-
-  const renderDrawing = (drawing: DrawingElement) => {
-    switch (drawing.type) {
-      case 'pen':
-        return (
-          <svg
-            key={Math.random()}
-            className="absolute inset-0 w-full h-full pointer-events-none"
-            style={{ zIndex: 10 }}
-          >
-            <polyline
-              points={drawing.points.map(p => `${p.x},${p.y}`).join(' ')}
-              fill="none"
-              stroke={drawing.color}
-              strokeWidth="2"
-              strokeLinejoin="round"
-              strokeLinecap="round"
-            />
-          </svg>
-        );
-      case 'ellipse':
-        if (drawing.points.length < 2) return null;
-        const [start, end] = drawing.points;
-        const rx = Math.abs(end.x - start.x) / 2;
-        const ry = Math.abs(end.y - start.y) / 2;
-        const cx = start.x + (end.x - start.x) / 2;
-        const cy = start.y + (end.y - start.y) / 2;
-        return (
-          <svg
-            key={Math.random()}
-            className="absolute inset-0 w-full h-full pointer-events-none"
-            style={{ zIndex: 10 }}
-          >
-            <ellipse
-              cx={`${cx}%`}
-              cy={`${cy}%`}
-              rx={`${rx}%`}
-              ry={`${ry}%`}
-              fill="none"
-              stroke={drawing.color}
-              strokeWidth="2"
-            />
-          </svg>
-        );
-      case 'rectangle':
-        if (drawing.points.length < 2) return null;
-        const [startR, endR] = drawing.points;
-        return (
-          <svg
-            key={Math.random()}
-            className="absolute inset-0 w-full h-full pointer-events-none"
-            style={{ zIndex: 10 }}
-          >
-            <rect
-              x={`${Math.min(startR.x, endR.x)}%`}
-              y={`${Math.min(startR.y, endR.y)}%`}
-              width={`${Math.abs(endR.x - startR.x)}%`}
-              height={`${Math.abs(endR.y - startR.y)}%`}
-              fill="none"
-              stroke={drawing.color}
-              strokeWidth="2"
-            />
-          </svg>
-        );
-      case 'straightLine':
-        if (drawing.points.length < 2) return null;
-        const [startL, endL] = drawing.points;
-        return (
-          <svg
-            key={Math.random()}
-            className="absolute inset-0 w-full h-full pointer-events-none"
-            style={{ zIndex: 10 }}
-          >
-            <line
-              x1={`${startL.x}%`}
-              y1={`${startL.y}%`}
-              x2={`${endL.x}%`}
-              y2={`${endL.y}%`}
-              stroke={drawing.color}
-              strokeWidth="2"
-            />
-          </svg>
-        );
-      case 'dottedLine':
-        if (drawing.points.length < 2) return null;
-        const [startD, endD] = drawing.points;
-        return (
-          <svg
-            key={Math.random()}
-            className="absolute inset-0 w-full h-full pointer-events-none"
-            style={{ zIndex: 10 }}
-          >
-            <line
-              x1={`${startD.x}%`}
-              y1={`${startD.y}%`}
-              x2={`${endD.x}%`}
-              y2={`${endD.y}%`}
-              stroke={drawing.color}
-              strokeWidth="2"
-              strokeDasharray="5,5"
-            />
-          </svg>
-        );
-    }
-  };
 
   useEffect(() => {
     const updateDimensions = () => {
@@ -399,13 +219,12 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
     <div className="space-y-24 bg-black/20 backdrop-blur-sm px-8 sm:px-12 md:px-16 lg:px-20 py-16 rounded-3xl shadow-2xl border border-white/10">
       <div 
         ref={courtRef}
-        className="court relative"
+        className="court"
         style={{ 
           width: dimensions.width, 
           height: dimensions.height,
           margin: '60px auto'
         }}
-        onMouseDown={handleDrawingStart}
       >
         <div className="goal goal-top">
           <div ref={topGoalNetRef} className="goal-net" />
@@ -448,18 +267,6 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
         <Player team={2} number={4} initialX={30} initialY={80} onPositionChange={(pos) => updatePlayerPosition('24', pos)} id="player-24" />
         <Player team={2} number={5} initialX={50} initialY={80} onPositionChange={(pos) => updatePlayerPosition('25', pos)} id="player-25" />
         <Player team={2} number={6} initialX={70} initialY={80} onPositionChange={(pos) => updatePlayerPosition('26', pos)} id="player-26" />
-
-        {/* Render all completed drawings */}
-        {drawings.map(drawing => renderDrawing(drawing))}
-        
-        {/* Render current drawing */}
-        {currentDrawing && renderDrawing(currentDrawing)}
-
-        <canvas
-          ref={drawingCanvasRef}
-          className="absolute inset-0 w-full h-full pointer-events-none"
-          style={{ zIndex: 9 }}
-        />
       </div>
 
       <Timeline

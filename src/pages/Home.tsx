@@ -22,7 +22,7 @@ const Home = () => {
 
         <Navigation />
         
-        <main className="relative flex-1 flex flex-col items-center justify-center p-4 sm:p-8 md:p-12 lg:p-16 pb-48">
+        <main className="relative flex-1 flex flex-col items-center justify-center p-4 sm:p-8 md:p-12 lg:p-16 pb-64">
           <div className="max-w-5xl w-full space-y-12 text-center">
             <div className="space-y-6">
               <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold bg-gradient-to-r from-white via-white/90 to-white/70 text-transparent bg-clip-text break-words leading-tight">

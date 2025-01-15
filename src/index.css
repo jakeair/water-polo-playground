@@ -50,10 +50,10 @@
 
 .goal {
   position: absolute;
-  width: 30%;
-  height: 10%;
+  width: 20%;
+  height: 6%;
   border: 4px solid #FF4D4D;
-  background-color: #ff6b6b;
+  background: linear-gradient(to right, #ee9ca7, #ffdde1);
   border-radius: 8px;
   display: flex;
   justify-content: center;
@@ -76,11 +76,11 @@
 }
 
 .goal-top {
-  top: -10%;
+  top: -6%;
 }
 
 .goal-bottom {
-  bottom: -10%;
+  bottom: -6%;
 }
 
 .line {

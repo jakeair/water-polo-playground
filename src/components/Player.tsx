@@ -82,14 +82,12 @@ const Player: React.FC<PlayerProps> = ({
     <div
       id={id}
       ref={playerRef}
-      className={`player ${isGoalie ? 'goalie' : team === 1 ? 'team1' : 'team2'}`}
+      className={`player team${team}`}
       style={{
         left: `${position.x}%`,
         top: `${position.y}%`,
         cursor: isDragging ? 'grabbing' : 'grab',
         transform: `translate(-50%, -50%) ${isDragging ? 'scale(1.05)' : 'scale(1)'}`,
-        position: 'absolute',
-        transition: isDragging ? 'none' : 'transform 0.2s ease-out'
       }}
       onMouseDown={handleMouseDown}
     >

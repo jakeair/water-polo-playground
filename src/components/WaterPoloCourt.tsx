@@ -3,6 +3,7 @@ import { gsap } from 'gsap';
 import Player from './Player';
 import Timeline from './Timeline';
 import { toast } from 'sonner';
+import ColorPicker from './ColorPicker';
 
 interface PlayerPosition {
   x: number;
@@ -22,12 +23,16 @@ const WaterPoloCourt: React.FC = () => {
   const bottomGoalNetRef = useRef<HTMLDivElement>(null);
   const [dimensions, setDimensions] = useState({ width: 1000, height: 1400 });
   
+  // Team colors state
+  const [team1Color, setTeam1Color] = useState('#3b82f6');
+  const [team2Color, setTeam2Color] = useState('#ef4444');
+  
   // Animation state
   const [currentTime, setCurrentTime] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
   const [keyframes, setKeyframes] = useState<KeyframeData[]>([]);
   const animationRef = useRef<number>();
-  const ANIMATION_DURATION = 2500; // Changed to 25 seconds * 100
+  const ANIMATION_DURATION = 2500;
 
   const [playerPositions, setPlayerPositions] = useState<{[key: string]: PlayerPosition}>({});
   const lastInterpolatedPositions = useRef<{[key: string]: PlayerPosition}>({});
@@ -51,6 +56,12 @@ const WaterPoloCourt: React.FC = () => {
     window.addEventListener('resize', updateDimensions);
     return () => window.removeEventListener('resize', updateDimensions);
   }, []);
+
+  // Update CSS variables when team colors change
+  useEffect(() => {
+    document.documentElement.style.setProperty('--team1-color', team1Color);
+    document.documentElement.style.setProperty('--team2-color', team2Color);
+  }, [team1Color, team2Color]);
 
   const updatePlayerPosition = (playerId: string, position: PlayerPosition) => {
     setPlayerPositions(prev => ({
@@ -203,8 +214,31 @@ const WaterPoloCourt: React.FC = () => {
     };
   }, [isDraggingBall.current]);
 
+  const handleTeam1ColorChange = (color: string) => {
+    setTeam1Color(color);
+    toast.success('Team 1 color updated');
+  };
+
+  const handleTeam2ColorChange = (color: string) => {
+    setTeam2Color(color);
+    toast.success('Team 2 color updated');
+  };
+
   return (
     <div className="space-y-6 bg-black/20 backdrop-blur-sm p-8 rounded-2xl shadow-2xl border border-white/10">
+      <div className="flex justify-center gap-4 mb-4">
+        <ColorPicker
+          color={team1Color}
+          onChange={handleTeam1ColorChange}
+          label="Team 1"
+        />
+        <ColorPicker
+          color={team2Color}
+          onChange={handleTeam2ColorChange}
+          label="Team 2"
+        />
+      </div>
+      
       <div 
         ref={courtRef}
         className="court"

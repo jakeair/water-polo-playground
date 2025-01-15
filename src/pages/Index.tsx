@@ -2,6 +2,7 @@ import { useState } from 'react';
 import Navigation from '@/components/Navigation';
 import WaterPoloCourt from '@/components/WaterPoloCourt';
 import Toolbar from '@/components/Toolbar';
+import { SidebarProvider } from '@/components/ui/sidebar';
 
 const Index = () => {
   const [team1Color, setTeam1Color] = useState('#3b82f6');
@@ -27,31 +28,35 @@ const Index = () => {
               </p>
             </header>
             
-            <WaterPoloCourt
-              team1Color={team1Color}
-              team2Color={team2Color}
-              onTeam1ColorChange={setTeam1Color}
-              onTeam2ColorChange={setTeam2Color}
-              isDrawing={isDrawing}
-              isErasing={isErasing}
-              strokeColor={strokeColor}
-              strokeWidth={strokeWidth}
-            />
-            
-            <Toolbar
-              team1Color={team1Color}
-              team2Color={team2Color}
-              onTeam1ColorChange={setTeam1Color}
-              onTeam2ColorChange={setTeam2Color}
-              isDrawing={isDrawing}
-              setIsDrawing={setIsDrawing}
-              isErasing={isErasing}
-              setIsErasing={setIsErasing}
-              strokeColor={strokeColor}
-              setStrokeColor={setStrokeColor}
-              strokeWidth={strokeWidth}
-              setStrokeWidth={setStrokeWidth}
-            />
+            <SidebarProvider>
+              <div className="flex w-full">
+                <WaterPoloCourt
+                  team1Color={team1Color}
+                  team2Color={team2Color}
+                  onTeam1ColorChange={setTeam1Color}
+                  onTeam2ColorChange={setTeam2Color}
+                  isDrawing={isDrawing}
+                  isErasing={isErasing}
+                  strokeColor={strokeColor}
+                  strokeWidth={strokeWidth}
+                />
+                
+                <Toolbar
+                  team1Color={team1Color}
+                  team2Color={team2Color}
+                  onTeam1ColorChange={setTeam1Color}
+                  onTeam2ColorChange={setTeam2Color}
+                  isDrawing={isDrawing}
+                  onDrawingChange={setIsDrawing}
+                  isErasing={isErasing}
+                  onErasingChange={setIsErasing}
+                  strokeColor={strokeColor}
+                  onStrokeColorChange={setStrokeColor}
+                  strokeWidth={strokeWidth}
+                  onStrokeWidthChange={setStrokeWidth}
+                />
+              </div>
+            </SidebarProvider>
           </div>
         </div>
       </main>

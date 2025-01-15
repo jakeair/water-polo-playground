@@ -17,7 +17,7 @@ const Index = () => {
           onTeam2ColorChange={setTeam2Color}
         />
         <div className="flex-1 p-4 md:p-8 lg:p-12 overflow-y-auto">
-          <div className="max-w-7xl mx-auto space-y-8 pb-12">
+          <div className="max-w-7xl mx-auto space-y-8 pb-24">
             <header className="text-center space-y-4 px-4">
               <h1 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold bg-gradient-to-r from-white to-white/60 text-transparent bg-clip-text break-words">
                 Water Polo Playground

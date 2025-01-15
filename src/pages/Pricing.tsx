@@ -23,10 +23,10 @@ const PricingPage = () => {
             </div>
 
             <div className="text-white mb-8">
-              <h3 className="text-2xl font-semibold mb-2">14-Day Trial</h3>
+              <h3 className="text-2xl font-semibold mb-2">7-Day Trial</h3>
               <div className="flex items-baseline gap-2">
                 <span className="text-4xl font-bold">$0</span>
-                <span className="text-white/70">/14 days</span>
+                <span className="text-white/70">/7 days</span>
               </div>
               <p className="text-white/70 mt-2">No credit card required</p>
             </div>
@@ -59,10 +59,10 @@ const PricingPage = () => {
             <div className="text-white mb-8">
               <h3 className="text-2xl font-semibold mb-2">Quarterly Plan</h3>
               <div className="flex items-baseline gap-2">
-                <span className="text-4xl font-bold">$29</span>
+                <span className="text-4xl font-bold">$22</span>
                 <span className="text-white/70">/month</span>
               </div>
-              <p className="text-white/70 mt-2">Billed quarterly ($87)</p>
+              <p className="text-white/70 mt-2">Billed quarterly ($66)</p>
             </div>
 
             <ul className="space-y-4 mb-8">
@@ -99,10 +99,10 @@ const PricingPage = () => {
             <div className="text-white mb-8">
               <h3 className="text-2xl font-semibold mb-2">Annual Plan</h3>
               <div className="flex items-baseline gap-2">
-                <span className="text-4xl font-bold">$23</span>
+                <span className="text-4xl font-bold">$17</span>
                 <span className="text-white/70">/month</span>
               </div>
-              <p className="text-white/70 mt-2">Billed annually ($276)</p>
+              <p className="text-white/70 mt-2">Billed annually ($204)</p>
             </div>
 
             <ul className="space-y-4 mb-8">

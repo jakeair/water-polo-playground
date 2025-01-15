@@ -3,8 +3,8 @@ import React, { useState, useRef } from 'react';
 interface PlayerProps {
   team: 1 | 2;
   number: number;
-  initialX: number;
-  initialY: number;
+  initialX: number;  // percentage value (0-100)
+  initialY: number;  // percentage value (0-100)
   isGoalie?: boolean;
 }
 
@@ -29,12 +29,13 @@ const Player: React.FC<PlayerProps> = ({ team, number, initialX, initialY, isGoa
     if (isDragging && playerRef.current) {
       const courtRect = playerRef.current.parentElement?.getBoundingClientRect();
       if (courtRect) {
-        const newX = e.clientX - courtRect.left - dragOffset.current.x;
-        const newY = e.clientY - courtRect.top - dragOffset.current.y;
+        // Calculate percentage positions
+        const newX = ((e.clientX - courtRect.left) / courtRect.width) * 100;
+        const newY = ((e.clientY - courtRect.top) / courtRect.height) * 100;
         
-        // Ensure player stays within court boundaries
-        const x = Math.max(0, Math.min(newX, courtRect.width - 50));
-        const y = Math.max(0, Math.min(newY, courtRect.height - 50));
+        // Ensure player stays within court boundaries (0-100%)
+        const x = Math.max(0, Math.min(newX, 100));
+        const y = Math.max(0, Math.min(newY, 100));
         
         setPosition({ x, y });
       }
@@ -61,8 +62,8 @@ const Player: React.FC<PlayerProps> = ({ team, number, initialX, initialY, isGoa
       ref={playerRef}
       className={`player ${isGoalie ? 'goalie' : team === 1 ? 'team1' : 'team2'}`}
       style={{
-        left: position.x,
-        top: position.y,
+        left: `${position.x}%`,
+        top: `${position.y}%`,
       }}
       onMouseDown={handleMouseDown}
     >

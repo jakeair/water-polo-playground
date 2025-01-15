@@ -31,6 +31,11 @@ const WaterPoloCourt: React.FC = () => {
 
   const [playerPositions, setPlayerPositions] = useState<{[key: string]: PlayerPosition}>({});
   const lastInterpolatedPositions = useRef<{[key: string]: PlayerPosition}>({});
+  const [ballPosition, setBallPosition] = useState({ x: 50, y: 50 });
+  const ballRef = useRef<HTMLDivElement>(null);
+  const isDraggingBall = useRef(false);
+  const ballStartPos = useRef({ x: 0, y: 0 });
+  const initialBallPos = useRef({ x: 0, y: 0 });
 
   useEffect(() => {
     const updateDimensions = () => {
@@ -153,6 +158,51 @@ const WaterPoloCourt: React.FC = () => {
     setIsPlaying(!isPlaying);
   };
 
+  const handleBallMouseDown = (e: React.MouseEvent) => {
+    if (ballRef.current) {
+      isDraggingBall.current = true;
+      ballStartPos.current = {
+        x: e.clientX,
+        y: e.clientY
+      };
+      initialBallPos.current = {
+        x: ballPosition.x,
+        y: ballPosition.y
+      };
+      e.preventDefault();
+    }
+  };
+
+  const handleBallMouseMove = (e: MouseEvent) => {
+    if (isDraggingBall.current && ballRef.current) {
+      const courtRect = ballRef.current.parentElement?.getBoundingClientRect();
+      if (courtRect) {
+        const deltaX = (e.clientX - ballStartPos.current.x) / courtRect.width * 100;
+        const deltaY = (e.clientY - ballStartPos.current.y) / courtRect.height * 100;
+        
+        const newX = Math.max(0, Math.min(100, initialBallPos.current.x + deltaX));
+        const newY = Math.max(0, Math.min(100, initialBallPos.current.y + deltaY));
+        
+        setBallPosition({ x: newX, y: newY });
+      }
+    }
+  };
+
+  const handleBallMouseUp = () => {
+    isDraggingBall.current = false;
+  };
+
+  useEffect(() => {
+    if (isDraggingBall.current) {
+      window.addEventListener('mousemove', handleBallMouseMove);
+      window.addEventListener('mouseup', handleBallMouseUp);
+    }
+    return () => {
+      window.removeEventListener('mousemove', handleBallMouseMove);
+      window.removeEventListener('mouseup', handleBallMouseUp);
+    };
+  }, [isDraggingBall.current]);
+
   return (
     <div className="space-y-6 bg-black/20 backdrop-blur-sm p-8 rounded-2xl shadow-2xl border border-white/10">
       <div 
@@ -174,6 +224,18 @@ const WaterPoloCourt: React.FC = () => {
         <div className="line five-meter-line" style={{ bottom: '20%' }}></div>
         <div className="line six-meter-line" style={{ bottom: '24%' }}></div>
         <div className="line halfway-line" style={{ top: '50%' }}></div>
+
+        {/* Ball */}
+        <div
+          ref={ballRef}
+          className="ball"
+          style={{
+            left: `${ballPosition.x}%`,
+            top: `${ballPosition.y}%`,
+            cursor: isDraggingBall.current ? 'grabbing' : 'grab',
+          }}
+          onMouseDown={handleBallMouseDown}
+        />
 
         {/* Team 1 Players (Top) */}
         <Player team={1} number="G" initialX={50} initialY={5} isGoalie onPositionChange={(pos) => updatePlayerPosition('1G', pos)} id="player-1G" />

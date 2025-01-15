@@ -105,8 +105,8 @@
 
 .player {
   position: absolute;
-  width: 40px;
-  height: 40px;
+  width: 44px; /* Increased from 40px (10% bigger) */
+  height: 44px; /* Increased from 40px (10% bigger) */
   border-radius: 50%;
   display: flex;
   justify-content: center;
@@ -128,19 +128,16 @@
   transition: transform 0.1s cubic-bezier(0.2, 0, 0, 1);
 }
 
-.player:hover {
-  transform: scale(1.1);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-}
-
-.player.team1 {
-  background: linear-gradient(145deg, #0055ff, #0044CC);
-}
-
-.player.team2 {
-  background: linear-gradient(145deg, #9b5e3d, #8B4513);
-}
-
-.player.goalie {
-  background: linear-gradient(145deg, #ff5555, #FF4444);
+.ball {
+  position: absolute;
+  width: 11px; /* 25% of original player size (44px) */
+  height: 11px;
+  border-radius: 50%;
+  background: linear-gradient(145deg, #ffffff, #f0f0f0);
+  border: 1px solid #e0e0e0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  cursor: grab;
+  will-change: transform, left, top;
+  touch-action: none;
+  transform: translate(-50%, -50%);
 }

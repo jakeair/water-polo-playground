@@ -15,25 +15,12 @@ const AboutPage = () => {
         }} />
       </div>
 
-      {/* Header Section */}
-      <header className="relative py-16 px-4 text-center">
-        <h1 className="text-5xl sm:text-6xl font-bold bg-gradient-to-r from-white via-white/90 to-white/70 text-transparent bg-clip-text mb-4">
-          About Us
-        </h1>
-        <p className="text-xl sm:text-2xl text-white/60 max-w-3xl mx-auto mb-4">
-          Empowering Water Polo Coaches and Players Worldwide
-        </p>
-        <p className="text-lg text-white/80 max-w-2xl mx-auto">
-          We combine cutting-edge technology with deep water polo expertise to revolutionize how teams strategize, train, and compete. Our platform serves everyone from youth teams to Olympic athletes.
-        </p>
-      </header>
-
       {/* Vision Section */}
       <section className="relative py-16 px-4">
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-3xl md:text-4xl font-bold text-center text-white mb-8">
+          <h1 className="text-5xl md:text-6xl font-bold text-center bg-gradient-to-r from-white via-white/90 to-white/70 text-transparent bg-clip-text mb-8">
             Our Vision
-          </h2>
+          </h1>
           <div className="text-center mb-12">
             <p className="text-lg text-white/60 leading-relaxed max-w-3xl mx-auto mb-8">
               We are a dedicated team of water polo players and coaches committed to revolutionizing 

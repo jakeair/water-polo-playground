@@ -262,14 +262,14 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
   }, [isDraggingBall.current]);
 
   return (
-    <div className="space-y-8 bg-black/20 backdrop-blur-sm px-8 sm:px-12 md:px-16 lg:px-20 py-8 rounded-3xl shadow-2xl border border-white/10">
+    <div className="space-y-24 bg-black/20 backdrop-blur-sm px-8 sm:px-12 md:px-16 lg:px-20 py-16 rounded-3xl shadow-2xl border border-white/10">
       <div 
         ref={courtRef}
         className="court relative"
         style={{ 
           width: dimensions.width, 
           height: dimensions.height,
-          margin: '0 auto',
+          margin: '60px auto',
           overflow: 'visible'
         }}
       >

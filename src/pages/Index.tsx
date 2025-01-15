@@ -38,17 +38,19 @@ const Index = () => {
                 Design and animate your water polo plays with our interactive court builder
               </p>
             </header>
-            
-            <WaterPoloCourt
-              team1Color={team1Color}
-              team2Color={team2Color}
-              onTeam1ColorChange={setTeam1Color}
-              onTeam2ColorChange={setTeam2Color}
-              isDrawing={isDrawing}
-              isErasing={isErasing}
-              strokeColor={strokeColor}
-              strokeWidth={strokeWidth}
-            />
+
+            <div className="space-y-6">
+              <WaterPoloCourt
+                team1Color={team1Color}
+                team2Color={team2Color}
+                onTeam1ColorChange={setTeam1Color}
+                onTeam2ColorChange={setTeam2Color}
+                isDrawing={isDrawing}
+                isErasing={isErasing}
+                strokeColor={strokeColor}
+                strokeWidth={strokeWidth}
+              />
+            </div>
           </div>
         </div>
       </div>

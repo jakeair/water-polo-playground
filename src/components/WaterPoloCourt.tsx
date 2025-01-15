@@ -3,6 +3,7 @@ import { gsap } from 'gsap';
 import Player from './Player';
 import Timeline from './Timeline';
 import { toast } from 'sonner';
+import DrawingCanvas from './DrawingCanvas';
 
 interface PlayerPosition {
   x: number;
@@ -25,13 +26,15 @@ interface WaterPoloCourtProps {
   team2Color: string;
   onTeam1ColorChange: (color: string) => void;
   onTeam2ColorChange: (color: string) => void;
+  isDrawing: boolean;
 }
 
 const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
   team1Color,
   team2Color,
   onTeam1ColorChange,
-  onTeam2ColorChange
+  onTeam2ColorChange,
+  isDrawing
 }) => {
   const courtRef = useRef<HTMLDivElement>(null);
   const topGoalNetRef = useRef<HTMLDivElement>(null);
@@ -252,13 +255,19 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
     <div className="space-y-24 bg-black/20 backdrop-blur-sm px-8 sm:px-12 md:px-16 lg:px-20 py-16 rounded-3xl shadow-2xl border border-white/10">
       <div 
         ref={courtRef}
-        className="court"
+        className="court relative"
         style={{ 
           width: dimensions.width, 
           height: dimensions.height,
           margin: '60px auto'
         }}
       >
+        <DrawingCanvas 
+          isDrawing={isDrawing}
+          width={dimensions.width}
+          height={dimensions.height}
+        />
+        
         <div className="goal goal-top">
           <div ref={topGoalNetRef} className="goal-net" />
         </div>

@@ -122,7 +122,8 @@
   transition: transform 0.2s;
   font-size: clamp(12px, 1.5vw, 20px);
   transform-origin: center;
-  line-height: 0;
+  line-height: 1;
+  padding-top: 2.5%;
 }
 
 .player:hover {

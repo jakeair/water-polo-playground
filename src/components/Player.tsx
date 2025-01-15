@@ -8,6 +8,7 @@ interface PlayerProps {
   isGoalie?: boolean;
   onPositionChange?: (position: { x: number; y: number }) => void;
   id: string;
+  style?: React.CSSProperties;
 }
 
 const Player: React.FC<PlayerProps> = ({ 
@@ -17,7 +18,8 @@ const Player: React.FC<PlayerProps> = ({
   initialY, 
   isGoalie = false,
   onPositionChange,
-  id 
+  id,
+  style
 }) => {
   const [position, setPosition] = useState({ x: initialX, y: initialY });
   const playerRef = useRef<HTMLDivElement>(null);
@@ -88,6 +90,7 @@ const Player: React.FC<PlayerProps> = ({
         top: `${position.y}%`,
         cursor: isDragging ? 'grabbing' : 'grab',
         transform: `translate(-50%, -50%) ${isDragging ? 'scale(1.05)' : 'scale(1)'}`,
+        ...style
       }}
       onMouseDown={handleMouseDown}
     >

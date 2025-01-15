@@ -59,7 +59,7 @@ const AboutPage = () => {
       </section>
 
       {/* Mission Section */}
-      <section className="relative py-16 px-4">
+      <section className="relative py-8 px-4">
         <div className="max-w-6xl mx-auto">
           <h2 className="text-3xl md:text-4xl font-bold text-center text-white mb-8">
             Our Mission

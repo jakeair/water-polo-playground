@@ -18,66 +18,68 @@ const AboutPage = () => {
       </div>
 
       {/* Vision Section */}
-      <section className="relative py-16 px-4">
-        <div className="max-w-6xl mx-auto">
-          <div className="flex flex-col items-center mb-12">
-            <h1 className="text-5xl md:text-6xl font-bold text-center bg-gradient-to-r from-white via-white/90 to-white/70 text-transparent bg-clip-text mb-8">
-              Our Vision
-            </h1>
-          </div>
-          <div className="text-center mb-12">
-            <p className="text-lg text-white/60 leading-relaxed max-w-3xl mx-auto mb-8">
-              We are a dedicated team of water polo players and coaches committed to revolutionizing 
-              how strategies are created, shared, and understood. Our tools are designed to serve 
-              everyone in the water polo community, from youth teams to Olympic athletes.
-            </p>
-          </div>
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
-            {[
-              { icon: Target, label: "Strategy", description: "Advanced tactical planning and execution" },
-              { icon: Trophy, label: "Competition", description: "Excellence in competitive play" },
-              { icon: MessageSquare, label: "Communication", description: "Enhanced team coordination" },
-              { icon: Lightbulb, label: "Innovation", description: "Cutting-edge coaching solutions" },
-              { icon: Users, label: "Empowerment", description: "Team development and growth" },
-              { icon: ClipboardList, label: "Coaching Tools", description: "Comprehensive training resources" },
-            ].map((item, index) => (
-              <div
-                key={index}
-                className="group bg-white/5 hover:bg-white/10 backdrop-blur-md border border-white/10 rounded-2xl p-8 text-left transition-all hover:scale-105"
-              >
-                <div className="bg-white/10 rounded-xl p-3 w-fit mb-4">
-                  <item.icon
-                    className="w-8 h-8 text-white"
-                    strokeWidth={1.5}
-                  />
+      <div className="max-w-[1400px] mx-auto">
+        <section className="relative py-16 px-4">
+          <div className="max-w-6xl mx-auto">
+            <div className="flex flex-col items-center mb-12">
+              <h1 className="text-5xl md:text-6xl font-bold text-center bg-gradient-to-r from-white via-white/90 to-white/70 text-transparent bg-clip-text mb-8">
+                Our Vision
+              </h1>
+            </div>
+            <div className="text-center mb-12">
+              <p className="text-lg text-white/60 leading-relaxed max-w-3xl mx-auto mb-8">
+                We are a dedicated team of water polo players and coaches committed to revolutionizing 
+                how strategies are created, shared, and understood. Our tools are designed to serve 
+                everyone in the water polo community, from youth teams to Olympic athletes.
+              </p>
+            </div>
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+              {[
+                { icon: Target, label: "Strategy", description: "Advanced tactical planning and execution" },
+                { icon: Trophy, label: "Competition", description: "Excellence in competitive play" },
+                { icon: MessageSquare, label: "Communication", description: "Enhanced team coordination" },
+                { icon: Lightbulb, label: "Innovation", description: "Cutting-edge coaching solutions" },
+                { icon: Users, label: "Empowerment", description: "Team development and growth" },
+                { icon: ClipboardList, label: "Coaching Tools", description: "Comprehensive training resources" },
+              ].map((item, index) => (
+                <div
+                  key={index}
+                  className="group bg-white/5 hover:bg-white/10 backdrop-blur-md border border-white/10 rounded-2xl p-8 text-left transition-all hover:scale-105"
+                >
+                  <div className="bg-white/10 rounded-xl p-3 w-fit mb-4">
+                    <item.icon
+                      className="w-8 h-8 text-white"
+                      strokeWidth={1.5}
+                    />
+                  </div>
+                  <span className="text-lg font-semibold text-white block mb-2">{item.label}</span>
+                  <p className="text-sm text-white/60">{item.description}</p>
                 </div>
-                <span className="text-lg font-semibold text-white block mb-2">{item.label}</span>
-                <p className="text-sm text-white/60">{item.description}</p>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* Mission Section */}
-      <section className="relative py-8 px-4">
-        <div className="max-w-6xl mx-auto">
-          <h2 className="text-3xl md:text-4xl font-bold text-center text-white mb-8">
-            Our Mission
-          </h2>
-          <div className="text-center mb-12">
-            <p className="text-lg text-white/60 leading-relaxed max-w-3xl mx-auto">
-              Our mission is to empower coaches with intuitive digital tools that enhance 
-              communication, simplify strategy planning, and elevate training effectiveness. 
-              We believe that better tools lead to better coaching, and better coaching 
-              creates stronger athletes.
-            </p>
+        {/* Mission Section */}
+        <section className="relative py-8 px-4">
+          <div className="max-w-6xl mx-auto">
+            <h2 className="text-3xl md:text-4xl font-bold text-center text-white mb-8">
+              Our Mission
+            </h2>
+            <div className="text-center mb-12">
+              <p className="text-lg text-white/60 leading-relaxed max-w-3xl mx-auto">
+                Our mission is to empower coaches with intuitive digital tools that enhance 
+                communication, simplify strategy planning, and elevate training effectiveness. 
+                We believe that better tools lead to better coaching, and better coaching 
+                creates stronger athletes.
+              </p>
+            </div>
+            <div className="flex justify-center items-center mt-8">
+              <OlympicRings className="opacity-90" size={180} />
+            </div>
           </div>
-          <div className="flex justify-center items-center mt-8">
-            <OlympicRings className="opacity-90" size={180} />
-          </div>
-        </div>
-      </section>
+        </section>
+      </div>
 
       {/* Footer */}
       <footer className="relative bg-white/5 backdrop-blur-sm border-t border-white/10 text-white/60 py-8 px-4 text-center mt-16">

@@ -22,9 +22,8 @@ const Home = () => {
 
         <Navigation />
         
-        <main className="relative flex flex-col items-center justify-center min-h-screen p-4 pt-16 sm:p-8 sm:pt-20 md:p-12 lg:p-16">
-          <div className="max-w-7xl w-full space-y-12 sm:space-y-16 md:space-y-24">
-            {/* Hero Section */}
+        <main className="relative flex flex-col items-center justify-center min-h-screen p-4 pt-16 sm:p-8 sm:pt-20 md:p-12 lg:p-16 max-w-[1400px] mx-auto">
+          <div className="w-full space-y-12 sm:space-y-16 md:space-y-24">
             <div className="space-y-8 text-center animate-fade-in">
               <div className="inline-block px-4 py-1.5 bg-white/10 backdrop-blur rounded-full text-sm font-medium text-white/80 mb-4">
                 🎯 Professional Water Polo Strategy Platform

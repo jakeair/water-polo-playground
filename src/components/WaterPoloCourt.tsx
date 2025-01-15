@@ -3,7 +3,6 @@ import { gsap } from 'gsap';
 import Player from './Player';
 import Timeline from './Timeline';
 import { toast } from 'sonner';
-import ColorPicker from './ColorPicker';
 
 interface PlayerPosition {
   x: number;
@@ -17,23 +16,24 @@ interface KeyframeData {
   };
 }
 
-const WaterPoloCourt: React.FC = () => {
+interface WaterPoloCourtProps {
+  team1Color: string;
+  team2Color: string;
+  onTeam1ColorChange: (color: string) => void;
+  onTeam2ColorChange: (color: string) => void;
+}
+
+const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
+  team1Color,
+  team2Color,
+  onTeam1ColorChange,
+  onTeam2ColorChange
+}) => {
   const courtRef = useRef<HTMLDivElement>(null);
   const topGoalNetRef = useRef<HTMLDivElement>(null);
   const bottomGoalNetRef = useRef<HTMLDivElement>(null);
   const [dimensions, setDimensions] = useState({ width: 1000, height: 1400 });
   
-  // Team colors state
-  const [team1Color, setTeam1Color] = useState('#3b82f6');
-  const [team2Color, setTeam2Color] = useState('#ef4444');
-  
-  // Animation state
-  const [currentTime, setCurrentTime] = useState(0);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [keyframes, setKeyframes] = useState<KeyframeData[]>([]);
-  const animationRef = useRef<number>();
-  const ANIMATION_DURATION = 2500;
-
   const [playerPositions, setPlayerPositions] = useState<{[key: string]: PlayerPosition}>({});
   const lastInterpolatedPositions = useRef<{[key: string]: PlayerPosition}>({});
   const [ballPosition, setBallPosition] = useState({ x: 50, y: 50 });
@@ -41,6 +41,12 @@ const WaterPoloCourt: React.FC = () => {
   const isDraggingBall = useRef(false);
   const ballStartPos = useRef({ x: 0, y: 0 });
   const initialBallPos = useRef({ x: 0, y: 0 });
+
+  const [currentTime, setCurrentTime] = useState(0);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [keyframes, setKeyframes] = useState<KeyframeData[]>([]);
+  const animationRef = useRef<number>();
+  const ANIMATION_DURATION = 2500;
 
   useEffect(() => {
     const updateDimensions = () => {
@@ -57,7 +63,6 @@ const WaterPoloCourt: React.FC = () => {
     return () => window.removeEventListener('resize', updateDimensions);
   }, []);
 
-  // Update CSS variables when team colors change
   useEffect(() => {
     document.documentElement.style.setProperty('--team1-color', team1Color);
     document.documentElement.style.setProperty('--team2-color', team2Color);
@@ -87,7 +92,6 @@ const WaterPoloCourt: React.FC = () => {
   };
 
   const interpolatePositions = (time: number) => {
-    // Find the surrounding keyframes
     const prevKeyframe = [...keyframes]
       .reverse()
       .find(kf => kf.time <= time);
@@ -98,10 +102,8 @@ const WaterPoloCourt: React.FC = () => {
     if (!prevKeyframe) return nextKeyframe?.positions;
     if (!nextKeyframe) return prevKeyframe.positions;
 
-    // Calculate interpolation factor
     const factor = (time - prevKeyframe.time) / (nextKeyframe.time - prevKeyframe.time);
 
-    // Interpolate between positions
     const interpolated: {[key: string]: PlayerPosition} = {};
     Object.keys(prevKeyframe.positions).forEach(playerId => {
       const prev = prevKeyframe.positions[playerId];
@@ -148,7 +150,6 @@ const WaterPoloCourt: React.FC = () => {
   useEffect(() => {
     const interpolated = interpolatePositions(currentTime);
     if (interpolated) {
-      // Use GSAP to animate the position changes
       Object.entries(interpolated).forEach(([playerId, position]) => {
         const lastPos = lastInterpolatedPositions.current[playerId];
         if (lastPos && (lastPos.x !== position.x || lastPos.y !== position.y)) {
@@ -214,31 +215,8 @@ const WaterPoloCourt: React.FC = () => {
     };
   }, [isDraggingBall.current]);
 
-  const handleTeam1ColorChange = (color: string) => {
-    setTeam1Color(color);
-    toast.success('Team 1 color updated');
-  };
-
-  const handleTeam2ColorChange = (color: string) => {
-    setTeam2Color(color);
-    toast.success('Team 2 color updated');
-  };
-
   return (
     <div className="space-y-6 bg-black/20 backdrop-blur-sm p-8 rounded-2xl shadow-2xl border border-white/10">
-      <div className="flex justify-center gap-4 mb-4">
-        <ColorPicker
-          color={team1Color}
-          onChange={handleTeam1ColorChange}
-          label="Team 1"
-        />
-        <ColorPicker
-          color={team2Color}
-          onChange={handleTeam2ColorChange}
-          label="Team 2"
-        />
-      </div>
-      
       <div 
         ref={courtRef}
         className="court"
@@ -259,7 +237,6 @@ const WaterPoloCourt: React.FC = () => {
         <div className="line six-meter-line" style={{ bottom: '24%' }}></div>
         <div className="line halfway-line" style={{ top: '50%' }}></div>
 
-        {/* Ball */}
         <div
           ref={ballRef}
           className="ball"
@@ -271,7 +248,6 @@ const WaterPoloCourt: React.FC = () => {
           onMouseDown={handleBallMouseDown}
         />
 
-        {/* Team 1 Players (Top) */}
         <Player team={1} number="G" initialX={50} initialY={5} isGoalie onPositionChange={(pos) => updatePlayerPosition('1G', pos)} id="player-1G" />
         <Player team={1} number={1} initialX={20} initialY={20} onPositionChange={(pos) => updatePlayerPosition('11', pos)} id="player-11" />
         <Player team={1} number={2} initialX={40} initialY={20} onPositionChange={(pos) => updatePlayerPosition('12', pos)} id="player-12" />
@@ -280,7 +256,6 @@ const WaterPoloCourt: React.FC = () => {
         <Player team={1} number={5} initialX={50} initialY={30} onPositionChange={(pos) => updatePlayerPosition('15', pos)} id="player-15" />
         <Player team={1} number={6} initialX={70} initialY={30} onPositionChange={(pos) => updatePlayerPosition('16', pos)} id="player-16" />
 
-        {/* Team 2 Players (Bottom) */}
         <Player team={2} number="G" initialX={50} initialY={95} isGoalie onPositionChange={(pos) => updatePlayerPosition('2G', pos)} id="player-2G" />
         <Player team={2} number={1} initialX={20} initialY={70} onPositionChange={(pos) => updatePlayerPosition('21', pos)} id="player-21" />
         <Player team={2} number={2} initialX={40} initialY={70} onPositionChange={(pos) => updatePlayerPosition('22', pos)} id="player-22" />

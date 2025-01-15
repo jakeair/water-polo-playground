@@ -8,6 +8,7 @@ import {
   SidebarGroup,
   SidebarGroupContent,
 } from '@/components/ui/sidebar';
+import { Separator } from "@/components/ui/separator";
 
 interface ToolbarProps {
   team1Color: string;
@@ -53,33 +54,72 @@ const Toolbar: React.FC<ToolbarProps> = ({
   };
 
   return (
-    <Sidebar variant="floating" className="w-[80px] bg-white/5 backdrop-blur-md border-r border-white/10">
+    <Sidebar variant="floating" className="w-[100px] bg-white/5 backdrop-blur-md border-r border-white/10">
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupContent className="space-y-8 p-4">
             <div className="space-y-6">
-              <div className="flex items-center justify-center">
+              <div className="flex flex-col items-center gap-2">
                 <Palette className="w-5 h-5 text-white/60" />
+                <span className="text-xs text-white/60">Teams</span>
               </div>
               <div className="flex flex-col items-center gap-4">
-                <ColorPicker
-                  color={team1Color}
-                  onChange={onTeam1ColorChange}
-                  label="Team 1"
-                />
-                <ColorPicker
-                  color={team2Color}
-                  onChange={onTeam2ColorChange}
-                  label="Team 2"
-                />
-                {isDrawing && (
-                  <>
+                <div className="flex flex-col items-center gap-2">
+                  <ColorPicker
+                    color={team1Color}
+                    onChange={onTeam1ColorChange}
+                    label="Team 1"
+                  />
+                  <span className="text-[10px] text-white/40">Team 1</span>
+                </div>
+                <div className="flex flex-col items-center gap-2">
+                  <ColorPicker
+                    color={team2Color}
+                    onChange={onTeam2ColorChange}
+                    label="Team 2"
+                  />
+                  <span className="text-[10px] text-white/40">Team 2</span>
+                </div>
+              </div>
+            </div>
+
+            <Separator className="bg-white/10" />
+
+            <div className="space-y-6">
+              <div className="flex flex-col items-center gap-4">
+                <button
+                  onClick={handleDrawingClick}
+                  className={`w-10 h-10 rounded-lg flex items-center justify-center transition-colors ${
+                    isDrawing ? 'bg-white/20 ring-2 ring-white/30' : 'hover:bg-white/10'
+                  }`}
+                  title="Drawing Tool"
+                >
+                  <Pencil className="w-5 h-5 text-white/60" />
+                </button>
+                <button
+                  onClick={handleErasingClick}
+                  className={`w-10 h-10 rounded-lg flex items-center justify-center transition-colors ${
+                    isErasing ? 'bg-white/20 ring-2 ring-white/30' : 'hover:bg-white/10'
+                  }`}
+                  title="Eraser Tool"
+                >
+                  <Eraser className="w-5 h-5 text-white/60" />
+                </button>
+              </div>
+
+              {isDrawing && (
+                <div className="space-y-4">
+                  <div className="flex flex-col items-center gap-2">
                     <ColorPicker
                       color={strokeColor}
                       onChange={onStrokeColorChange}
                       label="Stroke"
                     />
-                    <div className="w-full px-2">
+                    <span className="text-[10px] text-white/40">Stroke</span>
+                  </div>
+                  <div className="space-y-2">
+                    <span className="text-[10px] text-white/40 block text-center">Width</span>
+                    <div className="px-2 py-1 bg-black/20 rounded-lg">
                       <Slider
                         value={[strokeWidth]}
                         onValueChange={handleStrokeWidthChange}
@@ -89,29 +129,10 @@ const Toolbar: React.FC<ToolbarProps> = ({
                         className="w-full"
                       />
                     </div>
-                  </>
-                )}
-              </div>
-            </div>
-            <div className="space-y-4">
-              <button
-                onClick={handleDrawingClick}
-                className={`w-10 h-10 rounded-lg flex items-center justify-center transition-colors ${
-                  isDrawing ? 'bg-white/20' : 'hover:bg-white/10'
-                }`}
-                title="Drawing Tool"
-              >
-                <Pencil className="w-5 h-5 text-white/60" />
-              </button>
-              <button
-                onClick={handleErasingClick}
-                className={`w-10 h-10 rounded-lg flex items-center justify-center transition-colors ${
-                  isErasing ? 'bg-white/20' : 'hover:bg-white/10'
-                }`}
-                title="Eraser Tool"
-              >
-                <Eraser className="w-5 h-5 text-white/60" />
-              </button>
+                    <span className="text-[10px] text-white/40 block text-center">{strokeWidth}px</span>
+                  </div>
+                </div>
+              )}
             </div>
           </SidebarGroupContent>
         </SidebarGroup>

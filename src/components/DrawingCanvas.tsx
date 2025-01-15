@@ -78,7 +78,11 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({ isDrawing, isErasing, wid
       width={width}
       height={height}
       className="absolute inset-0 pointer-events-auto z-10"
-      style={{ opacity: isDrawing || isErasing ? 1 : 0, cursor: isDrawing ? 'crosshair' : isErasing ? 'not-allowed' : 'default' }}
+      style={{ 
+        opacity: 1,
+        cursor: isDrawing ? 'crosshair' : isErasing ? 'not-allowed' : 'default',
+        pointerEvents: isDrawing || isErasing ? 'auto' : 'none'
+      }}
     />
   );
 };

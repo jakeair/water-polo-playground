@@ -1,5 +1,5 @@
 import React from "react";
-import { Trophy, Users, Target, Flag, Medal } from "lucide-react";
+import { Target, Trophy, MessageSquare, Lightbulb, Users, ClipboardList } from "lucide-react";
 import Navigation from "@/components/Navigation";
 
 const AboutPage = () => {
@@ -40,11 +40,12 @@ const AboutPage = () => {
           </div>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
             {[
-              { icon: Trophy, label: "Excellence" },
-              { icon: Users, label: "Teamwork" },
-              { icon: Target, label: "Strategy" },
-              { icon: Flag, label: "Competition" },
-              { icon: Medal, label: "Achievement" },
+              { icon: Target, label: "Strategy", description: "Advanced tactical planning and execution" },
+              { icon: Trophy, label: "Competition", description: "Excellence in competitive play" },
+              { icon: MessageSquare, label: "Communication", description: "Enhanced team coordination" },
+              { icon: Lightbulb, label: "Innovation", description: "Cutting-edge coaching solutions" },
+              { icon: Users, label: "Empowerment", description: "Team development and growth" },
+              { icon: ClipboardList, label: "Coaching Tools", description: "Comprehensive training resources" },
             ].map((item, index) => (
               <div
                 key={index}
@@ -56,7 +57,8 @@ const AboutPage = () => {
                     strokeWidth={1.5}
                   />
                 </div>
-                <span className="text-lg font-semibold text-white">{item.label}</span>
+                <span className="text-lg font-semibold text-white block mb-2">{item.label}</span>
+                <p className="text-sm text-white/60">{item.description}</p>
               </div>
             ))}
           </div>

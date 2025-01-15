@@ -4,7 +4,7 @@ import Player from './Player';
 import Timeline from './Timeline';
 import { toast } from 'sonner';
 import DrawingCanvas from './DrawingCanvas';
-import ImageUpload from './ImageUpload';
+import Toolbar from './Toolbar';
 
 interface PlayerPosition {
   x: number;
@@ -268,24 +268,6 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
 
   return (
     <div className="space-y-24 bg-black/20 backdrop-blur-sm px-8 sm:px-12 md:px-16 lg:px-20 py-16 rounded-3xl shadow-2xl border border-white/10">
-      <div className="flex justify-center gap-8 mb-8">
-        <ImageUpload
-          onImageUploaded={setTeam1Logo}
-          currentImage={team1Logo}
-          label="Team 1 Logo"
-        />
-        <ImageUpload
-          onImageUploaded={setBallImage}
-          currentImage={ballImage}
-          label="Ball Image"
-        />
-        <ImageUpload
-          onImageUploaded={setTeam2Logo}
-          currentImage={team2Logo}
-          label="Team 2 Logo"
-        />
-      </div>
-
       <div 
         ref={courtRef}
         className="court relative"
@@ -296,6 +278,25 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
           overflow: 'visible'
         }}
       >
+        <Toolbar
+          team1Color={team1Color}
+          team2Color={team2Color}
+          onTeam1ColorChange={onTeam1ColorChange}
+          onTeam2ColorChange={onTeam2ColorChange}
+          isDrawing={isDrawing}
+          isErasing={isErasing}
+          strokeColor={strokeColor}
+          onStrokeColorChange={onStrokeColorChange}
+          strokeWidth={strokeWidth}
+          onStrokeWidthChange={onStrokeWidthChange}
+          team1Logo={team1Logo}
+          team2Logo={team2Logo}
+          ballImage={ballImage}
+          onTeam1LogoChange={setTeam1Logo}
+          onTeam2LogoChange={setTeam2Logo}
+          onBallImageChange={setBallImage}
+        />
+
         <DrawingCanvas 
           isDrawing={isDrawing}
           isErasing={isErasing}

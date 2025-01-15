@@ -3,7 +3,6 @@ import { Target, Trophy, MessageSquare, Lightbulb, Users, ClipboardList } from "
 import Navigation from "@/components/Navigation";
 import OlympicRings from "@/components/OlympicRings";
 import NcaaLogo from "@/components/NcaaLogo";
-import { Card } from "@/components/ui/card";
 
 const AboutPage = () => {
   return (
@@ -18,86 +17,76 @@ const AboutPage = () => {
         }} />
       </div>
 
-      {/* Main Content Container */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 relative z-10">
-        {/* Hero Section */}
-        <div className="text-center mb-16 animate-fade-in">
-          <h1 className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-white via-white/90 to-white/70 bg-clip-text text-transparent mb-6">
-            Revolutionizing Water Polo Strategy
-          </h1>
-          <p className="text-lg md:text-xl text-white/60 max-w-3xl mx-auto leading-relaxed">
-            We're passionate about elevating the game of water polo through innovative digital solutions 
-            that help coaches and players visualize, plan, and execute winning strategies.
-          </p>
-        </div>
-
-        {/* Features Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
-          {[
-            {
-              icon: Target,
-              title: "Strategic Planning",
-              description: "Create and share detailed play diagrams with your team"
-            },
-            {
-              icon: Trophy,
-              title: "Game Analysis",
-              description: "Break down successful plays and identify areas for improvement"
-            },
-            {
-              icon: MessageSquare,
-              title: "Team Communication",
-              description: "Enhance coordination with clear visual instructions"
-            },
-            {
-              icon: Lightbulb,
-              title: "Innovation",
-              description: "Stay ahead with cutting-edge coaching tools"
-            },
-            {
-              icon: Users,
-              title: "Team Development",
-              description: "Foster player growth and tactical understanding"
-            },
-            {
-              icon: ClipboardList,
-              title: "Practice Planning",
-              description: "Organize efficient and focused training sessions"
-            }
-          ].map((feature, index) => (
-            <Card 
-              key={index}
-              className="group hover:scale-105 transition-all duration-300 bg-white/5 border-white/10 p-6 backdrop-blur-sm"
-            >
-              <div className="flex flex-col items-center text-center space-y-4">
-                <div className="p-3 rounded-full bg-white/10 group-hover:bg-white/20 transition-colors">
-                  <feature.icon className="w-8 h-8 text-white" strokeWidth={1.5} />
-                </div>
-                <h3 className="text-xl font-semibold text-white">{feature.title}</h3>
-                <p className="text-white/60">{feature.description}</p>
-              </div>
-            </Card>
-          ))}
-        </div>
-
-        {/* Partners Section */}
-        <div className="text-center space-y-8">
-          <h2 className="text-3xl font-bold text-white mb-8">Trusted By</h2>
-          <div className="flex justify-center items-center gap-8 flex-wrap">
-            <div className="backdrop-blur-sm bg-white/5 p-6 rounded-xl hover:bg-white/10 transition-colors">
-              <OlympicRings className="opacity-90" size={180} />
+      {/* Vision Section */}
+      <div className="max-w-[1400px] mx-auto">
+        <section className="relative py-16 px-4">
+          <div className="max-w-6xl mx-auto">
+            <div className="flex flex-col items-center mb-12">
+              <h1 className="text-5xl md:text-6xl font-bold text-center bg-gradient-to-r from-white via-white/90 to-white/70 text-transparent bg-clip-text mb-8">
+                Our Vision
+              </h1>
             </div>
-            <div className="backdrop-blur-sm bg-white/5 p-6 rounded-xl hover:bg-white/10 transition-colors">
-              <NcaaLogo className="opacity-90" size={180} />
+            <div className="text-center mb-12">
+              <p className="text-lg text-white/60 leading-relaxed max-w-3xl mx-auto mb-8">
+                We are a dedicated team of water polo players and coaches committed to revolutionizing 
+                how strategies are created, shared, and understood. Our tools are designed to serve 
+                everyone in the water polo community, from youth teams to Olympic athletes.
+              </p>
+            </div>
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+              {[
+                { icon: Target, label: "Strategy", description: "Advanced tactical planning and execution" },
+                { icon: Trophy, label: "Competition", description: "Excellence in competitive play" },
+                { icon: MessageSquare, label: "Communication", description: "Enhanced team coordination" },
+                { icon: Lightbulb, label: "Innovation", description: "Cutting-edge coaching solutions" },
+                { icon: Users, label: "Empowerment", description: "Team development and growth" },
+                { icon: ClipboardList, label: "Coaching Tools", description: "Comprehensive training resources" },
+              ].map((item, index) => (
+                <div
+                  key={index}
+                  className="group bg-white/5 hover:bg-white/10 backdrop-blur-md border border-white/10 rounded-2xl p-8 text-left transition-all hover:scale-105"
+                >
+                  <div className="bg-white/10 rounded-xl p-3 w-fit mb-4">
+                    <item.icon
+                      className="w-8 h-8 text-white"
+                      strokeWidth={1.5}
+                    />
+                  </div>
+                  <span className="text-lg font-semibold text-white block mb-2">{item.label}</span>
+                  <p className="text-sm text-white/60">{item.description}</p>
+                </div>
+              ))}
             </div>
           </div>
-        </div>
+        </section>
 
-        {/* Footer */}
-        <footer className="mt-24 text-center text-white/60">
-          <p>© {new Date().getFullYear()} Water Polo Strategy. All rights reserved.</p>
-        </footer>
+        {/* Mission Section */}
+        <section className="relative py-8 px-4">
+          <div className="max-w-6xl mx-auto">
+            <h2 className="text-3xl md:text-4xl font-bold text-center text-white mb-8">
+              Our Mission
+            </h2>
+            <div className="text-center mb-12">
+              <p className="text-lg text-white/60 leading-relaxed max-w-3xl mx-auto">
+                Our mission is to empower coaches with intuitive digital tools that enhance 
+                communication, simplify strategy planning, and elevate training effectiveness. 
+                We believe that better tools lead to better coaching, and better coaching 
+                creates stronger athletes.
+              </p>
+            </div>
+            <div className="flex justify-center items-center mt-8">
+              <OlympicRings className="opacity-90" size={180} />
+            </div>
+          </div>
+        </section>
       </div>
+
+      {/* Footer */}
+      <footer className="relative bg-white/5 backdrop-blur-sm border-t border-white/10 text-white/60 py-8 px-4 text-center mt-16">
+        <p className="text-sm md:text-base">
+          © {new Date().getFullYear()} Water Polo Coaching Tools | Designed by Players, Built for Coaches
+        </p>
+      </footer>
     </div>
   );
 };

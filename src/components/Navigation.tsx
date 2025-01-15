@@ -14,7 +14,15 @@ const Navigation = () => {
   const isActive = (path: string) => location.pathname === path;
 
   return (
-    <nav className="fixed top-0 right-0 p-3 sm:p-4 z-50 flex gap-2 sm:gap-6">
+    <nav className="fixed top-0 right-0 p-3 sm:p-4 z-50 flex items-center gap-2 sm:gap-6">
+      <Link to="/" className="mr-auto">
+        <img 
+          src="/lovable-uploads/826f1811-9259-45a1-8c6c-539598b0896e.png" 
+          alt="Water Polo Playground"
+          className="w-8 h-8 sm:w-10 sm:h-10"
+        />
+      </Link>
+      
       <TooltipProvider>
         <Tooltip>
           <TooltipTrigger asChild>

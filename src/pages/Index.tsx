@@ -3,9 +3,12 @@ import Toolbar from '@/components/Toolbar';
 import { SidebarProvider } from '@/components/ui/sidebar';
 import { useState } from 'react';
 
+type Tool = 'pen' | 'ellipse' | 'rectangle' | 'dottedLine' | 'straightLine';
+
 const Index = () => {
   const [team1Color, setTeam1Color] = useState('#3b82f6');
   const [team2Color, setTeam2Color] = useState('#ef4444');
+  const [activeTool, setActiveTool] = useState<Tool>('pen');
 
   return (
     <SidebarProvider>
@@ -15,6 +18,8 @@ const Index = () => {
           team2Color={team2Color}
           onTeam1ColorChange={setTeam1Color}
           onTeam2ColorChange={setTeam2Color}
+          activeTool={activeTool}
+          onToolSelect={setActiveTool}
         />
         <div className="flex-1 p-4 md:p-8 lg:p-12 overflow-y-auto">
           <div className="max-w-7xl mx-auto space-y-8 pb-24">

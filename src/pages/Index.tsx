@@ -41,9 +41,9 @@ const Index = () => {
             onStrokeWidthChange={setStrokeWidth}
           />
           
-          <main className="flex-1 overflow-x-hidden overflow-y-auto px-4 sm:px-6 md:px-8">
+          <main className="flex-1 overflow-x-hidden overflow-y-auto px-2 sm:px-4 md:px-6 lg:px-8">
             <div className="min-h-full py-2 sm:py-4 lg:py-6">
-              <div className="mx-auto max-w-7xl flex flex-col items-center justify-start gap-4 sm:gap-6 lg:gap-8">
+              <div className="mx-auto max-w-[95%] sm:max-w-[90%] md:max-w-7xl flex flex-col items-center justify-start gap-4 sm:gap-6 lg:gap-8">
                 <header className="text-center space-y-3 sm:space-y-4 w-full max-w-3xl px-2 sm:px-4 pt-4 sm:pt-6 md:pt-8">
                   <div className="inline-block px-3 sm:px-4 py-1 sm:py-1.5 bg-white/10 backdrop-blur rounded-full text-xs sm:text-sm font-medium text-white/80">
                     Interactive Whiteboard
@@ -56,17 +56,19 @@ const Index = () => {
                   </p>
                 </header>
                 
-                <div className="w-full flex justify-center px-3 sm:px-4 md:px-6">
-                  <WaterPoloCourt
-                    team1Color={team1Color}
-                    team2Color={team2Color}
-                    onTeam1ColorChange={setTeam1Color}
-                    onTeam2ColorChange={setTeam2Color}
-                    isDrawing={isDrawing}
-                    isErasing={isErasing}
-                    strokeColor={strokeColor}
-                    strokeWidth={strokeWidth}
-                  />
+                <div className="w-full flex justify-center px-1 sm:px-2 md:px-4">
+                  <div className="w-full max-w-[95vw] sm:max-w-[90vw] md:max-w-[85vw] lg:max-w-[80vw]">
+                    <WaterPoloCourt
+                      team1Color={team1Color}
+                      team2Color={team2Color}
+                      onTeam1ColorChange={setTeam1Color}
+                      onTeam2ColorChange={setTeam2Color}
+                      isDrawing={isDrawing}
+                      isErasing={isErasing}
+                      strokeColor={strokeColor}
+                      strokeWidth={strokeWidth}
+                    />
+                  </div>
                 </div>
               </div>
             </div>

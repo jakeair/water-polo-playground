@@ -216,11 +216,15 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
   }, [isDraggingBall.current]);
 
   return (
-    <div className="space-y-6 bg-black/20 backdrop-blur-sm p-8 rounded-2xl shadow-2xl border border-white/10">
+    <div className="space-y-8 bg-black/20 backdrop-blur-sm p-12 rounded-3xl shadow-2xl border border-white/10">
       <div 
         ref={courtRef}
         className="court"
-        style={{ width: dimensions.width, height: dimensions.height }}
+        style={{ 
+          width: dimensions.width, 
+          height: dimensions.height,
+          margin: '40px auto'  // Increased margin
+        }}
       >
         <div className="goal goal-top">
           <div ref={topGoalNetRef} className="goal-net" />

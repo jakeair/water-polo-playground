@@ -42,7 +42,7 @@
   border: 5px solid #0044CC;
   border-radius: 12px;
   margin: 20px auto;
-  overflow: hidden;
+  overflow: visible;
 }
 
 .goal {
@@ -73,15 +73,15 @@
 }
 
 .goal-top {
-  top: -6%;
+  top: 0;
   left: 50%;
-  transform: translateX(-50%);
+  transform: translate(-50%, -50%);
 }
 
 .goal-bottom {
-  bottom: -6%;
+  bottom: 0;
   left: 50%;
-  transform: translateX(-50%);
+  transform: translate(-50%, 50%);
 }
 
 .line {

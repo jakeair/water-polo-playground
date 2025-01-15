@@ -4,6 +4,7 @@ import Player from './Player';
 import Timeline from './Timeline';
 import { toast } from 'sonner';
 import DrawingCanvas from './DrawingCanvas';
+import ImageUpload from './ImageUpload';
 
 interface PlayerPosition {
   x: number;
@@ -60,6 +61,10 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
   const [keyframes, setKeyframes] = useState<KeyframeData[]>([]);
   const animationRef = useRef<number>();
   const ANIMATION_DURATION = 2500;
+
+  const [team1Logo, setTeam1Logo] = useState<string>();
+  const [team2Logo, setTeam2Logo] = useState<string>();
+  const [ballImage, setBallImage] = useState<string>();
 
   useEffect(() => {
     const updateDimensions = () => {
@@ -263,6 +268,24 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
 
   return (
     <div className="space-y-24 bg-black/20 backdrop-blur-sm px-8 sm:px-12 md:px-16 lg:px-20 py-16 rounded-3xl shadow-2xl border border-white/10">
+      <div className="flex justify-center gap-8 mb-8">
+        <ImageUpload
+          onImageUploaded={setTeam1Logo}
+          currentImage={team1Logo}
+          label="Team 1 Logo"
+        />
+        <ImageUpload
+          onImageUploaded={setBallImage}
+          currentImage={ballImage}
+          label="Ball Image"
+        />
+        <ImageUpload
+          onImageUploaded={setTeam2Logo}
+          currentImage={team2Logo}
+          label="Team 2 Logo"
+        />
+      </div>
+
       <div 
         ref={courtRef}
         className="court relative"
@@ -304,6 +327,9 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
             left: `${ballPosition.x}%`,
             top: `${ballPosition.y}%`,
             cursor: isDraggingBall.current ? 'grabbing' : 'grab',
+            backgroundImage: ballImage ? `url(${ballImage})` : undefined,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
           }}
           onMouseDown={handleBallMouseDown}
         />

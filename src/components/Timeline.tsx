@@ -16,7 +16,7 @@ interface TimelineProps {
 
 const Timeline: React.FC<TimelineProps> = ({
   currentTime,
-  duration,
+  duration = 2500, // 25 seconds * 100 (for precision)
   keyframes,
   isPlaying,
   onTimeChange,
@@ -24,9 +24,9 @@ const Timeline: React.FC<TimelineProps> = ({
   onRecordKeyframe
 }) => {
   return (
-    <div className="w-full space-y-4 p-6 rounded-xl bg-white/10 backdrop-blur-sm shadow-xl border border-white/20">
-      {/* Controls and timeline */}
-      <div className="flex items-center gap-4">
+    <div className="w-full space-y-6 mt-8 p-6 rounded-xl bg-white/10 backdrop-blur-sm shadow-xl border border-white/20">
+      {/* Control buttons */}
+      <div className="flex items-center justify-center gap-4">
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild>
@@ -48,39 +48,6 @@ const Timeline: React.FC<TimelineProps> = ({
           </Tooltip>
         </TooltipProvider>
 
-        <div className="flex-1 space-y-2">
-          <Slider
-            value={[currentTime]}
-            max={duration}
-            step={1}
-            onValueChange={(value) => onTimeChange(value[0])}
-            className="flex-1"
-          />
-          
-          {/* Keyframe markers */}
-          <div className="relative h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
-            {keyframes.map((time, index) => (
-              <div
-                key={index}
-                className="absolute w-1 h-full bg-red-500/80"
-                style={{ 
-                  left: `${(time / duration) * 100}%`,
-                  transform: 'translateX(-50%)',
-                }}
-              />
-            ))}
-            {/* Playhead */}
-            <div 
-              className="absolute h-full w-1 bg-blue-500"
-              style={{ 
-                left: `${(currentTime / duration) * 100}%`,
-                transform: 'translateX(-50%)',
-                transition: 'left 0.1s linear'
-              }}
-            />
-          </div>
-        </div>
-
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild>
@@ -98,6 +65,40 @@ const Timeline: React.FC<TimelineProps> = ({
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>
+      </div>
+
+      {/* Timeline slider */}
+      <div className="space-y-2">
+        <Slider
+          value={[currentTime]}
+          max={duration}
+          step={1}
+          onValueChange={(value) => onTimeChange(value[0])}
+          className="flex-1"
+        />
+        
+        {/* Keyframe markers */}
+        <div className="relative h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
+          {keyframes.map((time, index) => (
+            <div
+              key={index}
+              className="absolute w-1 h-full bg-red-500/80"
+              style={{ 
+                left: `${(time / duration) * 100}%`,
+                transform: 'translateX(-50%)',
+              }}
+            />
+          ))}
+          {/* Playhead */}
+          <div 
+            className="absolute h-full w-1 bg-blue-500"
+            style={{ 
+              left: `${(currentTime / duration) * 100}%`,
+              transform: 'translateX(-50%)',
+              transition: 'left 0.1s linear'
+            }}
+          />
+        </div>
       </div>
 
       {/* Time display */}

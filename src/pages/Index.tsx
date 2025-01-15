@@ -24,9 +24,9 @@ const Index = () => {
         </div>
 
         <Navigation />
-        <div className="relative flex-1 p-2 sm:p-3 md:p-4 lg:p-6 xl:p-8">
+        <div className="relative p-2 sm:p-3 md:p-4">
           <div className="max-w-7xl mx-auto">
-            <header className="text-center space-y-2 mb-4">
+            <header className="text-center mb-2">
               <div className="inline-block px-4 py-1.5 bg-white/10 backdrop-blur rounded-full text-sm font-medium text-white/80">
                 Interactive Whiteboard
               </div>

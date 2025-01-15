@@ -44,7 +44,7 @@ const Index = () => {
           <main className="flex-1 overflow-x-hidden overflow-y-auto">
             <div className="h-full px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8">
               <div className="mx-auto max-w-7xl flex flex-col items-center justify-start gap-6 sm:gap-8 lg:gap-10">
-                <header className="text-center space-y-3 sm:space-y-4 w-full max-w-3xl px-4">
+                <header className="text-center space-y-3 sm:space-y-4 w-full max-w-3xl px-4 pt-6 sm:pt-8 md:pt-10">
                   <div className="inline-block px-3 sm:px-4 py-1 sm:py-1.5 bg-white/10 backdrop-blur rounded-full text-xs sm:text-sm font-medium text-white/80">
                     Interactive Whiteboard
                   </div>

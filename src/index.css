@@ -47,18 +47,23 @@
 
 .goal {
   position: absolute;
-  width: 18%;
+  width: 20%;  /* Increased from 18% to ~20% (10% increase) */
   height: 6%;
   border: 4px solid #FF4D4D;
-  background-color: white;
-  border-radius: 5px;
+  background: linear-gradient(to right, #ee9ca7, #ffdde1);
+  border-radius: 8px;
   display: flex;
   justify-content: center;
   align-items: center;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
   overflow: hidden;
   transform-origin: center;
-  transition: transform 0.2s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.goal:hover {
+  transform: scale(1.02);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
 }
 
 .goal-net {
@@ -66,10 +71,10 @@
   width: 100%;
   height: 100%;
   background-image: 
-    linear-gradient(to right, rgba(0, 0, 0, 0.1) 2px, transparent 2px),
-    linear-gradient(to bottom, rgba(0, 0, 0, 0.1) 2px, transparent 2px);
+    linear-gradient(to right, rgba(0, 0, 0, 0.15) 2px, transparent 2px),
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.15) 2px, transparent 2px);
   background-size: 10% 10%;
-  opacity: 0.8;
+  opacity: 0.9;
 }
 
 .goal-top {

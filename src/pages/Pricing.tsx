@@ -19,33 +19,6 @@ const PricingPage = () => {
           </p>
         </div>
 
-        {/* Features Grid */}
-        <div className="grid md:grid-cols-3 gap-8 mb-16">
-          <Card className="p-6 bg-white/5 backdrop-blur-sm border-white/10 hover:bg-white/10 transition-colors">
-            <Zap className="h-12 w-12 text-blue-400 mb-4" />
-            <h3 className="text-xl font-semibold text-white mb-2">Real-time Strategy</h3>
-            <p className="text-white/70">
-              Create and modify plays in real-time during matches and practice sessions
-            </p>
-          </Card>
-
-          <Card className="p-6 bg-white/5 backdrop-blur-sm border-white/10 hover:bg-white/10 transition-colors">
-            <Shield className="h-12 w-12 text-blue-400 mb-4" />
-            <h3 className="text-xl font-semibold text-white mb-2">Advanced Analytics</h3>
-            <p className="text-white/70">
-              Track team performance and analyze patterns to improve game strategy
-            </p>
-          </Card>
-
-          <Card className="p-6 bg-white/5 backdrop-blur-sm border-white/10 hover:bg-white/10 transition-colors">
-            <Users className="h-12 w-12 text-blue-400 mb-4" />
-            <h3 className="text-xl font-semibold text-white mb-2">Team Collaboration</h3>
-            <p className="text-white/70">
-              Share strategies with your coaching staff and players seamlessly
-            </p>
-          </Card>
-        </div>
-
         {/* Pricing Cards */}
         <div className="grid md:grid-cols-3 gap-8 max-w-7xl mx-auto">
           {/* Free Trial */}

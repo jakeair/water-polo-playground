@@ -42,9 +42,9 @@ const Index = () => {
           />
           
           <main className="flex-1 overflow-x-hidden overflow-y-auto">
-            <div className="h-full px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8">
-              <div className="mx-auto max-w-7xl flex flex-col items-center justify-start gap-6 sm:gap-8 lg:gap-10">
-                <header className="text-center space-y-3 sm:space-y-4 w-full max-w-3xl px-4 pt-6 sm:pt-8 md:pt-10">
+            <div className="min-h-full px-2 sm:px-4 lg:px-6 py-2 sm:py-4 lg:py-6">
+              <div className="mx-auto max-w-7xl flex flex-col items-center justify-start gap-4 sm:gap-6 lg:gap-8">
+                <header className="text-center space-y-3 sm:space-y-4 w-full max-w-3xl px-2 sm:px-4 pt-4 sm:pt-6 md:pt-8">
                   <div className="inline-block px-3 sm:px-4 py-1 sm:py-1.5 bg-white/10 backdrop-blur rounded-full text-xs sm:text-sm font-medium text-white/80">
                     Interactive Whiteboard
                   </div>
@@ -56,7 +56,7 @@ const Index = () => {
                   </p>
                 </header>
                 
-                <div className="w-full flex justify-center px-2 sm:px-4">
+                <div className="w-full flex justify-center px-1 sm:px-2 md:px-4">
                   <WaterPoloCourt
                     team1Color={team1Color}
                     team2Color={team2Color}

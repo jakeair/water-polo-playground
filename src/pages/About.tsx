@@ -2,6 +2,7 @@ import React from "react";
 import { Target, Trophy, MessageSquare, Lightbulb, Users, ClipboardList } from "lucide-react";
 import Navigation from "@/components/Navigation";
 import OlympicRings from "@/components/OlympicRings";
+import NcaaLogo from "@/components/NcaaLogo";
 
 const AboutPage = () => {
   return (
@@ -72,8 +73,9 @@ const AboutPage = () => {
               creates stronger athletes.
             </p>
           </div>
-          <div className="flex justify-center mt-8">
+          <div className="flex justify-center items-center gap-8 mt-8">
             <OlympicRings className="opacity-90" size={180} />
+            <NcaaLogo className="opacity-90" size={180} />
           </div>
         </div>
       </section>

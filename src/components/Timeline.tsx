@@ -24,7 +24,7 @@ const Timeline: React.FC<TimelineProps> = ({
   onRecordKeyframe
 }) => {
   return (
-    <div className="w-full space-y-8 mb-8 p-8 rounded-2xl bg-black/5 backdrop-blur-md border border-white/10 shadow-xl">
+    <div className="w-full space-y-8 mt-24 p-8 rounded-2xl bg-black/5 backdrop-blur-md border border-white/10 shadow-xl">
       <div className="flex items-center justify-center gap-6">
         <TooltipProvider>
           <Tooltip>

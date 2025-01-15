@@ -29,7 +29,7 @@ const Index = () => {
           onStrokeWidthChange={setStrokeWidth}
         />
         <div className="flex-1 p-2 sm:p-4 md:p-6 lg:p-8 xl:p-12 overflow-y-auto">
-          <div className="max-w-7xl mx-auto space-y-6 sm:space-y-8 pb-24">
+          <div className="max-w-7xl mx-auto space-y-6 sm:space-y-8">
             <WaterPoloCourt
               team1Color={team1Color}
               team2Color={team2Color}

@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 
 interface PlayerProps {
   team: 1 | 2;
@@ -6,14 +6,28 @@ interface PlayerProps {
   initialX: number;
   initialY: number;
   isGoalie?: boolean;
+  onPositionChange?: (position: { x: number; y: number }) => void;
 }
 
-const Player: React.FC<PlayerProps> = ({ team, number, initialX, initialY, isGoalie = false }) => {
+const Player: React.FC<PlayerProps> = ({ 
+  team, 
+  number, 
+  initialX, 
+  initialY, 
+  isGoalie = false,
+  onPositionChange 
+}) => {
   const [position, setPosition] = useState({ x: initialX, y: initialY });
   const playerRef = useRef<HTMLDivElement>(null);
   const [isDragging, setIsDragging] = useState(false);
   const dragStartPos = useRef({ x: 0, y: 0 });
   const initialPlayerPos = useRef({ x: 0, y: 0 });
+
+  useEffect(() => {
+    if (onPositionChange) {
+      onPositionChange(position);
+    }
+  }, [position, onPositionChange]);
 
   const handleMouseDown = (e: React.MouseEvent) => {
     if (playerRef.current) {

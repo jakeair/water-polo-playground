@@ -2,8 +2,8 @@ import WaterPoloCourt from '@/components/WaterPoloCourt';
 
 const Index = () => {
   return (
-    <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold text-center mb-8">Water Polo Court</h1>
+    <div className="container mx-auto px-4 py-24">
+      <h1 className="text-4xl font-bold text-center mb-16 text-white/90">Water Polo Court</h1>
       <WaterPoloCourt />
     </div>
   );

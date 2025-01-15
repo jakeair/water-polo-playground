@@ -16,7 +16,7 @@ interface TimelineProps {
 
 const Timeline: React.FC<TimelineProps> = ({
   currentTime,
-  duration = 2500, // 25 seconds * 100 (for precision)
+  duration = 2500,
   keyframes,
   isPlaying,
   onTimeChange,
@@ -24,8 +24,7 @@ const Timeline: React.FC<TimelineProps> = ({
   onRecordKeyframe
 }) => {
   return (
-    <div className="w-full space-y-6 mt-8 p-6 rounded-xl bg-white/10 backdrop-blur-sm shadow-xl border border-white/20">
-      {/* Control buttons */}
+    <div className="w-full space-y-8 mt-12 p-8 rounded-xl bg-white/10 backdrop-blur-sm shadow-xl border border-white/20">
       <div className="flex items-center justify-center gap-4">
         <TooltipProvider>
           <Tooltip>

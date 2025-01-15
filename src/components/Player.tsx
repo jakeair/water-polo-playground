@@ -29,11 +29,9 @@ const Player: React.FC<PlayerProps> = ({ team, number, initialX, initialY, isGoa
     if (isDragging && playerRef.current) {
       const courtRect = playerRef.current.parentElement?.getBoundingClientRect();
       if (courtRect) {
-        // Calculate percentage positions
         const newX = ((e.clientX - courtRect.left) / courtRect.width) * 100;
         const newY = ((e.clientY - courtRect.top) / courtRect.height) * 100;
         
-        // Ensure player stays within court boundaries (0-100%)
         const x = Math.max(0, Math.min(newX, 100));
         const y = Math.max(0, Math.min(newY, 100));
         

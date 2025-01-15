@@ -20,8 +20,11 @@ const AboutPage = () => {
         <h1 className="text-5xl sm:text-6xl font-bold bg-gradient-to-r from-white via-white/90 to-white/70 text-transparent bg-clip-text mb-4">
           About Us
         </h1>
-        <p className="text-xl sm:text-2xl text-white/60 max-w-3xl mx-auto">
+        <p className="text-xl sm:text-2xl text-white/60 max-w-3xl mx-auto mb-4">
           Empowering Water Polo Coaches and Players Worldwide
+        </p>
+        <p className="text-lg text-white/80 max-w-2xl mx-auto">
+          We combine cutting-edge technology with deep water polo expertise to revolutionize how teams strategize, train, and compete. Our platform serves everyone from youth teams to Olympic athletes.
         </p>
       </header>
 

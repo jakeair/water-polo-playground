@@ -14,7 +14,7 @@ const Index = () => {
 
   return (
     <SidebarProvider>
-      <div className="relative min-h-screen w-full bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+      <div className="relative min-h-screen w-full bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 pt-4 sm:pt-6 md:pt-8 lg:pt-10">
         {/* Background pattern */}
         <div className="absolute inset-0 opacity-5">
           <div className="absolute inset-0" style={{

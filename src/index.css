@@ -43,6 +43,7 @@
   border-radius: 12px;
   margin: 20px auto;
   overflow: visible;
+  padding: 40px 0; /* Add padding to create space for goals */
 }
 
 .goal {

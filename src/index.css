@@ -140,14 +140,24 @@
 
 .ball {
   position: absolute;
-  width: 11px;
-  height: 11px;
+  width: 2.5%;
+  aspect-ratio: 1;
+  background: linear-gradient(145deg, #FFA500, #FF8C00);
+  border: 2px solid #FFD700;
   border-radius: 50%;
-  background: linear-gradient(145deg, #ffffff, #f0f0f0);
-  border: 1px solid #e0e0e0;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   cursor: grab;
   will-change: transform, left, top;
   touch-action: none;
   transform: translate(-50%, -50%);
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.ball:active {
+  cursor: grabbing;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.ball:hover {
+  transform: translate(-50%, -50%) scale(1.1);
 }

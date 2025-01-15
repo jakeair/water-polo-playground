@@ -108,9 +108,8 @@
 
 .player {
   position: absolute;
-  width: 5%;
-  height: 0;
-  padding-bottom: 5%;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   cursor: move;
   display: flex;
@@ -122,8 +121,6 @@
   transition: transform 0.2s;
   font-size: clamp(12px, 1.5vw, 20px);
   transform-origin: center;
-  line-height: 1;
-  padding-top: 2.5%;
 }
 
 .player:hover {

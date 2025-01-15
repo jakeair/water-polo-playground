@@ -158,7 +158,7 @@
 
 .ball {
   position: absolute;
-  width: 2.5%;
+  width: 3.125%;  /* Increased from 2.5% to 3.125% (25% bigger) */
   aspect-ratio: 1;
   background: linear-gradient(145deg, #FFA500, #FF8C00);
   border: 2px solid #FFD700;

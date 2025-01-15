@@ -1,6 +1,7 @@
 import WaterPoloCourt from '@/components/WaterPoloCourt';
 import Toolbar from '@/components/Toolbar';
 import { SidebarProvider } from '@/components/ui/sidebar';
+import { useState } from 'react';
 
 const Index = () => {
   const [team1Color, setTeam1Color] = useState('#3b82f6');

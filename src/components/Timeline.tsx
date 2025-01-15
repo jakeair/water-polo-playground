@@ -1,7 +1,7 @@
 import React from 'react';
 import { Slider } from "@/components/ui/slider";
 import { Button } from "@/components/ui/button";
-import { PlayCircle, PauseCircle, CircleDot } from "lucide-react";
+import { PlayCircle, PauseCircle, Plus } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 interface TimelineProps {
@@ -24,8 +24,8 @@ const Timeline: React.FC<TimelineProps> = ({
   onRecordKeyframe
 }) => {
   return (
-    <div className="w-full space-y-8 mt-12 p-8 rounded-xl bg-white/10 backdrop-blur-sm shadow-xl border border-white/20">
-      <div className="flex items-center justify-center gap-4">
+    <div className="w-full space-y-12 mt-16 p-8 rounded-xl bg-white/10 backdrop-blur-sm shadow-xl border border-white/20">
+      <div className="flex items-center justify-center gap-8">
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild>
@@ -56,18 +56,17 @@ const Timeline: React.FC<TimelineProps> = ({
                 onClick={onRecordKeyframe}
                 className="w-12 h-12 rounded-full border-red-500/50 hover:bg-red-500/20 hover:border-red-500"
               >
-                <CircleDot className="h-6 w-6 text-red-500" />
+                <Plus className="h-6 w-6 text-red-500" />
               </Button>
             </TooltipTrigger>
             <TooltipContent>
-              <p>Record Keyframe</p>
+              <p>Add Keyframe</p>
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>
       </div>
 
-      {/* Timeline slider */}
-      <div className="space-y-2">
+      <div className="space-y-4">
         <Slider
           value={[currentTime]}
           max={duration}
@@ -76,7 +75,6 @@ const Timeline: React.FC<TimelineProps> = ({
           className="flex-1"
         />
         
-        {/* Keyframe markers */}
         <div className="relative h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
           {keyframes.map((time, index) => (
             <div
@@ -88,7 +86,6 @@ const Timeline: React.FC<TimelineProps> = ({
               }}
             />
           ))}
-          {/* Playhead */}
           <div 
             className="absolute h-full w-1 bg-blue-500"
             style={{ 
@@ -100,7 +97,6 @@ const Timeline: React.FC<TimelineProps> = ({
         </div>
       </div>
 
-      {/* Time display */}
       <div className="text-sm text-white/60 text-center">
         {(currentTime / 100).toFixed(1)}s / {(duration / 100).toFixed(1)}s
       </div>

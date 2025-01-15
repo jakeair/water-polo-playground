@@ -1,12 +1,11 @@
 import React from 'react';
 import ColorPicker from './ColorPicker';
-import { Palette, Droplet } from 'lucide-react';
+import { Palette } from 'lucide-react';
 import {
   Sidebar,
   SidebarContent,
   SidebarGroup,
   SidebarGroupContent,
-  SidebarGroupLabel,
 } from '@/components/ui/sidebar';
 
 interface ToolbarProps {
@@ -26,27 +25,16 @@ const Toolbar: React.FC<ToolbarProps> = ({
     <Sidebar variant="floating" className="w-[180px] bg-white/50 backdrop-blur-sm border-r">
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel className="flex items-center gap-2">
-            <Palette className="w-4 h-4" />
-            Team Colors
-          </SidebarGroupLabel>
-          <SidebarGroupContent className="space-y-3 p-2">
-            <div className="space-y-2">
-              <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                <Droplet className="w-3 h-3" />
-                Team 1
+          <SidebarGroupContent className="space-y-6 p-4">
+            <div className="space-y-6">
+              <div className="flex items-center justify-center">
+                <Palette className="w-5 h-5 text-gray-500" />
               </div>
               <ColorPicker
                 color={team1Color}
                 onChange={onTeam1ColorChange}
                 label="Team 1"
               />
-            </div>
-            <div className="space-y-2">
-              <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                <Droplet className="w-3 h-3" />
-                Team 2
-              </div>
               <ColorPicker
                 color={team2Color}
                 onChange={onTeam2ColorChange}

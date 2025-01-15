@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Home, Play, Info } from 'lucide-react';
+import { Home, Gamepad2, Info } from 'lucide-react';
 
 const Navigation = () => {
   const location = useLocation();
@@ -28,8 +28,8 @@ const Navigation = () => {
             : 'bg-white/10 hover:bg-white/15 text-white/80 hover:text-white'
         } backdrop-blur-md border border-white/20 transition-all`}
       >
-        <Play className="h-5 w-5" />
-        <span className="hidden sm:inline">Plays</span>
+        <Gamepad2 className="h-5 w-5" />
+        <span className="hidden sm:inline">Playground</span>
       </Link>
       <Link 
         to="/about" 

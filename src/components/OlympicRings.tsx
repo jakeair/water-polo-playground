@@ -16,8 +16,8 @@ const OlympicRings = ({ className = "", size = 120 }: { className?: string; size
       <circle cx="130" cy="30" r="20" fill="none" stroke="#DF0024" strokeWidth="4"/>
       {/* Yellow Ring */}
       <circle cx="62.5" cy="50" r="20" fill="none" stroke="#F4C300" strokeWidth="4"/>
-      {/* Red Ring */}
-      <circle cx="107.5" cy="50" r="20" fill="none" stroke="#DF0024" strokeWidth="4"/>
+      {/* Green Ring */}
+      <circle cx="107.5" cy="50" r="20" fill="none" stroke="#009F3D" strokeWidth="4"/>
     </svg>
   );
 };

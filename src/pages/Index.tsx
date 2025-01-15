@@ -39,8 +39,8 @@ const Index = () => {
           onStrokeWidthChange={setStrokeWidth}
         />
         <div className="relative flex-1 p-2 sm:p-3 md:p-4 lg:p-6 xl:p-8 overflow-y-auto">
-          <div className="max-w-7xl mx-auto space-y-4 sm:space-y-6 pb-16">
-            <header className="text-center space-y-3 px-4 py-6 sm:py-8 md:py-10 mt-12 sm:mt-14 md:mt-16">
+          <div className="max-w-7xl mx-auto space-y-4 sm:space-y-6">
+            <header className="text-center space-y-3 px-4 py-4 sm:py-6">
               <div className="inline-block px-4 py-1.5 bg-white/10 backdrop-blur rounded-full text-sm font-medium text-white/80 mb-2">
                 Interactive Whiteboard
               </div>

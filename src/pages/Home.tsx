@@ -49,14 +49,32 @@ const Home = () => {
               </Link>
             </div>
 
-            {/* Whiteboard Preview */}
-            <div className="relative mx-auto max-w-5xl rounded-2xl overflow-hidden shadow-2xl border border-white/10">
+            {/* Animated Court Preview */}
+            <div className="relative mx-auto max-w-5xl rounded-2xl overflow-hidden shadow-2xl border border-white/10 group hover:scale-[1.02] transition-transform duration-500">
               <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-transparent to-transparent pointer-events-none" />
-              <img 
-                src="https://images.unsplash.com/photo-1488590528505-98d2b5aba04b"
-                alt="Water Polo Whiteboard Preview"
-                className="w-full aspect-[16/9] object-cover"
-              />
+              <div className="court w-full aspect-[16/9] bg-[#d9f0ff] border-[#0044CC] relative animate-float">
+                {/* Goals */}
+                <div className="goal goal-top bg-[#ffdde1] border-[#FF4D4D]">
+                  <div className="goal-net" />
+                </div>
+                <div className="goal goal-bottom bg-[#ffdde1] border-[#FF4D4D]">
+                  <div className="goal-net" />
+                </div>
+                
+                {/* Lines */}
+                <div className="line two-meter-line" style={{ top: '8%' }} />
+                <div className="line five-meter-line" style={{ top: '20%' }} />
+                <div className="line six-meter-line" style={{ top: '24%' }} />
+                <div className="line two-meter-line" style={{ bottom: '8%' }} />
+                <div className="line five-meter-line" style={{ bottom: '20%' }} />
+                <div className="line six-meter-line" style={{ bottom: '24%' }} />
+                <div className="line halfway-line" style={{ top: '50%' }} />
+
+                {/* Example Players */}
+                <div className="player team1 animate-bounce-slow" style={{ left: '20%', top: '20%' }}>1</div>
+                <div className="player team2 animate-bounce-slow" style={{ left: '70%', top: '70%' }}>2</div>
+                <div className="ball animate-float" style={{ left: '50%', top: '50%' }} />
+              </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">

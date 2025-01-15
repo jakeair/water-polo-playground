@@ -9,7 +9,7 @@ const Index = () => {
 
   return (
     <SidebarProvider>
-      <div className="min-h-screen flex w-full">
+      <div className="min-h-screen flex w-full bg-zinc-900">
         <Toolbar
           team1Color={team1Color}
           team2Color={team2Color}

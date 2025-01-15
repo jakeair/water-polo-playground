@@ -1,5 +1,6 @@
 import React from 'react';
 import ColorPicker from './ColorPicker';
+import { Palette, Swatch } from 'lucide-react';
 import {
   Sidebar,
   SidebarContent,
@@ -22,21 +23,36 @@ const Toolbar: React.FC<ToolbarProps> = ({
   onTeam2ColorChange
 }) => {
   return (
-    <Sidebar variant="floating" className="w-[200px]">
+    <Sidebar variant="floating" className="w-[240px] bg-white/10 backdrop-blur-sm">
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Team Colors</SidebarGroupLabel>
-          <SidebarGroupContent className="space-y-4 p-2">
-            <ColorPicker
-              color={team1Color}
-              onChange={onTeam1ColorChange}
-              label="Team 1"
-            />
-            <ColorPicker
-              color={team2Color}
-              onChange={onTeam2ColorChange}
-              label="Team 2"
-            />
+          <SidebarGroupLabel className="flex items-center gap-2">
+            <Palette className="w-4 h-4" />
+            Team Colors
+          </SidebarGroupLabel>
+          <SidebarGroupContent className="space-y-4 p-4">
+            <div className="space-y-2">
+              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                <Swatch className="w-4 h-4" />
+                Team 1
+              </div>
+              <ColorPicker
+                color={team1Color}
+                onChange={onTeam1ColorChange}
+                label="Team 1"
+              />
+            </div>
+            <div className="space-y-2">
+              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                <Swatch className="w-4 h-4" />
+                Team 2
+              </div>
+              <ColorPicker
+                color={team2Color}
+                onChange={onTeam2ColorChange}
+                label="Team 2"
+              />
+            </div>
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>

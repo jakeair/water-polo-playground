@@ -23,17 +23,17 @@ const Toolbar: React.FC<ToolbarProps> = ({
   onTeam2ColorChange
 }) => {
   return (
-    <Sidebar variant="floating" className="w-[240px] bg-white/10 backdrop-blur-sm">
+    <Sidebar variant="floating" className="w-[180px] bg-white/50 backdrop-blur-sm border-r">
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupLabel className="flex items-center gap-2">
             <Palette className="w-4 h-4" />
             Team Colors
           </SidebarGroupLabel>
-          <SidebarGroupContent className="space-y-4 p-4">
+          <SidebarGroupContent className="space-y-3 p-2">
             <div className="space-y-2">
-              <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                <Droplet className="w-4 h-4" />
+              <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                <Droplet className="w-3 h-3" />
                 Team 1
               </div>
               <ColorPicker
@@ -43,8 +43,8 @@ const Toolbar: React.FC<ToolbarProps> = ({
               />
             </div>
             <div className="space-y-2">
-              <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                <Droplet className="w-4 h-4" />
+              <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                <Droplet className="w-3 h-3" />
                 Team 2
               </div>
               <ColorPicker

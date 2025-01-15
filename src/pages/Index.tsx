@@ -9,7 +9,7 @@ const Index = () => {
 
   return (
     <SidebarProvider>
-      <div className="min-h-screen flex w-full bg-zinc-900">
+      <div className="min-h-screen flex w-full bg-white">
         <Toolbar
           team1Color={team1Color}
           team2Color={team2Color}
@@ -17,7 +17,7 @@ const Index = () => {
           onTeam2ColorChange={setTeam2Color}
         />
         <div className="flex-1 px-4 py-24">
-          <h1 className="text-4xl font-bold text-center mb-16 text-white/90">Water Polo Court</h1>
+          <h1 className="text-4xl font-bold text-center mb-16 text-gray-800">Water Polo Court</h1>
           <WaterPoloCourt
             team1Color={team1Color}
             team2Color={team2Color}

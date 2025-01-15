@@ -51,7 +51,7 @@
 
 .goal {
   position: absolute;
-  width: 27.5%; /* Updated from 20% to 27.5% */
+  width: 23%;
   height: 6%;
   border: 4px solid #FF4D4D;
   background-color: #ffdde1;
@@ -78,10 +78,24 @@
 
 .goal-top {
   top: -6%;
+  transform: translateX(-50%) perspective(100px) rotateX(5deg);
+  border-width: 6px;
+  border-style: solid;
+  border-image: linear-gradient(to bottom, #ff6b6b, #ff4d4d) 1;
+  box-shadow: 
+    0 4px 12px rgba(0, 0, 0, 0.2),
+    inset 0 2px 4px rgba(255, 255, 255, 0.3);
 }
 
 .goal-bottom {
   bottom: -6%;
+  transform: translateX(-50%) perspective(100px) rotateX(-5deg);
+  border-width: 6px;
+  border-style: solid;
+  border-image: linear-gradient(to top, #ff6b6b, #ff4d4d) 1;
+  box-shadow: 
+    0 -4px 12px rgba(0, 0, 0, 0.2),
+    inset 0 -2px 4px rgba(255, 255, 255, 0.3);
 }
 
 .line {

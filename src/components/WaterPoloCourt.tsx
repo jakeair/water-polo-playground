@@ -1,16 +1,19 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
+import { gsap } from 'gsap';
 import Player from './Player';
 
 const WaterPoloCourt: React.FC = () => {
   const courtRef = React.useRef<HTMLDivElement>(null);
+  const topGoalNetRef = useRef<HTMLDivElement>(null);
+  const bottomGoalNetRef = useRef<HTMLDivElement>(null);
   const [dimensions, setDimensions] = React.useState({ width: 1000, height: 1400 });
 
-  React.useEffect(() => {
+  useEffect(() => {
     const updateDimensions = () => {
       if (courtRef.current) {
         const containerWidth = courtRef.current.parentElement?.clientWidth || 1000;
-        const width = Math.min(containerWidth - 40, 1000); // Max width of 1000px, 20px padding on each side
-        const height = (width * 7) / 5; // Maintain 5:7 aspect ratio
+        const width = Math.min(containerWidth - 40, 1000);
+        const height = (width * 7) / 5;
         setDimensions({ width, height });
       }
     };
@@ -20,15 +23,31 @@ const WaterPoloCourt: React.FC = () => {
     return () => window.removeEventListener('resize', updateDimensions);
   }, []);
 
+  const animateNet = (netRef: React.RefObject<HTMLDivElement>) => {
+    if (netRef.current) {
+      gsap.to(netRef.current, {
+        scale: 1.05,
+        duration: 0.2,
+        yoyo: true,
+        repeat: 1,
+        transformOrigin: 'center'
+      });
+    }
+  };
+
   return (
     <div 
       ref={courtRef}
       className="court"
       style={{ width: dimensions.width, height: dimensions.height }}
     >
-      {/* Goals */}
-      <div className="goal goal-top"></div>
-      <div className="goal goal-bottom"></div>
+      {/* Goals with nets */}
+      <div className="goal goal-top">
+        <div ref={topGoalNetRef} className="goal-net" />
+      </div>
+      <div className="goal goal-bottom">
+        <div ref={bottomGoalNetRef} className="goal-net" />
+      </div>
 
       {/* Lines */}
       <div className="line two-meter-line" style={{ top: '8%' }}></div>

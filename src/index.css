@@ -117,27 +117,23 @@
   color: white;
   font-weight: bold;
   user-select: none;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   font-size: clamp(12px, 1.5vw, 20px);
   transform-origin: center;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   border: 2px solid rgba(255, 255, 255, 0.2);
-  will-change: transform;
+  will-change: transform, left, top;
   touch-action: none;
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
+  transition: transform 0.1s cubic-bezier(0.2, 0, 0, 1);
 }
 
 .player:hover {
   transform: scale(1.1);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-}
-
-.player:active {
-  transform: scale(1.05);
 }
 
 .player.team1 {

@@ -3,8 +3,8 @@ import React, { useState, useRef } from 'react';
 interface PlayerProps {
   team: 1 | 2;
   number: number | "G";
-  initialX: number;  // percentage value (0-100)
-  initialY: number;  // percentage value (0-100)
+  initialX: number;
+  initialY: number;
   isGoalie?: boolean;
 }
 
@@ -26,8 +26,6 @@ const Player: React.FC<PlayerProps> = ({ team, number, initialX, initialY, isGoa
         x: position.x,
         y: position.y
       };
-      
-      // Prevent text selection during drag
       e.preventDefault();
     }
   };
@@ -36,15 +34,15 @@ const Player: React.FC<PlayerProps> = ({ team, number, initialX, initialY, isGoa
     if (isDragging && playerRef.current) {
       const courtRect = playerRef.current.parentElement?.getBoundingClientRect();
       if (courtRect) {
-        // Calculate the change in position
-        const deltaX = (e.clientX - dragStartPos.current.x) / courtRect.width * 100;
-        const deltaY = (e.clientY - dragStartPos.current.y) / courtRect.height * 100;
-        
-        // Update position based on initial position plus delta
-        const newX = Math.max(0, Math.min(100, initialPlayerPos.current.x + deltaX));
-        const newY = Math.max(0, Math.min(100, initialPlayerPos.current.y + deltaY));
-        
-        setPosition({ x: newX, y: newY });
+        requestAnimationFrame(() => {
+          const deltaX = (e.clientX - dragStartPos.current.x) / courtRect.width * 100;
+          const deltaY = (e.clientY - dragStartPos.current.y) / courtRect.height * 100;
+          
+          const newX = Math.max(0, Math.min(100, initialPlayerPos.current.x + deltaX));
+          const newY = Math.max(0, Math.min(100, initialPlayerPos.current.y + deltaY));
+          
+          setPosition({ x: newX, y: newY });
+        });
       }
     }
   };
@@ -55,7 +53,7 @@ const Player: React.FC<PlayerProps> = ({ team, number, initialX, initialY, isGoa
 
   React.useEffect(() => {
     if (isDragging) {
-      window.addEventListener('mousemove', handleMouseMove);
+      window.addEventListener('mousemove', handleMouseMove, { passive: true });
       window.addEventListener('mouseup', handleMouseUp);
     }
     return () => {
@@ -72,8 +70,7 @@ const Player: React.FC<PlayerProps> = ({ team, number, initialX, initialY, isGoa
         left: `${position.x}%`,
         top: `${position.y}%`,
         cursor: isDragging ? 'grabbing' : 'grab',
-        willChange: 'transform',
-        transform: `translate(-50%, -50%)`,
+        transform: `translate(-50%, -50%) ${isDragging ? 'scale(1.05)' : 'scale(1)'}`,
         position: 'absolute',
       }}
       onMouseDown={handleMouseDown}

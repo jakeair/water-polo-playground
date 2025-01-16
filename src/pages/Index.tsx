@@ -16,10 +16,10 @@ const Index = () => {
   const [strokeWidth, setStrokeWidth] = useState(2);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800 text-white pt-24 sm:pt-28">
+    <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800 text-white">
       {/* Navigation Bar */}
       <div className="fixed top-0 left-0 right-0 bg-gray-900/80 backdrop-blur-sm border-b border-white/10 z-50">
-        <div className="max-w-[1800px] mx-auto px-6 sm:px-8 py-3 sm:py-4 flex items-center justify-between">
+        <div className="max-w-[1800px] mx-auto px-4 sm:px-6 lg:px-8 py-3 sm:py-4 flex items-center justify-between">
           <Link to="/" className="flex items-center space-x-4 group">
             <img 
               src="/lovable-uploads/909e2d5e-f8a8-493f-9d95-f0d86ecd99be.png" 
@@ -32,13 +32,13 @@ const Index = () => {
       </div>
 
       {/* Main Content */}
-      <div className="max-w-[1800px] mx-auto p-4 sm:p-6 md:p-8 space-y-8">
+      <div className="w-full max-w-[1800px] mx-auto pt-24 sm:pt-28 px-4 sm:px-6 lg:px-8">
         {/* Help Section */}
         <Help />
         
         <SidebarProvider>
-          <div className="flex flex-col lg:flex-row gap-8 items-start justify-center">
-            <div className="w-full lg:w-auto">
+          <div className="w-full flex flex-col lg:flex-row gap-6 lg:gap-8 items-start">
+            <div className="w-full lg:w-auto lg:sticky lg:top-28">
               <Toolbar
                 team1Color={team1Color}
                 team2Color={team2Color}
@@ -55,7 +55,7 @@ const Index = () => {
               />
             </div>
 
-            <div className="w-full flex-1 flex justify-center">
+            <div className="w-full flex-1">
               <WaterPoloCourt
                 team1Color={team1Color}
                 team2Color={team2Color}

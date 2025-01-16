@@ -37,7 +37,7 @@ const Home = () => {
               <div className="inline-block px-3 py-1 sm:px-4 sm:py-1.5 bg-white/10 backdrop-blur rounded-full text-xs sm:text-sm font-medium text-white/80 mb-2 sm:mb-4">
                 🎯 Professional Water Polo Strategy Platform
               </div>
-              <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold bg-gradient-to-r from-white via-white/90 to-white/70 text-transparent bg-clip-text leading-tight px-2 sm:px-4">
+              <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold bg-gradient-to-r from-white via-white/90 to-white/70 text-transparent bg-clip-text leading-[1.15] px-2 sm:px-4 pb-2">
                 Elevate Your Water Polo Strategy
               </h1>
               <p className="text-lg sm:text-xl md:text-2xl text-white/60 max-w-3xl mx-auto leading-relaxed px-2">

@@ -120,7 +120,7 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
   }, [currentTime]);
 
   return (
-    <div className="space-y-12 bg-black/20 backdrop-blur-sm px-8 sm:px-12 md:px-16 lg:px-20 py-8 rounded-3xl shadow-2xl border border-white/10">
+    <div className="space-y-12 bg-black/20 backdrop-blur-sm px-4 sm:px-8 md:px-12 lg:px-16 py-8 rounded-3xl shadow-2xl border border-white/10 w-full overflow-hidden">
       <Timeline
         currentTime={currentTime}
         duration={ANIMATION_DURATION}
@@ -131,7 +131,7 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
         onRecordKeyframe={handleRecordKeyframe}
       />
       
-      <div className="flex gap-6">
+      <div className="flex flex-col md:flex-row gap-6 w-full items-center justify-center">
         <Court width={dimensions.width} height={dimensions.height}>
           <DrawingCanvas 
             isDrawing={localIsDrawing}

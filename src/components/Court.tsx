@@ -9,11 +9,11 @@ interface CourtProps {
 const Court: React.FC<CourtProps> = ({ width, height, children }) => {
   return (
     <div 
-      className="court relative flex-1"
+      className="court relative flex-1 max-w-full"
       style={{ 
         width, 
         height,
-        margin: '60px auto',
+        margin: '20px auto',
         overflow: 'visible'
       }}
     >

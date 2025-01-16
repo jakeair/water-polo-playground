@@ -62,15 +62,16 @@ const Toolbar: React.FC<ToolbarProps> = ({
         >
           <Pencil className={`w-4 h-4 ${isDrawing ? 'fill-white stroke-white' : ''}`} />
         </Toggle>
-        <Toggle
-          pressed={false}
-          onPressedChange={() => onUndo()}
+        <Button
+          variant="ghost"
+          size="icon"
           disabled={!canUndo}
-          className="data-[state=on]:bg-primary p-2 hover:bg-primary/90 active:bg-primary disabled:opacity-50"
+          onClick={onUndo}
+          className="p-2 h-auto hover:bg-primary/90 active:bg-primary disabled:opacity-50"
           aria-label="Undo last drawing"
         >
           <Undo2 className={`w-4 h-4 ${canUndo ? 'fill-white stroke-white' : ''}`} />
-        </Toggle>
+        </Button>
         <ColorPicker
           color={strokeColor}
           onChange={onStrokeColorChange}

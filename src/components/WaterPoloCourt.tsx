@@ -4,6 +4,7 @@ import Player from './Player';
 import Timeline from './Timeline';
 import { toast } from 'sonner';
 import DrawingCanvas from './DrawingCanvas';
+import Toolbar from './Toolbar';
 
 interface PlayerPosition {
   x: number;
@@ -263,66 +264,83 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
 
   return (
     <div className="space-y-24 bg-black/20 backdrop-blur-sm px-8 sm:px-12 md:px-16 lg:px-20 py-16 rounded-3xl shadow-2xl border border-white/10">
-      <div 
-        ref={courtRef}
-        className="court relative"
-        style={{ 
-          width: dimensions.width, 
-          height: dimensions.height,
-          margin: '60px auto',
-          overflow: 'visible'
-        }}
-      >
-        <DrawingCanvas 
+      <div className="flex gap-6">
+        <div 
+          ref={courtRef}
+          className="court relative"
+          style={{ 
+            width: dimensions.width, 
+            height: dimensions.height,
+            margin: '60px auto',
+            overflow: 'visible'
+          }}
+        >
+          <DrawingCanvas 
+            isDrawing={isDrawing}
+            isErasing={isErasing}
+            width={dimensions.width}
+            height={dimensions.height}
+            strokeColor={strokeColor}
+            strokeWidth={strokeWidth}
+          />
+          
+          <div className="goal goal-top">
+            <div ref={topGoalNetRef} className="goal-net" />
+          </div>
+          <div className="goal goal-bottom">
+            <div ref={bottomGoalNetRef} className="goal-net" />
+          </div>
+
+          <div className="line two-meter-line" style={{ top: '8%' }}></div>
+          <div className="line five-meter-line" style={{ top: '20%' }}></div>
+          <div className="line six-meter-line" style={{ top: '24%' }}></div>
+          <div className="line two-meter-line" style={{ bottom: '8%' }}></div>
+          <div className="line five-meter-line" style={{ bottom: '20%' }}></div>
+          <div className="line six-meter-line" style={{ bottom: '24%' }}></div>
+          <div className="line halfway-line" style={{ top: '50%' }}></div>
+
+          <div
+            ref={ballRef}
+            className="ball"
+            style={{
+              left: `${ballPosition.x}%`,
+              top: `${ballPosition.y}%`,
+              cursor: isDraggingBall.current ? 'grabbing' : 'grab',
+            }}
+            onMouseDown={handleBallMouseDown}
+          />
+
+          <Player team={1} number="G" initialX={50} initialY={5} isGoalie onPositionChange={(pos) => updatePlayerPosition('1G', pos)} id="player-1G" style={{ backgroundColor: 'var(--goalie-color)' }} />
+          <Player team={1} number={1} initialX={20} initialY={20} onPositionChange={(pos) => updatePlayerPosition('11', pos)} id="player-11" />
+          <Player team={1} number={2} initialX={40} initialY={20} onPositionChange={(pos) => updatePlayerPosition('12', pos)} id="player-12" />
+          <Player team={1} number={3} initialX={60} initialY={20} onPositionChange={(pos) => updatePlayerPosition('13', pos)} id="player-13" />
+          <Player team={1} number={4} initialX={30} initialY={30} onPositionChange={(pos) => updatePlayerPosition('14', pos)} id="player-14" />
+          <Player team={1} number={5} initialX={50} initialY={30} onPositionChange={(pos) => updatePlayerPosition('15', pos)} id="player-15" />
+          <Player team={1} number={6} initialX={70} initialY={30} onPositionChange={(pos) => updatePlayerPosition('16', pos)} id="player-16" />
+
+          <Player team={2} number="G" initialX={50} initialY={95} isGoalie onPositionChange={(pos) => updatePlayerPosition('2G', pos)} id="player-2G" style={{ backgroundColor: 'var(--goalie-color)' }} />
+          <Player team={2} number={1} initialX={20} initialY={70} onPositionChange={(pos) => updatePlayerPosition('21', pos)} id="player-21" />
+          <Player team={2} number={2} initialX={40} initialY={70} onPositionChange={(pos) => updatePlayerPosition('22', pos)} id="player-22" />
+          <Player team={2} number={3} initialX={60} initialY={70} onPositionChange={(pos) => updatePlayerPosition('23', pos)} id="player-23" />
+          <Player team={2} number={4} initialX={30} initialY={80} onPositionChange={(pos) => updatePlayerPosition('24', pos)} id="player-24" />
+          <Player team={2} number={5} initialX={50} initialY={80} onPositionChange={(pos) => updatePlayerPosition('25', pos)} id="player-25" />
+          <Player team={2} number={6} initialX={70} initialY={80} onPositionChange={(pos) => updatePlayerPosition('26', pos)} id="player-26" />
+        </div>
+
+        <Toolbar
+          team1Color={team1Color}
+          team2Color={team2Color}
+          onTeam1ColorChange={onTeam1ColorChange}
+          onTeam2ColorChange={onTeam2ColorChange}
           isDrawing={isDrawing}
           isErasing={isErasing}
-          width={dimensions.width}
-          height={dimensions.height}
+          onDrawingChange={setIsDrawing}
+          onErasingChange={setIsErasing}
           strokeColor={strokeColor}
+          onStrokeColorChange={onStrokeColorChange}
           strokeWidth={strokeWidth}
+          onStrokeWidthChange={setStrokeWidth}
         />
-        
-        <div className="goal goal-top">
-          <div ref={topGoalNetRef} className="goal-net" />
-        </div>
-        <div className="goal goal-bottom">
-          <div ref={bottomGoalNetRef} className="goal-net" />
-        </div>
-
-        <div className="line two-meter-line" style={{ top: '8%' }}></div>
-        <div className="line five-meter-line" style={{ top: '20%' }}></div>
-        <div className="line six-meter-line" style={{ top: '24%' }}></div>
-        <div className="line two-meter-line" style={{ bottom: '8%' }}></div>
-        <div className="line five-meter-line" style={{ bottom: '20%' }}></div>
-        <div className="line six-meter-line" style={{ bottom: '24%' }}></div>
-        <div className="line halfway-line" style={{ top: '50%' }}></div>
-
-        <div
-          ref={ballRef}
-          className="ball"
-          style={{
-            left: `${ballPosition.x}%`,
-            top: `${ballPosition.y}%`,
-            cursor: isDraggingBall.current ? 'grabbing' : 'grab',
-          }}
-          onMouseDown={handleBallMouseDown}
-        />
-
-        <Player team={1} number="G" initialX={50} initialY={5} isGoalie onPositionChange={(pos) => updatePlayerPosition('1G', pos)} id="player-1G" style={{ backgroundColor: 'var(--goalie-color)' }} />
-        <Player team={1} number={1} initialX={20} initialY={20} onPositionChange={(pos) => updatePlayerPosition('11', pos)} id="player-11" />
-        <Player team={1} number={2} initialX={40} initialY={20} onPositionChange={(pos) => updatePlayerPosition('12', pos)} id="player-12" />
-        <Player team={1} number={3} initialX={60} initialY={20} onPositionChange={(pos) => updatePlayerPosition('13', pos)} id="player-13" />
-        <Player team={1} number={4} initialX={30} initialY={30} onPositionChange={(pos) => updatePlayerPosition('14', pos)} id="player-14" />
-        <Player team={1} number={5} initialX={50} initialY={30} onPositionChange={(pos) => updatePlayerPosition('15', pos)} id="player-15" />
-        <Player team={1} number={6} initialX={70} initialY={30} onPositionChange={(pos) => updatePlayerPosition('16', pos)} id="player-16" />
-
-        <Player team={2} number="G" initialX={50} initialY={95} isGoalie onPositionChange={(pos) => updatePlayerPosition('2G', pos)} id="player-2G" style={{ backgroundColor: 'var(--goalie-color)' }} />
-        <Player team={2} number={1} initialX={20} initialY={70} onPositionChange={(pos) => updatePlayerPosition('21', pos)} id="player-21" />
-        <Player team={2} number={2} initialX={40} initialY={70} onPositionChange={(pos) => updatePlayerPosition('22', pos)} id="player-22" />
-        <Player team={2} number={3} initialX={60} initialY={70} onPositionChange={(pos) => updatePlayerPosition('23', pos)} id="player-23" />
-        <Player team={2} number={4} initialX={30} initialY={80} onPositionChange={(pos) => updatePlayerPosition('24', pos)} id="player-24" />
-        <Player team={2} number={5} initialX={50} initialY={80} onPositionChange={(pos) => updatePlayerPosition('25', pos)} id="player-25" />
-        <Player team={2} number={6} initialX={70} initialY={80} onPositionChange={(pos) => updatePlayerPosition('26', pos)} id="player-26" />
       </div>
 
       <Timeline

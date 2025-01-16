@@ -50,7 +50,7 @@ const Home = () => {
                 <Link to="/plays">
                   <Button 
                     size="lg" 
-                    className="w-full sm:w-auto group bg-gradient-to-r from-[#9b87f5] to-[#8B5CF6] hover:from-[#8B5CF6] hover:to-[#7E69AB] text-white gap-2 sm:gap-3 px-6 sm:px-8 py-5 sm:py-6 text-base sm:text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-200"
+                    className="w-full sm:w-auto group bg-[#0a65ae] hover:bg-[#085490] text-white gap-2 sm:gap-3 px-6 sm:px-8 py-5 sm:py-6 text-base sm:text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-200"
                   >
                     <Play className="w-5 h-5 sm:w-6 sm:h-6" />
                     Start Creating Plays
@@ -61,7 +61,7 @@ const Home = () => {
                   <Button 
                     variant="outline" 
                     size="lg" 
-                    className="w-full sm:w-auto border-2 border-[#9b87f5]/30 text-[#9b87f5] hover:bg-[#9b87f5]/10 gap-2 sm:gap-3 px-6 sm:px-8 py-5 sm:py-6 text-base sm:text-lg font-medium backdrop-blur-sm"
+                    className="w-full sm:w-auto border-2 border-[#0a65ae]/30 text-[#0a65ae] hover:bg-[#0a65ae]/10 gap-2 sm:gap-3 px-6 sm:px-8 py-5 sm:py-6 text-base sm:text-lg font-medium backdrop-blur-sm"
                   >
                     View Pricing
                   </Button>
@@ -117,7 +117,7 @@ const Home = () => {
                 <Link to="/pricing" className="w-full sm:w-auto">
                   <Button 
                     size="lg" 
-                    className="w-full sm:w-auto bg-gradient-to-r from-[#9b87f5] to-[#8B5CF6] hover:from-[#8B5CF6] hover:to-[#7E69AB] text-white gap-2 px-6 sm:px-8 py-5 sm:py-6 text-base sm:text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-200"
+                    className="w-full sm:w-auto bg-[#0a65ae] hover:bg-[#085490] text-white gap-2 px-6 sm:px-8 py-5 sm:py-6 text-base sm:text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-200"
                   >
                     Start Free Trial
                   </Button>
@@ -126,7 +126,7 @@ const Home = () => {
                   <Button 
                     variant="outline" 
                     size="lg" 
-                    className="w-full sm:w-auto border-2 border-[#9b87f5]/30 text-[#9b87f5] hover:bg-[#9b87f5]/10 gap-2 px-6 sm:px-8 py-5 sm:py-6 text-base sm:text-lg font-medium backdrop-blur-sm"
+                    className="w-full sm:w-auto border-2 border-[#0a65ae]/30 text-[#0a65ae] hover:bg-[#0a65ae]/10 gap-2 px-6 sm:px-8 py-5 sm:py-6 text-base sm:text-lg font-medium backdrop-blur-sm"
                   >
                     Watch Demo
                   </Button>

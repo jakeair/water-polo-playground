@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button } from "@/components/ui/button";
-import { PlayCircle, Plus, MousePointerClick, Move, Repeat } from "lucide-react";
+import { PlayCircle, Plus, Clock, MousePointerClick, Move, Repeat } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
 const Help = () => {
@@ -29,13 +29,9 @@ const Help = () => {
                 <span>Add Keyframe: Save current positions</span>
               </div>
               <div className="flex items-center gap-3 text-white/80">
-                <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center relative">
-                  <div className="w-6 h-1 bg-white/20 rounded-full">
-                    <div className="absolute w-1 h-full bg-red-500/60" style={{ left: '30%' }} />
-                    <div className="absolute w-1 h-full bg-red-500/60" style={{ left: '70%' }} />
-                    <div className="absolute w-1 h-full bg-blue-500/80" style={{ left: '50%' }} />
-                  </div>
-                </div>
+                <Button variant="ghost" size="icon" className="w-10 h-10 rounded-full hover:bg-white/10">
+                  <Clock className="h-6 w-6" />
+                </Button>
                 <span>Timeline: Shows keyframes (<span className="text-red-500">red markers</span>) and current time (<span className="text-blue-500">blue marker</span>)</span>
               </div>
             </div>
@@ -53,7 +49,7 @@ const Help = () => {
               />
               <Step
                 number={2}
-                icon={Move}
+                icon={Clock}
                 title="Move Forward in Time"
                 description="Drag the timeline forward to when you want the next movement"
               />

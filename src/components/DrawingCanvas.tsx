@@ -56,18 +56,21 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
     const dy = to.y - from.y;
     const angle = Math.atan2(dy, dx);
     
+    // Start a new path for the arrow
     context.beginPath();
+    
+    // Set line style (solid or dotted)
     if (isDotted) {
       context.setLineDash([5, 5]);
     } else {
       context.setLineDash([]);
     }
     
-    // Draw the straight line segment
+    // Draw the line
     context.moveTo(from.x, from.y);
     context.lineTo(to.x, to.y);
     
-    // Draw the arrow head
+    // Draw the arrowhead
     context.moveTo(to.x, to.y);
     context.lineTo(
       to.x - headLength * Math.cos(angle - Math.PI / 6),
@@ -79,8 +82,9 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
       to.y - headLength * Math.sin(angle + Math.PI / 6)
     );
     
+    // Stroke the entire arrow
     context.stroke();
-    context.setLineDash([]);
+    context.setLineDash([]); // Reset dash pattern
   };
 
   const getCoordinates = (event: MouseEvent | TouchEvent): { x: number, y: number } | null => {
@@ -107,8 +111,6 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
 
   const startDrawing = (event: MouseEvent | TouchEvent) => {
     event.preventDefault();
-    event.stopPropagation();
-    
     if (!isDrawing || !contextRef.current) return;
 
     const coords = getCoordinates(event);
@@ -117,15 +119,10 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
     setIsDrawingActive(true);
     startPointRef.current = coords;
 
-    // Store the current canvas state for arrow drawing
     if (drawingTool !== 'pen') {
-      const canvas = canvasRef.current;
-      if (canvas) {
-        lastDrawRef.current = contextRef.current.getImageData(0, 0, canvas.width, canvas.height);
-      }
-    }
-
-    if (drawingTool === 'pen') {
+      // Store the current canvas state for arrow preview
+      lastDrawRef.current = contextRef.current.getImageData(0, 0, width, height);
+    } else {
       contextRef.current.beginPath();
       contextRef.current.moveTo(coords.x, coords.y);
     }
@@ -133,9 +130,7 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
 
   const draw = (event: MouseEvent | TouchEvent) => {
     event.preventDefault();
-    event.stopPropagation();
-
-    if (!isDrawingActive || !isDrawing || !contextRef.current) return;
+    if (!isDrawingActive || !contextRef.current) return;
 
     const coords = getCoordinates(event);
     if (!coords) return;
@@ -144,7 +139,7 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
       contextRef.current.lineTo(coords.x, coords.y);
       contextRef.current.stroke();
     } else if (startPointRef.current && lastDrawRef.current) {
-      // Restore the previous canvas state
+      // Restore the canvas to its state before the current drag operation
       contextRef.current.putImageData(lastDrawRef.current, 0, 0);
       
       // Draw the preview arrow
@@ -158,13 +153,13 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
   };
 
   const stopDrawing = () => {
+    if (!isDrawingActive) return;
+    
     if (drawingTool !== 'pen' && contextRef.current) {
-      // Save the final arrow state
-      const canvas = canvasRef.current;
-      if (canvas) {
-        lastDrawRef.current = contextRef.current.getImageData(0, 0, canvas.width, canvas.height);
-      }
+      // Save the final state with the arrow
+      lastDrawRef.current = contextRef.current.getImageData(0, 0, width, height);
     }
+    
     setIsDrawingActive(false);
     startPointRef.current = null;
   };

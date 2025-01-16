@@ -13,7 +13,8 @@ const Court: React.FC<CourtProps> = ({ width, height, children }) => {
       style={{ 
         width, 
         height,
-        margin: '20px auto',
+        margin: '40px auto',
+        marginTop: '60px', // Increased top margin specifically
         overflow: 'visible'
       }}
     >

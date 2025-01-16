@@ -266,6 +266,21 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
   return (
     <div className="space-y-24 bg-black/20 backdrop-blur-sm px-8 sm:px-12 md:px-16 lg:px-20 py-16 rounded-3xl shadow-2xl border border-white/10">
       <div className="flex gap-6">
+        <Toolbar
+          team1Color={team1Color}
+          team2Color={team2Color}
+          onTeam1ColorChange={onTeam1ColorChange}
+          onTeam2ColorChange={onTeam2ColorChange}
+          isDrawing={localIsDrawing}
+          isErasing={localIsErasing}
+          onDrawingChange={setIsDrawing}
+          onErasingChange={setIsErasing}
+          strokeColor={localStrokeColor}
+          onStrokeColorChange={setStrokeColor}
+          strokeWidth={localStrokeWidth}
+          onStrokeWidthChange={setStrokeWidth}
+        />
+        
         <div 
           ref={courtRef}
           className="court relative"
@@ -327,21 +342,6 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
           <Player team={2} number={5} initialX={50} initialY={80} onPositionChange={(pos) => updatePlayerPosition('25', pos)} id="player-25" />
           <Player team={2} number={6} initialX={70} initialY={80} onPositionChange={(pos) => updatePlayerPosition('26', pos)} id="player-26" />
         </div>
-
-        <Toolbar
-          team1Color={team1Color}
-          team2Color={team2Color}
-          onTeam1ColorChange={onTeam1ColorChange}
-          onTeam2ColorChange={onTeam2ColorChange}
-          isDrawing={localIsDrawing}
-          isErasing={localIsErasing}
-          onDrawingChange={setIsDrawing}
-          onErasingChange={setIsErasing}
-          strokeColor={localStrokeColor}
-          onStrokeColorChange={setStrokeColor}
-          strokeWidth={localStrokeWidth}
-          onStrokeWidthChange={setStrokeWidth}
-        />
       </div>
 
       <Timeline

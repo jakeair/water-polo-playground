@@ -57,19 +57,16 @@ const Home = () => {
                     <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 transition-transform group-hover:translate-x-1" />
                   </Button>
                 </Link>
-                <Link to="/pricing">
-                  <Button 
-                    variant="outline" 
-                    size="lg" 
-                    className="w-full sm:w-auto border-2 border-[#0a65ae]/30 text-[#0a65ae] hover:bg-[#0a65ae]/10 gap-2 sm:gap-3 px-6 sm:px-8 py-5 sm:py-6 text-base sm:text-lg font-medium backdrop-blur-sm"
-                  >
-                    View Pricing
-                  </Button>
-                </Link>
+                <Button 
+                  variant="outline" 
+                  size="lg" 
+                  className="w-full sm:w-auto border-2 border-[#0a65ae]/30 text-[#0a65ae] hover:bg-[#0a65ae]/10 gap-2 sm:gap-3 px-6 sm:px-8 py-5 sm:py-6 text-base sm:text-lg font-medium backdrop-blur-sm"
+                >
+                  View Pricing
+                </Button>
               </div>
             </div>
 
-            {/* Features Grid */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 md:gap-8 px-2 sm:px-4 animate-fade-in" style={{ animationDelay: '200ms' }}>
               <div className="group bg-white/5 hover:bg-white/10 backdrop-blur-md border border-white/10 rounded-xl sm:rounded-2xl p-6 sm:p-8 text-left transition-all hover:scale-[1.02]">
                 <div className="bg-white/10 rounded-lg sm:rounded-xl p-2 sm:p-3 w-fit mb-3 sm:mb-4">
@@ -96,7 +93,6 @@ const Home = () => {
               </div>
             </div>
 
-            {/* Social Proof */}
             <div className="text-center space-y-6 sm:space-y-8 animate-fade-in px-2 sm:px-4" style={{ animationDelay: '400ms' }}>
               <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white">Trusted by Leading Teams</h2>
               <div className="flex flex-wrap justify-center gap-4 sm:gap-8 items-center opacity-60">
@@ -114,23 +110,19 @@ const Home = () => {
                 Join the elite teams using our platform to develop winning strategies.
               </p>
               <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center pt-2 sm:pt-4">
-                <Link to="/pricing" className="w-full sm:w-auto">
-                  <Button 
-                    size="lg" 
-                    className="w-full sm:w-auto bg-[#0a65ae] hover:bg-[#085490] text-white gap-2 px-6 sm:px-8 py-5 sm:py-6 text-base sm:text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-200"
-                  >
-                    Start Free Trial
-                  </Button>
-                </Link>
-                <Link to="/pricing" className="w-full sm:w-auto">
-                  <Button 
-                    variant="outline" 
-                    size="lg" 
-                    className="w-full sm:w-auto border-2 border-[#0a65ae]/30 text-[#0a65ae] hover:bg-[#0a65ae]/10 gap-2 px-6 sm:px-8 py-5 sm:py-6 text-base sm:text-lg font-medium backdrop-blur-sm"
-                  >
-                    Watch Demo
-                  </Button>
-                </Link>
+                <Button 
+                  size="lg" 
+                  className="w-full sm:w-auto bg-[#0a65ae] hover:bg-[#085490] text-white gap-2 px-6 sm:px-8 py-5 sm:py-6 text-base sm:text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-200"
+                >
+                  Start Free Trial
+                </Button>
+                <Button 
+                  variant="outline" 
+                  size="lg" 
+                  className="w-full sm:w-auto border-2 border-[#0a65ae]/30 text-[#0a65ae] hover:bg-[#0a65ae]/10 gap-2 px-6 sm:px-8 py-5 sm:py-6 text-base sm:text-lg font-medium backdrop-blur-sm"
+                >
+                  Watch Demo
+                </Button>
               </div>
             </div>
           </div>

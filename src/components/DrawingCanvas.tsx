@@ -6,7 +6,7 @@ interface DrawingCanvasProps {
   height: number;
   strokeColor: string;
   strokeWidth: number;
-  drawingTool: 'pen' | 'arrow' | 'dottedArrow';
+  drawingTool: 'pen' | 'dottedLine';
 }
 
 const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
@@ -50,36 +50,14 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
     contextRef.current.lineWidth = strokeWidth;
   }, [strokeWidth]);
 
-  const drawArrow = (context: CanvasRenderingContext2D, from: { x: number; y: number }, to: { x: number; y: number }, isDotted: boolean) => {
-    const distance = Math.sqrt(Math.pow(to.x - from.x, 2) + Math.pow(to.y - from.y, 2));
-    const headLength = Math.min(20, distance / 3);
-    const dx = to.x - from.x;
-    const dy = to.y - from.y;
-    const angle = Math.atan2(dy, dx);
-
+  const drawDottedLine = (context: CanvasRenderingContext2D, from: { x: number; y: number }, to: { x: number; y: number }) => {
     context.beginPath();
-    context.setLineDash(isDotted ? [5, 5] : []);
-
-    // Draw the line
+    context.setLineDash([5, 5]);
     context.moveTo(from.x, from.y);
     context.lineTo(to.x, to.y);
     context.stroke();
-
-    // Draw the arrowhead
-    context.beginPath();
-    context.moveTo(to.x, to.y);
-    context.lineTo(
-      to.x - headLength * Math.cos(angle - Math.PI / 6),
-      to.y - headLength * Math.sin(angle - Math.PI / 6)
-    );
-    context.moveTo(to.x, to.y);
-    context.lineTo(
-      to.x - headLength * Math.cos(angle + Math.PI / 6),
-      to.y - headLength * Math.sin(angle + Math.PI / 6)
-    );
-    context.stroke();
     context.setLineDash([]);
-  };
+  }
 
   const getCoordinates = (event: MouseEvent | TouchEvent): { x: number, y: number } | null => {
     const canvas = canvasRef.current;
@@ -113,7 +91,7 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
     setIsDrawingActive(true);
     startPointRef.current = coords;
 
-    if (drawingTool !== 'pen') {
+    if (drawingTool === 'dottedLine') {
       lastDrawRef.current = contextRef.current.getImageData(0, 0, width, height);
     } else {
       contextRef.current.beginPath();
@@ -133,28 +111,18 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
       contextRef.current.stroke();
     } else if (lastDrawRef.current) {
       contextRef.current.putImageData(lastDrawRef.current, 0, 0);
-      drawArrow(
-        contextRef.current,
-        startPointRef.current,
-        coords,
-        drawingTool === 'dottedArrow'
-      );
+      drawDottedLine(contextRef.current, startPointRef.current, coords);
     }
   };
 
   const stopDrawing = () => {
     if (!isDrawingActive || !contextRef.current || !startPointRef.current) return;
 
-    if (drawingTool !== 'pen') {
+    if (drawingTool === 'dottedLine') {
       const coords = getCoordinates(lastMouseEvent.current as MouseEvent | TouchEvent);
       if (coords && lastDrawRef.current) {
         contextRef.current.putImageData(lastDrawRef.current, 0, 0);
-        drawArrow(
-          contextRef.current,
-          startPointRef.current,
-          coords,
-          drawingTool === 'dottedArrow'
-        );
+        drawDottedLine(contextRef.current, startPointRef.current, coords);
       }
     }
     

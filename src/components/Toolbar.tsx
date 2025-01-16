@@ -1,6 +1,6 @@
 import React from 'react';
 import ColorPicker from './ColorPicker';
-import { Pencil, ArrowRight, ArrowBigRightDash } from 'lucide-react';
+import { Pencil, DashedLine } from 'lucide-react';
 import { Separator } from "@/components/ui/separator";
 import { Toggle } from "@/components/ui/toggle";
 
@@ -15,8 +15,8 @@ interface ToolbarProps {
   onStrokeColorChange: (color: string) => void;
   strokeWidth: number;
   onStrokeWidthChange: (width: number) => void;
-  drawingTool: 'pen' | 'arrow' | 'dottedArrow';
-  onDrawingToolChange: (tool: 'pen' | 'arrow' | 'dottedArrow') => void;
+  drawingTool: 'pen' | 'dottedLine';
+  onDrawingToolChange: (tool: 'pen' | 'dottedLine') => void;
 }
 
 const Toolbar: React.FC<ToolbarProps> = ({
@@ -88,25 +88,25 @@ const Toolbar: React.FC<ToolbarProps> = ({
           )}
         </div>
 
-        {/* Arrow Tool */}
+        {/* Dotted Line Tool */}
         <div className="flex flex-col items-center gap-2 w-full">
           <Toggle 
-            pressed={isDrawing && drawingTool === 'arrow'} 
+            pressed={isDrawing && drawingTool === 'dottedLine'} 
             onPressedChange={(pressed) => {
               onDrawingChange(pressed);
-              if (pressed) onDrawingToolChange('arrow');
+              if (pressed) onDrawingToolChange('dottedLine');
             }}
             className="data-[state=on]:bg-primary p-2 hover:bg-primary/90 active:bg-primary w-full"
-            aria-label="Arrow tool"
+            aria-label="Dotted line tool"
           >
-            <ArrowRight className={`w-4 h-4 ${isDrawing && drawingTool === 'arrow' ? 'fill-white stroke-white' : ''}`} />
+            <DashedLine className={`w-4 h-4 ${isDrawing && drawingTool === 'dottedLine' ? 'fill-white stroke-white' : ''}`} />
           </Toggle>
-          {isDrawing && drawingTool === 'arrow' && (
+          {isDrawing && drawingTool === 'dottedLine' && (
             <>
               <ColorPicker
                 color={strokeColor}
                 onChange={onStrokeColorChange}
-                label="Arrow Color"
+                label="Line Color"
               />
               <input
                 type="range"
@@ -115,40 +115,7 @@ const Toolbar: React.FC<ToolbarProps> = ({
                 value={strokeWidth}
                 onChange={(e) => onStrokeWidthChange(Number(e.target.value))}
                 className="w-full"
-                aria-label="Arrow width"
-              />
-            </>
-          )}
-        </div>
-
-        {/* Dotted Arrow Tool */}
-        <div className="flex flex-col items-center gap-2 w-full">
-          <Toggle 
-            pressed={isDrawing && drawingTool === 'dottedArrow'} 
-            onPressedChange={(pressed) => {
-              onDrawingChange(pressed);
-              if (pressed) onDrawingToolChange('dottedArrow');
-            }}
-            className="data-[state=on]:bg-primary p-2 hover:bg-primary/90 active:bg-primary w-full"
-            aria-label="Dotted arrow tool"
-          >
-            <ArrowBigRightDash className={`w-4 h-4 ${isDrawing && drawingTool === 'dottedArrow' ? 'fill-white stroke-white' : ''}`} />
-          </Toggle>
-          {isDrawing && drawingTool === 'dottedArrow' && (
-            <>
-              <ColorPicker
-                color={strokeColor}
-                onChange={onStrokeColorChange}
-                label="Dotted Arrow Color"
-              />
-              <input
-                type="range"
-                min="1"
-                max="10"
-                value={strokeWidth}
-                onChange={(e) => onStrokeWidthChange(Number(e.target.value))}
-                className="w-full"
-                aria-label="Dotted arrow width"
+                aria-label="Line width"
               />
             </>
           )}

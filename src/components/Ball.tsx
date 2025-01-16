@@ -12,24 +12,23 @@ const Ball: React.FC<BallProps> = ({ position, onPositionChange }) => {
   const startPos = useRef({ x: 0, y: 0 });
   const initialPos = useRef({ x: 0, y: 0 });
 
-  const handleMouseDown = (e: React.MouseEvent) => {
+  const handleStart = (clientX: number, clientY: number) => {
     if (ballRef.current) {
       isDragging.current = true;
       startPos.current = {
-        x: e.clientX,
-        y: e.clientY
+        x: clientX,
+        y: clientY
       };
       initialPos.current = position;
-      e.preventDefault();
     }
   };
 
-  const handleMouseMove = (e: MouseEvent) => {
+  const handleMove = (clientX: number, clientY: number) => {
     if (isDragging.current && ballRef.current) {
       const courtRect = ballRef.current.parentElement?.getBoundingClientRect();
       if (courtRect) {
-        const deltaX = (e.clientX - startPos.current.x) / courtRect.width * 100;
-        const deltaY = (e.clientY - startPos.current.y) / courtRect.height * 100;
+        const deltaX = (clientX - startPos.current.x) / courtRect.width * 100;
+        const deltaY = (clientY - startPos.current.y) / courtRect.height * 100;
         
         let newX = initialPos.current.x + deltaX;
         let newY = initialPos.current.y + deltaY;
@@ -42,18 +41,44 @@ const Ball: React.FC<BallProps> = ({ position, onPositionChange }) => {
     }
   };
 
-  const handleMouseUp = () => {
+  const handleEnd = () => {
     isDragging.current = false;
+  };
+
+  // Mouse event handlers
+  const handleMouseDown = (e: React.MouseEvent) => {
+    handleStart(e.clientX, e.clientY);
+    e.preventDefault();
+  };
+
+  const handleMouseMove = (e: MouseEvent) => {
+    handleMove(e.clientX, e.clientY);
+  };
+
+  // Touch event handlers
+  const handleTouchStart = (e: React.TouchEvent) => {
+    const touch = e.touches[0];
+    handleStart(touch.clientX, touch.clientY);
+    e.preventDefault();
+  };
+
+  const handleTouchMove = (e: TouchEvent) => {
+    const touch = e.touches[0];
+    handleMove(touch.clientX, touch.clientY);
   };
 
   React.useEffect(() => {
     if (isDragging.current) {
       window.addEventListener('mousemove', handleMouseMove);
-      window.addEventListener('mouseup', handleMouseUp);
+      window.addEventListener('mouseup', handleEnd);
+      window.addEventListener('touchmove', handleTouchMove);
+      window.addEventListener('touchend', handleEnd);
     }
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
-      window.removeEventListener('mouseup', handleMouseUp);
+      window.removeEventListener('mouseup', handleEnd);
+      window.removeEventListener('touchmove', handleTouchMove);
+      window.removeEventListener('touchend', handleEnd);
     };
   }, [isDragging.current]);
 
@@ -79,6 +104,7 @@ const Ball: React.FC<BallProps> = ({ position, onPositionChange }) => {
         cursor: isDragging.current ? 'grabbing' : 'grab',
       }}
       onMouseDown={handleMouseDown}
+      onTouchStart={handleTouchStart}
     />
   );
 };

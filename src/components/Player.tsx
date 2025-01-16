@@ -33,51 +33,46 @@ const Player: React.FC<PlayerProps> = ({
     }
   }, [position, onPositionChange]);
 
-  const handleMouseDown = (e: React.MouseEvent) => {
+  const handleStart = (clientX: number, clientY: number) => {
     if (playerRef.current) {
       setIsDragging(true);
       dragStartPos.current = {
-        x: e.clientX,
-        y: e.clientY
+        x: clientX,
+        y: clientY
       };
       initialPlayerPos.current = {
         x: position.x,
         y: position.y
       };
-      e.preventDefault();
     }
   };
 
-  const handleMouseMove = (e: MouseEvent) => {
+  const handleMove = (clientX: number, clientY: number) => {
     if (isDragging && playerRef.current) {
       const courtRect = playerRef.current.parentElement?.getBoundingClientRect();
       if (courtRect) {
         requestAnimationFrame(() => {
-          const deltaX = (e.clientX - dragStartPos.current.x) / courtRect.width * 100;
-          const deltaY = (e.clientY - dragStartPos.current.y) / courtRect.height * 100;
+          const deltaX = (clientX - dragStartPos.current.x) / courtRect.width * 100;
+          const deltaY = (clientY - dragStartPos.current.y) / courtRect.height * 100;
           
           let newX = initialPlayerPos.current.x + deltaX;
           let newY = initialPlayerPos.current.y + deltaY;
 
-          // Special handling for goalies
           if (isGoalie) {
-            const goalWidth = 23; // Width of goal in percentage
-            const goalHeight = 6; // Height of goal in percentage
+            const goalWidth = 23;
+            const goalHeight = 6;
             const halfGoalWidth = goalWidth / 2;
             
             if (team === 1) {
-              // Top goalie
               if (newY < -goalHeight) newY = -goalHeight;
               if (newY > goalHeight) newY = goalHeight;
               newX = Math.max(50 - halfGoalWidth, Math.min(50 + halfGoalWidth, newX));
             } else {
-              // Bottom goalie
               if (newY < (100 - goalHeight)) newY = 100 - goalHeight;
               if (newY > (100 + goalHeight)) newY = 100 + goalHeight;
               newX = Math.max(50 - halfGoalWidth, Math.min(50 + halfGoalWidth, newX));
             }
           } else {
-            // Regular players stay within court bounds
             newX = Math.max(0, Math.min(100, newX));
             newY = Math.max(0, Math.min(100, newY));
           }
@@ -88,18 +83,44 @@ const Player: React.FC<PlayerProps> = ({
     }
   };
 
-  const handleMouseUp = () => {
+  const handleEnd = () => {
     setIsDragging(false);
+  };
+
+  // Mouse event handlers
+  const handleMouseDown = (e: React.MouseEvent) => {
+    handleStart(e.clientX, e.clientY);
+    e.preventDefault();
+  };
+
+  const handleMouseMove = (e: MouseEvent) => {
+    handleMove(e.clientX, e.clientY);
+  };
+
+  // Touch event handlers
+  const handleTouchStart = (e: React.TouchEvent) => {
+    const touch = e.touches[0];
+    handleStart(touch.clientX, touch.clientY);
+    e.preventDefault();
+  };
+
+  const handleTouchMove = (e: TouchEvent) => {
+    const touch = e.touches[0];
+    handleMove(touch.clientX, touch.clientY);
   };
 
   useEffect(() => {
     if (isDragging) {
       window.addEventListener('mousemove', handleMouseMove, { passive: true });
-      window.addEventListener('mouseup', handleMouseUp);
+      window.addEventListener('mouseup', handleEnd);
+      window.addEventListener('touchmove', handleTouchMove, { passive: true });
+      window.addEventListener('touchend', handleEnd);
     }
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
-      window.removeEventListener('mouseup', handleMouseUp);
+      window.removeEventListener('mouseup', handleEnd);
+      window.removeEventListener('touchmove', handleTouchMove);
+      window.removeEventListener('touchend', handleEnd);
     };
   }, [isDragging]);
 
@@ -117,6 +138,7 @@ const Player: React.FC<PlayerProps> = ({
         ...style
       }}
       onMouseDown={handleMouseDown}
+      onTouchStart={handleTouchStart}
     >
       {number}
     </div>

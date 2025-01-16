@@ -63,7 +63,7 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
       context.setLineDash([]);
     }
     
-    // Draw the line
+    // Draw the straight line segment
     context.moveTo(from.x, from.y);
     context.lineTo(to.x, to.y);
     
@@ -145,12 +145,9 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
       contextRef.current.stroke();
     } else if (startPointRef.current && lastDrawRef.current) {
       // Restore the previous canvas state
-      const canvas = canvasRef.current;
-      if (!canvas) return;
-      
       contextRef.current.putImageData(lastDrawRef.current, 0, 0);
       
-      // Draw the new arrow
+      // Draw the preview arrow
       drawArrow(
         contextRef.current,
         startPointRef.current,

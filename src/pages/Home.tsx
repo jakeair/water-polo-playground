@@ -48,14 +48,21 @@ const Home = () => {
               </p>
               <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center items-center pt-4">
                 <Link to="/plays">
-                  <Button size="lg" className="w-full sm:w-auto group bg-white text-slate-900 hover:bg-white/90 gap-2 sm:gap-3 px-6 sm:px-8 py-5 sm:py-6 text-base sm:text-lg">
+                  <Button 
+                    size="lg" 
+                    className="w-full sm:w-auto group bg-gradient-to-r from-[#9b87f5] to-[#8B5CF6] hover:from-[#8B5CF6] hover:to-[#7E69AB] text-white gap-2 sm:gap-3 px-6 sm:px-8 py-5 sm:py-6 text-base sm:text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-200"
+                  >
                     <Play className="w-5 h-5 sm:w-6 sm:h-6" />
                     Start Creating Plays
                     <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 transition-transform group-hover:translate-x-1" />
                   </Button>
                 </Link>
                 <Link to="/pricing">
-                  <Button variant="outline" size="lg" className="w-full sm:w-auto border-white/20 text-white hover:bg-white/10 gap-2 sm:gap-3 px-6 sm:px-8 py-5 sm:py-6 text-base sm:text-lg">
+                  <Button 
+                    variant="outline" 
+                    size="lg" 
+                    className="w-full sm:w-auto border-2 border-[#9b87f5]/30 text-[#9b87f5] hover:bg-[#9b87f5]/10 gap-2 sm:gap-3 px-6 sm:px-8 py-5 sm:py-6 text-base sm:text-lg font-medium backdrop-blur-sm"
+                  >
                     View Pricing
                   </Button>
                 </Link>
@@ -108,12 +115,19 @@ const Home = () => {
               </p>
               <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center pt-2 sm:pt-4">
                 <Link to="/pricing" className="w-full sm:w-auto">
-                  <Button size="lg" className="w-full sm:w-auto bg-white text-slate-900 hover:bg-white/90 gap-2 px-6 sm:px-8 py-5 sm:py-6 text-base sm:text-lg">
+                  <Button 
+                    size="lg" 
+                    className="w-full sm:w-auto bg-gradient-to-r from-[#9b87f5] to-[#8B5CF6] hover:from-[#8B5CF6] hover:to-[#7E69AB] text-white gap-2 px-6 sm:px-8 py-5 sm:py-6 text-base sm:text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-200"
+                  >
                     Start Free Trial
                   </Button>
                 </Link>
                 <Link to="/pricing" className="w-full sm:w-auto">
-                  <Button variant="outline" size="lg" className="w-full sm:w-auto border-white/20 text-white hover:bg-white/10 gap-2 px-6 sm:px-8 py-5 sm:py-6 text-base sm:text-lg">
+                  <Button 
+                    variant="outline" 
+                    size="lg" 
+                    className="w-full sm:w-auto border-2 border-[#9b87f5]/30 text-[#9b87f5] hover:bg-[#9b87f5]/10 gap-2 px-6 sm:px-8 py-5 sm:py-6 text-base sm:text-lg font-medium backdrop-blur-sm"
+                  >
                     Watch Demo
                   </Button>
                 </Link>

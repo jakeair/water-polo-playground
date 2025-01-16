@@ -20,8 +20,6 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const isDrawingRef = useRef(false);
   const lastPosRef = useRef({ x: 0, y: 0 });
-  const points = useRef<{ x: number; y: number }[]>([]);
-  const requestRef = useRef<number>();
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -47,47 +45,19 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
       }
     };
 
-    const getCurvePoints = (points: { x: number; y: number }[]) => {
-      const curvePoints = [];
-      for (let i = 0; i < points.length - 1; i++) {
-        const p0 = i > 0 ? points[i - 1] : points[0];
-        const p1 = points[i];
-        const p2 = points[i + 1];
-        const p3 = i < points.length - 2 ? points[i + 2] : p2;
+    const draw = (e: MouseEvent) => {
+      if (!isDrawingRef.current || !ctx) return;
 
-        // Catmull-Rom to Cubic Bezier conversion
-        const cp1x = p1.x + (p2.x - p0.x) / 6;
-        const cp1y = p1.y + (p2.y - p0.y) / 6;
-        const cp2x = p2.x - (p3.x - p1.x) / 6;
-        const cp2y = p2.y - (p3.y - p1.y) / 6;
+      const rect = canvas.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
 
-        curvePoints.push({
-          startPoint: p1,
-          cp1: { x: cp1x, y: cp1y },
-          cp2: { x: cp2x, y: cp2y },
-          endPoint: p2,
-        });
-      }
-      return curvePoints;
-    };
-
-    const drawSmoothLine = (points: { x: number; y: number }[]) => {
-      if (!ctx || points.length < 2) return;
-
-      const curves = getCurvePoints(points);
-      
       ctx.beginPath();
-      ctx.moveTo(points[0].x, points[0].y);
-
-      curves.forEach(curve => {
-        ctx.bezierCurveTo(
-          curve.cp1.x, curve.cp1.y,
-          curve.cp2.x, curve.cp2.y,
-          curve.endPoint.x, curve.endPoint.y
-        );
-      });
-      
+      ctx.moveTo(lastPosRef.current.x, lastPosRef.current.y);
+      ctx.lineTo(x, y);
       ctx.stroke();
+
+      lastPosRef.current = { x, y };
     };
 
     const handleMouseDown = (e: MouseEvent) => {
@@ -98,7 +68,6 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
       const y = e.clientY - rect.top;
       
       isDrawingRef.current = true;
-      points.current = [{ x, y }];
       lastPosRef.current = { x, y };
       
       updateBrushStyle();
@@ -106,35 +75,58 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
 
     const handleMouseMove = (e: MouseEvent) => {
       if (!isDrawingRef.current || (!isDrawing && !isErasing)) return;
-      
-      const rect = canvas.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-      
-      points.current.push({ x, y });
-      
-      // Keep a moving window of points for smooth curve calculation
-      if (points.current.length > 8) {
-        const tempPoints = [...points.current];
-        drawSmoothLine(tempPoints);
-        points.current = points.current.slice(-4);
-      }
-      
-      lastPosRef.current = { x, y };
+      draw(e);
     };
 
     const handleMouseUp = () => {
-      if (points.current.length > 0) {
-        drawSmoothLine(points.current);
-      }
       isDrawingRef.current = false;
-      points.current = [];
+    };
+
+    // Add touch event handlers
+    const handleTouchStart = (e: TouchEvent) => {
+      e.preventDefault();
+      if (!isDrawing && !isErasing) return;
+      
+      const rect = canvas.getBoundingClientRect();
+      const touch = e.touches[0];
+      const x = touch.clientX - rect.left;
+      const y = touch.clientY - rect.top;
+      
+      isDrawingRef.current = true;
+      lastPosRef.current = { x, y };
+      
+      updateBrushStyle();
+    };
+
+    const handleTouchMove = (e: TouchEvent) => {
+      e.preventDefault();
+      if (!isDrawingRef.current || (!isDrawing && !isErasing)) return;
+      
+      const rect = canvas.getBoundingClientRect();
+      const touch = e.touches[0];
+      const x = touch.clientX - rect.left;
+      const y = touch.clientY - rect.top;
+
+      ctx.beginPath();
+      ctx.moveTo(lastPosRef.current.x, lastPosRef.current.y);
+      ctx.lineTo(x, y);
+      ctx.stroke();
+
+      lastPosRef.current = { x, y };
+    };
+
+    const handleTouchEnd = (e: TouchEvent) => {
+      e.preventDefault();
+      isDrawingRef.current = false;
     };
 
     canvas.addEventListener('mousedown', handleMouseDown);
     canvas.addEventListener('mousemove', handleMouseMove);
     canvas.addEventListener('mouseup', handleMouseUp);
     canvas.addEventListener('mouseleave', handleMouseUp);
+    canvas.addEventListener('touchstart', handleTouchStart);
+    canvas.addEventListener('touchmove', handleTouchMove);
+    canvas.addEventListener('touchend', handleTouchEnd);
 
     updateBrushStyle();
 
@@ -143,9 +135,9 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
       canvas.removeEventListener('mousemove', handleMouseMove);
       canvas.removeEventListener('mouseup', handleMouseUp);
       canvas.removeEventListener('mouseleave', handleMouseUp);
-      if (requestRef.current) {
-        cancelAnimationFrame(requestRef.current);
-      }
+      canvas.removeEventListener('touchstart', handleTouchStart);
+      canvas.removeEventListener('touchmove', handleTouchMove);
+      canvas.removeEventListener('touchend', handleTouchEnd);
     };
   }, [isDrawing, isErasing, strokeColor, strokeWidth]);
 
@@ -158,7 +150,8 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
       style={{ 
         opacity: 1,
         cursor: isDrawing ? 'crosshair' : isErasing ? 'not-allowed' : 'default',
-        pointerEvents: isDrawing || isErasing ? 'auto' : 'none'
+        pointerEvents: isDrawing || isErasing ? 'auto' : 'none',
+        touchAction: 'none'
       }}
     />
   );

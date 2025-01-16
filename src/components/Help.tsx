@@ -32,7 +32,7 @@ const Help = () => {
                 <Button variant="ghost" size="icon" className="w-10 h-10 rounded-full hover:bg-white/10">
                   <Clock className="h-6 w-6" />
                 </Button>
-                <span>Timeline: Shows keyframes and current time</span>
+                <span>Timeline: Shows keyframes (<span className="text-red-500">red markers</span>) and current time (<span className="text-blue-500">blue marker</span>)</span>
               </div>
             </div>
           </div>

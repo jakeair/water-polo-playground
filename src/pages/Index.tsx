@@ -39,6 +39,8 @@ const Index = () => {
             <WaterPoloCourt
               team1Color={team1Color}
               team2Color={team2Color}
+              onTeam1ColorChange={setTeam1Color}
+              onTeam2ColorChange={setTeam2Color}
               isDrawing={isDrawing}
               isErasing={isErasing}
               strokeColor={strokeColor}

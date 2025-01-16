@@ -33,11 +33,11 @@ const Timeline: React.FC<TimelineProps> = ({
                 variant="ghost" 
                 size="icon"
                 onClick={onPlayPause}
-                className="w-14 h-14 rounded-full hover:bg-white/10 transition-colors"
+                className="w-16 h-16 rounded-full hover:bg-white/10 transition-all duration-300 animate-pulse-subtle"
               >
                 {isPlaying ? 
-                  <PauseCircle className="h-10 w-10 text-white/80" /> : 
-                  <PlayCircle className="h-10 w-10 text-white/80" />
+                  <PauseCircle className="h-12 w-12 text-white/80" /> : 
+                  <PlayCircle className="h-12 w-12 text-white/80" />
                 }
               </Button>
             </TooltipTrigger>

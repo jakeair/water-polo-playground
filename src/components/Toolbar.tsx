@@ -2,7 +2,6 @@ import React from 'react';
 import ColorPicker from './ColorPicker';
 import { Palette, Pencil, Eraser } from 'lucide-react';
 import { Separator } from "@/components/ui/separator";
-import { Button } from "@/components/ui/button";
 import { Toggle } from "@/components/ui/toggle";
 
 interface ToolbarProps {
@@ -67,9 +66,10 @@ const Toolbar: React.FC<ToolbarProps> = ({
               onDrawingChange(pressed);
               if (pressed) onErasingChange(false);
             }}
-            className="data-[state=on]:bg-primary"
+            className="data-[state=on]:bg-primary p-2"
+            aria-label="Toggle drawing"
           >
-            Draw
+            <Pencil className="w-4 h-4" />
           </Toggle>
           <Toggle 
             pressed={isErasing} 
@@ -77,9 +77,10 @@ const Toolbar: React.FC<ToolbarProps> = ({
               onErasingChange(pressed);
               if (pressed) onDrawingChange(false);
             }}
-            className="data-[state=on]:bg-destructive"
+            className="data-[state=on]:bg-destructive p-2"
+            aria-label="Toggle erasing"
           >
-            Erase
+            <Eraser className="w-4 h-4" />
           </Toggle>
           <ColorPicker
             color={strokeColor}
@@ -93,6 +94,7 @@ const Toolbar: React.FC<ToolbarProps> = ({
             value={strokeWidth}
             onChange={(e) => onStrokeWidthChange(Number(e.target.value))}
             className="w-full"
+            aria-label="Stroke width"
           />
         </div>
       </div>

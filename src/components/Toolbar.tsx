@@ -40,12 +40,12 @@ const Toolbar: React.FC<ToolbarProps> = ({
   };
 
   return (
-    <div className="flex flex-col gap-4 bg-[#1A1F2C]/95 backdrop-blur-md p-3 rounded-xl shadow-md">
-      <div className="space-y-3">
+    <div className="flex flex-col gap-2 sm:gap-4 bg-[#1A1F2C]/95 backdrop-blur-md p-2 sm:p-3 rounded-xl shadow-md">
+      <div className="space-y-2 sm:space-y-3">
         <div className="flex justify-center">
-          <Palette className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-white/60" />
+          <Palette className="w-3 h-3 sm:w-4 sm:h-4 text-white/60" />
         </div>
-        <div className="flex flex-col items-center gap-2">
+        <div className="flex flex-col items-center gap-1.5 sm:gap-2">
           <ColorPicker
             color={team1Color}
             onChange={onTeam1ColorChange}
@@ -61,20 +61,20 @@ const Toolbar: React.FC<ToolbarProps> = ({
 
       <Separator className="bg-white/10" />
 
-      <div className="space-y-3">
-        <div className="flex flex-col items-center gap-2">
+      <div className="space-y-2 sm:space-y-3">
+        <div className="flex flex-col items-center gap-1.5 sm:gap-2">
           <button
             onClick={handleDrawingClick}
-            className={`w-7 h-7 sm:w-8 sm:h-8 rounded-lg flex items-center justify-center transition-colors ${
+            className={`w-6 h-6 sm:w-8 sm:h-8 rounded-lg flex items-center justify-center transition-colors ${
               isDrawing ? 'bg-white/20 ring-2 ring-white/30' : 'hover:bg-white/10'
             }`}
           >
-            <Pencil className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-white/60" />
+            <Pencil className="w-3 h-3 sm:w-4 sm:h-4 text-white/60" />
           </button>
         </div>
 
         {isDrawing && (
-          <div className="space-y-2">
+          <div className="space-y-1.5 sm:space-y-2">
             <ColorPicker
               color={strokeColor}
               onChange={onStrokeColorChange}

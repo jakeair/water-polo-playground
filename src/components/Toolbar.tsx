@@ -46,13 +46,13 @@ const Toolbar: React.FC<ToolbarProps> = ({
   };
 
   return (
-    <Sidebar variant="floating" className="w-[80px] sm:w-[90px] md:w-[100px] bg-black/30 backdrop-blur-md border border-white/10 rounded-xl">
+    <Sidebar variant="floating" className="w-[80px] sm:w-[90px] md:w-[100px] bg-white/5 backdrop-blur-md border-r border-white/10">
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupContent className="space-y-6 p-2 sm:p-3 md:p-4">
             <div className="space-y-4 sm:space-y-5 md:space-y-6">
               <div className="flex justify-center">
-                <Palette className="w-4 h-4 sm:w-5 sm:h-5 text-white/70" />
+                <Palette className="w-4 h-4 sm:w-5 sm:h-5 text-white/60" />
               </div>
               <div className="flex flex-col items-center gap-3 sm:gap-4">
                 <ColorPicker
@@ -78,7 +78,7 @@ const Toolbar: React.FC<ToolbarProps> = ({
                     isDrawing ? 'bg-white/20 ring-2 ring-white/30' : 'hover:bg-white/10'
                   }`}
                 >
-                  <Pencil className="w-4 h-4 sm:w-5 sm:h-5 text-white/70" />
+                  <Pencil className="w-4 h-4 sm:w-5 sm:h-5 text-white/60" />
                 </button>
               </div>
 

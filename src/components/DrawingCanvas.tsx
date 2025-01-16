@@ -28,6 +28,7 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
     const ctx = canvas.getContext('2d', { willReadFrequently: true });
     if (!ctx) return;
 
+    // Set initial canvas styles
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';
 
@@ -45,27 +46,8 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
       }
     };
 
-    const draw = (e: MouseEvent) => {
-      if (!isDrawingRef.current || !ctx) return;
-
-      const rect = canvas.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-
-      ctx.beginPath();
-      ctx.moveTo(lastPosRef.current.x, lastPosRef.current.y);
-      ctx.lineTo(x, y);
-      ctx.stroke();
-
-      lastPosRef.current = { x, y };
-    };
-
-    const handleMouseDown = (e: MouseEvent) => {
+    const startDrawing = (x: number, y: number) => {
       if (!isDrawing && !isErasing) return;
-      
-      const rect = canvas.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
       
       isDrawingRef.current = true;
       lastPosRef.current = { x, y };
@@ -73,71 +55,76 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
       updateBrushStyle();
     };
 
-    const handleMouseMove = (e: MouseEvent) => {
-      if (!isDrawingRef.current || (!isDrawing && !isErasing)) return;
-      draw(e);
+    const draw = (currentX: number, currentY: number) => {
+      if (!isDrawingRef.current || !ctx || (!isDrawing && !isErasing)) return;
+
+      ctx.beginPath();
+      ctx.moveTo(lastPosRef.current.x, lastPosRef.current.y);
+      ctx.lineTo(currentX, currentY);
+      ctx.stroke();
+
+      lastPosRef.current = { x: currentX, y: currentY };
     };
 
-    const handleMouseUp = () => {
+    const stopDrawing = () => {
       isDrawingRef.current = false;
     };
 
-    // Add touch event handlers
+    // Mouse event handlers
+    const handleMouseDown = (e: MouseEvent) => {
+      const rect = canvas.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      startDrawing(x, y);
+    };
+
+    const handleMouseMove = (e: MouseEvent) => {
+      const rect = canvas.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      draw(x, y);
+    };
+
+    // Touch event handlers
     const handleTouchStart = (e: TouchEvent) => {
       e.preventDefault();
-      if (!isDrawing && !isErasing) return;
-      
       const rect = canvas.getBoundingClientRect();
       const touch = e.touches[0];
       const x = touch.clientX - rect.left;
       const y = touch.clientY - rect.top;
-      
-      isDrawingRef.current = true;
-      lastPosRef.current = { x, y };
-      
-      updateBrushStyle();
+      startDrawing(x, y);
     };
 
     const handleTouchMove = (e: TouchEvent) => {
       e.preventDefault();
-      if (!isDrawingRef.current || (!isDrawing && !isErasing)) return;
-      
       const rect = canvas.getBoundingClientRect();
       const touch = e.touches[0];
       const x = touch.clientX - rect.left;
       const y = touch.clientY - rect.top;
-
-      ctx.beginPath();
-      ctx.moveTo(lastPosRef.current.x, lastPosRef.current.y);
-      ctx.lineTo(x, y);
-      ctx.stroke();
-
-      lastPosRef.current = { x, y };
+      draw(x, y);
     };
 
-    const handleTouchEnd = (e: TouchEvent) => {
-      e.preventDefault();
-      isDrawingRef.current = false;
-    };
-
+    // Add event listeners
     canvas.addEventListener('mousedown', handleMouseDown);
     canvas.addEventListener('mousemove', handleMouseMove);
-    canvas.addEventListener('mouseup', handleMouseUp);
-    canvas.addEventListener('mouseleave', handleMouseUp);
+    canvas.addEventListener('mouseup', stopDrawing);
+    canvas.addEventListener('mouseleave', stopDrawing);
     canvas.addEventListener('touchstart', handleTouchStart);
     canvas.addEventListener('touchmove', handleTouchMove);
-    canvas.addEventListener('touchend', handleTouchEnd);
+    canvas.addEventListener('touchend', stopDrawing);
 
+    // Update brush style whenever dependencies change
     updateBrushStyle();
 
+    // Cleanup
     return () => {
       canvas.removeEventListener('mousedown', handleMouseDown);
       canvas.removeEventListener('mousemove', handleMouseMove);
-      canvas.removeEventListener('mouseup', handleMouseUp);
-      canvas.removeEventListener('mouseleave', handleMouseUp);
+      canvas.removeEventListener('mouseup', stopDrawing);
+      canvas.removeEventListener('mouseleave', stopDrawing);
       canvas.removeEventListener('touchstart', handleTouchStart);
       canvas.removeEventListener('touchmove', handleTouchMove);
-      canvas.removeEventListener('touchend', handleTouchEnd);
+      canvas.removeEventListener('touchend', stopDrawing);
     };
   }, [isDrawing, isErasing, strokeColor, strokeWidth]);
 

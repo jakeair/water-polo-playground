@@ -264,7 +264,7 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
   }, [isDraggingBall.current]);
 
   return (
-    <div className="space-y-12 bg-black/20 backdrop-blur-sm px-8 sm:px-12 md:px-16 lg:px-20 py-16 rounded-3xl shadow-2xl border border-white/10">
+    <div className="space-y-12 bg-black/20 backdrop-blur-sm px-8 sm:px-12 md:px-16 lg:px-20 py-8 rounded-3xl shadow-2xl border border-white/10">
       <Timeline
         currentTime={currentTime}
         duration={ANIMATION_DURATION}
@@ -275,7 +275,6 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
         onRecordKeyframe={recordKeyframe}
       />
       <div className="flex gap-6">
-        
         <div 
           ref={courtRef}
           className="court relative flex-1"
@@ -338,7 +337,6 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
           <Player team={2} number={6} initialX={70} initialY={80} onPositionChange={(pos) => updatePlayerPosition('26', pos)} id="player-26" />
         </div>
       </div>
-
     </div>
   );
 };

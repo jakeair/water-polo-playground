@@ -4,6 +4,7 @@ import Player from './Player';
 import Timeline from './Timeline';
 import Ball from './Ball';
 import Court from './Court';
+import DrawingCanvas from './DrawingCanvas';
 import { useAnimation } from '@/hooks/useAnimation';
 import { useKeyframes } from '@/hooks/useKeyframes';
 
@@ -17,6 +18,14 @@ interface WaterPoloCourtProps {
   team2Color: string;
   onTeam1ColorChange: (color: string) => void;
   onTeam2ColorChange: (color: string) => void;
+  isDrawing: boolean;
+  isErasing: boolean;
+  onDrawingChange: (isDrawing: boolean) => void;
+  onErasingChange: (isErasing: boolean) => void;
+  strokeColor: string;
+  onStrokeColorChange: (color: string) => void;
+  strokeWidth: number;
+  onStrokeWidthChange: (width: number) => void;
 }
 
 const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
@@ -24,6 +33,14 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
   team2Color,
   onTeam1ColorChange,
   onTeam2ColorChange,
+  isDrawing,
+  isErasing,
+  onDrawingChange,
+  onErasingChange,
+  strokeColor,
+  onStrokeColorChange,
+  strokeWidth,
+  onStrokeWidthChange
 }) => {
   const [dimensions, setDimensions] = useState({ width: 1000, height: 1400 });
   const [playerPositions, setPlayerPositions] = useState<{[key: string]: PlayerPosition}>({});
@@ -119,8 +136,16 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
       
       <div className="flex flex-col md:flex-row gap-6 w-full items-center justify-center">
         <Court width={dimensions.width} height={dimensions.height}>
+          <DrawingCanvas
+            isDrawing={isDrawing}
+            isErasing={isErasing}
+            width={dimensions.width}
+            height={dimensions.height}
+            strokeColor={strokeColor}
+            strokeWidth={strokeWidth}
+          />
           <Ball position={ballPosition} onPositionChange={setBallPosition} />
-
+          
           <Player team={1} number="G" initialX={50} initialY={5} isGoalie onPositionChange={(pos) => updatePlayerPosition('1G', pos)} id="player-1G" style={{ backgroundColor: 'var(--goalie-color)' }} />
           <Player team={1} number={1} initialX={20} initialY={20} onPositionChange={(pos) => updatePlayerPosition('11', pos)} id="player-11" />
           <Player team={1} number={2} initialX={40} initialY={20} onPositionChange={(pos) => updatePlayerPosition('12', pos)} id="player-12" />

@@ -10,6 +10,10 @@ import Navigation from '@/components/Navigation';
 const Index = () => {
   const [team1Color, setTeam1Color] = useState('#3b82f6');
   const [team2Color, setTeam2Color] = useState('#ef4444');
+  const [isDrawing, setIsDrawing] = useState(false);
+  const [isErasing, setIsErasing] = useState(false);
+  const [strokeColor, setStrokeColor] = useState('#ffffff');
+  const [strokeWidth, setStrokeWidth] = useState(2);
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800 text-white">
@@ -40,6 +44,14 @@ const Index = () => {
                 team2Color={team2Color}
                 onTeam1ColorChange={setTeam1Color}
                 onTeam2ColorChange={setTeam2Color}
+                isDrawing={isDrawing}
+                isErasing={isErasing}
+                onDrawingChange={setIsDrawing}
+                onErasingChange={setIsErasing}
+                strokeColor={strokeColor}
+                onStrokeColorChange={setStrokeColor}
+                strokeWidth={strokeWidth}
+                onStrokeWidthChange={setStrokeWidth}
               />
             </div>
 
@@ -49,6 +61,14 @@ const Index = () => {
                 team2Color={team2Color}
                 onTeam1ColorChange={setTeam1Color}
                 onTeam2ColorChange={setTeam2Color}
+                isDrawing={isDrawing}
+                isErasing={isErasing}
+                onDrawingChange={setIsDrawing}
+                onErasingChange={setIsErasing}
+                strokeColor={strokeColor}
+                onStrokeColorChange={setStrokeColor}
+                strokeWidth={strokeWidth}
+                onStrokeWidthChange={setStrokeWidth}
               />
             </div>
           </div>

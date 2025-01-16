@@ -1,6 +1,6 @@
 import React from 'react';
 import ColorPicker from './ColorPicker';
-import { Pencil, DashedLine } from 'lucide-react';
+import { Pencil, MinusIcon } from 'lucide-react';
 import { Separator } from "@/components/ui/separator";
 import { Toggle } from "@/components/ui/toggle";
 
@@ -99,7 +99,7 @@ const Toolbar: React.FC<ToolbarProps> = ({
             className="data-[state=on]:bg-primary p-2 hover:bg-primary/90 active:bg-primary w-full"
             aria-label="Dotted line tool"
           >
-            <DashedLine className={`w-4 h-4 ${isDrawing && drawingTool === 'dottedLine' ? 'fill-white stroke-white' : ''}`} />
+            <MinusIcon className={`w-4 h-4 ${isDrawing && drawingTool === 'dottedLine' ? 'fill-white stroke-white' : ''}`} />
           </Toggle>
           {isDrawing && drawingTool === 'dottedLine' && (
             <>

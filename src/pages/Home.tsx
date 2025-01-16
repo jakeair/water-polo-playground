@@ -20,6 +20,15 @@ const Home = () => {
           }} />
         </div>
 
+        {/* Logo */}
+        <div className="absolute top-4 left-4 z-50">
+          <img 
+            src="/lovable-uploads/3d2e9fbd-02ec-4aed-8cf5-8960a9a8ea77.png" 
+            alt="Water Polo Strategy Logo" 
+            className="w-16 h-16 object-contain filter drop-shadow-lg hover:scale-105 transition-transform duration-200"
+          />
+        </div>
+
         <Navigation />
         
         <main className="relative flex flex-col items-center justify-center min-h-screen p-4 pt-16 sm:p-8 sm:pt-20 md:p-12 lg:p-16 max-w-[1400px] mx-auto">

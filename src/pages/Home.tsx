@@ -75,24 +75,24 @@ const Home = () => {
                 <div className="bg-white/10 rounded-lg sm:rounded-xl p-2 sm:p-3 w-fit mb-3 sm:mb-4">
                   <Trophy className="w-6 h-6 sm:w-8 sm:h-8 text-yellow-400" />
                 </div>
-                <h3 className="text-xl sm:text-2xl font-semibold text-white mb-2 sm:mb-3">Professional Tools</h3>
-                <p className="text-base sm:text-lg text-white/60">Advanced animation tools and strategies used by championship teams.</p>
+                <h3 className="text-xl sm:text-2xl font-semibold text-white mb-2 sm:mb-3">Strategic Planning</h3>
+                <p className="text-base sm:text-lg text-white/60">Design dynamic plays with precision and clarity, tailored for winning strategies.</p>
               </div>
               
               <div className="group bg-white/5 hover:bg-white/10 backdrop-blur-md border border-white/10 rounded-xl sm:rounded-2xl p-6 sm:p-8 text-left transition-all hover:scale-[1.02]">
                 <div className="bg-white/10 rounded-lg sm:rounded-xl p-2 sm:p-3 w-fit mb-3 sm:mb-4">
                   <Users className="w-6 h-6 sm:w-8 sm:h-8 text-blue-400" />
                 </div>
-                <h3 className="text-xl sm:text-2xl font-semibold text-white mb-2 sm:mb-3">Team Collaboration</h3>
-                <p className="text-base sm:text-lg text-white/60">Share and collaborate on plays with your entire coaching staff.</p>
+                <h3 className="text-xl sm:text-2xl font-semibold text-white mb-2 sm:mb-3">Visual Coaching</h3>
+                <p className="text-base sm:text-lg text-white/60">Transform complex tactics into simple, easy-to-follow visual instructions.</p>
               </div>
               
               <div className="group bg-white/5 hover:bg-white/10 backdrop-blur-md border border-white/10 rounded-xl sm:rounded-2xl p-6 sm:p-8 text-left transition-all hover:scale-[1.02]">
                 <div className="bg-white/10 rounded-lg sm:rounded-xl p-2 sm:p-3 w-fit mb-3 sm:mb-4">
                   <Zap className="w-6 h-6 sm:w-8 sm:h-8 text-purple-400" />
                 </div>
-                <h3 className="text-xl sm:text-2xl font-semibold text-white mb-2 sm:mb-3">Real-time Updates</h3>
-                <p className="text-base sm:text-lg text-white/60">Instant updates and synchronization across all devices.</p>
+                <h3 className="text-xl sm:text-2xl font-semibold text-white mb-2 sm:mb-3">Intuitive Design</h3>
+                <p className="text-base sm:text-lg text-white/60">Crafted with a sleek, user-friendly interface to make coaching effortless and engaging.</p>
               </div>
             </div>
 

@@ -51,26 +51,22 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
   }, [strokeWidth]);
 
   const drawArrow = (context: CanvasRenderingContext2D, from: { x: number; y: number }, to: { x: number; y: number }, isDotted: boolean) => {
-    const headLength = Math.min(20, Math.sqrt(Math.pow(to.x - from.x, 2) + Math.pow(to.y - from.y, 2)) / 3);
+    const distance = Math.sqrt(Math.pow(to.x - from.x, 2) + Math.pow(to.y - from.y, 2));
+    const headLength = Math.min(20, distance / 3);
     const dx = to.x - from.x;
     const dy = to.y - from.y;
     const angle = Math.atan2(dy, dx);
-    
-    // Start a new path for the arrow
+
     context.beginPath();
-    
-    // Set line style (solid or dotted)
-    if (isDotted) {
-      context.setLineDash([5, 5]);
-    } else {
-      context.setLineDash([]);
-    }
-    
+    context.setLineDash(isDotted ? [5, 5] : []);
+
     // Draw the line
     context.moveTo(from.x, from.y);
     context.lineTo(to.x, to.y);
-    
+    context.stroke();
+
     // Draw the arrowhead
+    context.beginPath();
     context.moveTo(to.x, to.y);
     context.lineTo(
       to.x - headLength * Math.cos(angle - Math.PI / 6),
@@ -81,10 +77,8 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
       to.x - headLength * Math.cos(angle + Math.PI / 6),
       to.y - headLength * Math.sin(angle + Math.PI / 6)
     );
-    
-    // Stroke the entire arrow
     context.stroke();
-    context.setLineDash([]); // Reset dash pattern
+    context.setLineDash([]);
   };
 
   const getCoordinates = (event: MouseEvent | TouchEvent): { x: number, y: number } | null => {
@@ -120,7 +114,6 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
     startPointRef.current = coords;
 
     if (drawingTool !== 'pen') {
-      // Store the current canvas state for arrow preview
       lastDrawRef.current = contextRef.current.getImageData(0, 0, width, height);
     } else {
       contextRef.current.beginPath();
@@ -130,7 +123,7 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
 
   const draw = (event: MouseEvent | TouchEvent) => {
     event.preventDefault();
-    if (!isDrawingActive || !contextRef.current) return;
+    if (!isDrawingActive || !contextRef.current || !startPointRef.current) return;
 
     const coords = getCoordinates(event);
     if (!coords) return;
@@ -138,11 +131,8 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
     if (drawingTool === 'pen') {
       contextRef.current.lineTo(coords.x, coords.y);
       contextRef.current.stroke();
-    } else if (startPointRef.current && lastDrawRef.current) {
-      // Restore the canvas to its state before the current drag operation
+    } else if (lastDrawRef.current) {
       contextRef.current.putImageData(lastDrawRef.current, 0, 0);
-      
-      // Draw the preview arrow
       drawArrow(
         contextRef.current,
         startPointRef.current,
@@ -153,36 +143,52 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
   };
 
   const stopDrawing = () => {
-    if (!isDrawingActive) return;
-    
-    if (drawingTool !== 'pen' && contextRef.current) {
-      // Save the final state with the arrow
-      lastDrawRef.current = contextRef.current.getImageData(0, 0, width, height);
+    if (!isDrawingActive || !contextRef.current || !startPointRef.current) return;
+
+    if (drawingTool !== 'pen') {
+      const coords = getCoordinates(lastMouseEvent.current as MouseEvent | TouchEvent);
+      if (coords && lastDrawRef.current) {
+        contextRef.current.putImageData(lastDrawRef.current, 0, 0);
+        drawArrow(
+          contextRef.current,
+          startPointRef.current,
+          coords,
+          drawingTool === 'dottedArrow'
+        );
+      }
     }
     
     setIsDrawingActive(false);
     startPointRef.current = null;
+    lastDrawRef.current = null;
   };
+
+  const lastMouseEvent = useRef<MouseEvent | TouchEvent | null>(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
+    const handleMouseMove = (e: MouseEvent | TouchEvent) => {
+      lastMouseEvent.current = e;
+      draw(e);
+    };
+
     canvas.addEventListener('mousedown', startDrawing);
-    canvas.addEventListener('mousemove', draw);
+    canvas.addEventListener('mousemove', handleMouseMove);
     canvas.addEventListener('mouseup', stopDrawing);
     canvas.addEventListener('mouseleave', stopDrawing);
     canvas.addEventListener('touchstart', startDrawing);
-    canvas.addEventListener('touchmove', draw);
+    canvas.addEventListener('touchmove', handleMouseMove);
     canvas.addEventListener('touchend', stopDrawing);
 
     return () => {
       canvas.removeEventListener('mousedown', startDrawing);
-      canvas.removeEventListener('mousemove', draw);
+      canvas.removeEventListener('mousemove', handleMouseMove);
       canvas.removeEventListener('mouseup', stopDrawing);
       canvas.removeEventListener('mouseleave', stopDrawing);
       canvas.removeEventListener('touchstart', startDrawing);
-      canvas.removeEventListener('touchmove', draw);
+      canvas.removeEventListener('touchmove', handleMouseMove);
       canvas.removeEventListener('touchend', stopDrawing);
     };
   }, [isDrawing, isDrawingActive, drawingTool]);

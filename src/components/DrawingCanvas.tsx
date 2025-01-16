@@ -58,7 +58,7 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
     ctx.lineWidth = strokeWidth;
   };
 
-  const getCoordinates = (event: React.MouseEvent | Touch): { x: number, y: number } => {
+  const getCoordinates = (event: React.MouseEvent | TouchEvent | MouseEvent): { x: number, y: number } => {
     const canvas = canvasRef.current;
     if (!canvas) return { x: 0, y: 0 };
 
@@ -66,10 +66,11 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
     const scaleX = canvas.width / rect.width;
     const scaleY = canvas.height / rect.height;
 
-    if ('touches' in event) {
+    if (event instanceof TouchEvent) {
+      const touch = event.touches[0];
       return {
-        x: (event.clientX - rect.left) * scaleX,
-        y: (event.clientY - rect.top) * scaleY
+        x: (touch.clientX - rect.left) * scaleX,
+        y: (touch.clientY - rect.top) * scaleY
       };
     }
 
@@ -79,7 +80,7 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
     };
   };
 
-  const handleStart = (event: React.MouseEvent | Touch) => {
+  const handleStart = (event: React.MouseEvent | TouchEvent | MouseEvent) => {
     if (!isDrawing) return;
     
     isDrawingRef.current = true;
@@ -88,7 +89,7 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
     updateBrushStyle();
   };
 
-  const handleMove = (event: React.MouseEvent | Touch) => {
+  const handleMove = (event: React.MouseEvent | TouchEvent | MouseEvent) => {
     if (!isDrawingRef.current || !contextRef.current || !isDrawing) return;
 
     const coords = getCoordinates(event);
@@ -136,14 +137,12 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
     };
     const handleTouchStart = (e: TouchEvent) => {
       e.preventDefault();
-      const touch = e.touches[0];
-      handleStart(touch);
+      handleStart(e);
     };
     const handleTouchMove = (e: TouchEvent) => {
       e.preventDefault();
       if (!isDrawingRef.current) return;
-      const touch = e.touches[0];
-      handleMove(touch);
+      handleMove(e);
     };
 
     canvas.addEventListener('mousedown', handleMouseDown);

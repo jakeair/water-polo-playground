@@ -37,7 +37,7 @@ const Index = () => {
         <Help />
         
         <SidebarProvider>
-          <div className="w-full flex flex-col lg:flex-row gap-6 lg:gap-8 items-start">
+          <div className="w-full flex flex-col lg:flex-row gap-6 lg:gap-8 items-start mt-12">
             <div className="w-full lg:w-auto lg:sticky lg:top-28">
               <Toolbar
                 team1Color={team1Color}

@@ -8,14 +8,6 @@ interface ToolbarProps {
   team2Color: string;
   onTeam1ColorChange: (color: string) => void;
   onTeam2ColorChange: (color: string) => void;
-  isDrawing: boolean;
-  isErasing: boolean;
-  onDrawingChange: (isDrawing: boolean) => void;
-  onErasingChange: (isErasing: boolean) => void;
-  strokeColor: string;
-  onStrokeColorChange: (color: string) => void;
-  strokeWidth: number;
-  onStrokeWidthChange: (width: number) => void;
 }
 
 const Toolbar: React.FC<ToolbarProps> = ({

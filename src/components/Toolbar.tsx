@@ -1,6 +1,6 @@
 import React from 'react';
 import ColorPicker from './ColorPicker';
-import { Pencil, ArrowRight, ArrowRightDashed } from 'lucide-react';
+import { Pencil, ArrowRight, ArrowBigRightDash } from 'lucide-react';
 import { Separator } from "@/components/ui/separator";
 import { Toggle } from "@/components/ui/toggle";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
@@ -76,7 +76,7 @@ const Toolbar: React.FC<ToolbarProps> = ({
                   <ArrowRight className="w-4 h-4" />
                 </ToggleGroupItem>
                 <ToggleGroupItem value="dottedArrow" aria-label="Dotted arrow tool">
-                  <ArrowRightDashed className="w-4 h-4" />
+                  <ArrowBigRightDash className="w-4 h-4" />
                 </ToggleGroupItem>
               </ToggleGroup>
               

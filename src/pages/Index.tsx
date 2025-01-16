@@ -6,46 +6,50 @@ import { Toaster } from 'sonner';
 import { SidebarProvider } from '@/components/ui/sidebar';
 
 const Index = () => {
-  const [team1Color, setTeam1Color] = useState('#FF0000');
-  const [team2Color, setTeam2Color] = useState('#0000FF');
+  const [team1Color, setTeam1Color] = useState('#3b82f6');
+  const [team2Color, setTeam2Color] = useState('#ef4444');
   const [isDrawing, setIsDrawing] = useState(false);
   const [isErasing, setIsErasing] = useState(false);
   const [strokeColor, setStrokeColor] = useState('#000000');
   const [strokeWidth, setStrokeWidth] = useState(2);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800 text-white p-4 sm:p-6 md:p-8">
-      <div className="max-w-7xl mx-auto space-y-8">
-        {/* Help Section at the top */}
+    <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800 text-white">
+      <div className="max-w-[1800px] mx-auto p-4 sm:p-6 md:p-8 space-y-8">
+        {/* Help Section */}
         <Help />
         
         <SidebarProvider>
-          <div className="w-full flex">
-            <Toolbar
-              team1Color={team1Color}
-              team2Color={team2Color}
-              onTeam1ColorChange={setTeam1Color}
-              onTeam2ColorChange={setTeam2Color}
-              isDrawing={isDrawing}
-              isErasing={isErasing}
-              onDrawingChange={setIsDrawing}
-              onErasingChange={setIsErasing}
-              strokeColor={strokeColor}
-              onStrokeColorChange={setStrokeColor}
-              strokeWidth={strokeWidth}
-              onStrokeWidthChange={setStrokeWidth}
-            />
+          <div className="flex flex-col lg:flex-row gap-8 items-start justify-center">
+            <div className="w-full lg:w-auto">
+              <Toolbar
+                team1Color={team1Color}
+                team2Color={team2Color}
+                onTeam1ColorChange={setTeam1Color}
+                onTeam2ColorChange={setTeam2Color}
+                isDrawing={isDrawing}
+                onDrawingChange={setIsDrawing}
+                isErasing={isErasing}
+                onErasingChange={setIsErasing}
+                strokeColor={strokeColor}
+                onStrokeColorChange={setStrokeColor}
+                strokeWidth={strokeWidth}
+                onStrokeWidthChange={setStrokeWidth}
+              />
+            </div>
 
-            <WaterPoloCourt
-              team1Color={team1Color}
-              team2Color={team2Color}
-              onTeam1ColorChange={setTeam1Color}
-              onTeam2ColorChange={setTeam2Color}
-              isDrawing={isDrawing}
-              isErasing={isErasing}
-              strokeColor={strokeColor}
-              strokeWidth={strokeWidth}
-            />
+            <div className="w-full flex-1 flex justify-center">
+              <WaterPoloCourt
+                team1Color={team1Color}
+                team2Color={team2Color}
+                onTeam1ColorChange={setTeam1Color}
+                onTeam2ColorChange={setTeam2Color}
+                isDrawing={isDrawing}
+                isErasing={isErasing}
+                strokeColor={strokeColor}
+                strokeWidth={strokeWidth}
+              />
+            </div>
           </div>
         </SidebarProvider>
       </div>

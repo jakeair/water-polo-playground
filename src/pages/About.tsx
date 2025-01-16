@@ -2,12 +2,24 @@ import React from "react";
 import { Target, Trophy, MessageSquare, Lightbulb, Users, ClipboardList } from "lucide-react";
 import Navigation from "@/components/Navigation";
 import OlympicRings from "@/components/OlympicRings";
-import NcaaLogo from "@/components/NcaaLogo";
+import { Link } from "react-router-dom";
 
 const AboutPage = () => {
   return (
     <div className="relative min-h-screen w-full bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
-      <Navigation />
+      {/* Navigation Bar */}
+      <div className="fixed top-0 left-0 right-0 bg-gray-900/80 backdrop-blur-sm border-b border-white/10 z-50">
+        <div className="max-w-[1800px] mx-auto px-6 sm:px-8 py-3 sm:py-4 flex items-center justify-between">
+          <Link to="/" className="flex items-center space-x-4 group">
+            <img 
+              src="/lovable-uploads/909e2d5e-f8a8-493f-9d95-f0d86ecd99be.png" 
+              alt="Logo" 
+              className="h-12 sm:h-14 w-auto opacity-90 transition-all duration-200 group-hover:opacity-100"
+            />
+          </Link>
+          <Navigation />
+        </div>
+      </div>
       
       {/* Background pattern */}
       <div className="absolute inset-0 opacity-5">
@@ -18,7 +30,7 @@ const AboutPage = () => {
       </div>
 
       {/* Vision Section */}
-      <div className="max-w-[1400px] mx-auto">
+      <div className="max-w-[1400px] mx-auto pt-24 sm:pt-28">
         <section className="relative py-16 px-4">
           <div className="max-w-6xl mx-auto">
             <div className="flex flex-col items-center mb-12">

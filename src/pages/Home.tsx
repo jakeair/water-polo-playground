@@ -3,12 +3,26 @@ import { Link } from 'react-router-dom';
 import { SidebarProvider } from '@/components/ui/sidebar';
 import Navigation from '@/components/Navigation';
 import { Button } from '@/components/ui/button';
-import { Play, Info, ArrowRight, Trophy, Users, Zap, Share2 } from 'lucide-react';
+import { Play, Info, ArrowRight, Trophy, Users, Zap } from 'lucide-react';
 
 const Home = () => {
   return (
     <SidebarProvider>
       <div className="relative min-h-screen w-full bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+        {/* Navigation Bar */}
+        <div className="fixed top-0 left-0 right-0 bg-gray-900/80 backdrop-blur-sm border-b border-white/10 z-50">
+          <div className="max-w-[1800px] mx-auto px-6 sm:px-8 py-3 sm:py-4 flex items-center justify-between">
+            <Link to="/" className="flex items-center space-x-4 group">
+              <img 
+                src="/lovable-uploads/909e2d5e-f8a8-493f-9d95-f0d86ecd99be.png" 
+                alt="Logo" 
+                className="h-12 sm:h-14 w-auto opacity-90 transition-all duration-200 group-hover:opacity-100"
+              />
+            </Link>
+            <Navigation />
+          </div>
+        </div>
+
         {/* Gradient overlay */}
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-slate-900/30 to-slate-900/50" />
         
@@ -20,18 +34,7 @@ const Home = () => {
           }} />
         </div>
 
-        {/* Logo */}
-        <div className="absolute top-6 left-6 sm:top-8 sm:left-8 z-50">
-          <img 
-            src="/lovable-uploads/3d2e9fbd-02ec-4aed-8cf5-8960a9a8ea77.png" 
-            alt="Water Polo Strategy Logo" 
-            className="w-14 h-14 sm:w-16 sm:h-16 object-contain filter drop-shadow-lg hover:scale-105 transition-transform duration-200"
-          />
-        </div>
-
-        <Navigation />
-        
-        <main className="relative flex flex-col items-center justify-center min-h-screen px-4 sm:px-6 md:px-8 lg:px-16 max-w-[1400px] mx-auto">
+        <main className="relative flex flex-col items-center justify-center min-h-screen px-4 sm:px-6 md:px-8 lg:px-16 max-w-[1400px] mx-auto pt-24 sm:pt-28">
           <div className="w-full space-y-8 sm:space-y-12 md:space-y-16 lg:space-y-24 py-20 sm:py-24">
             <div className="space-y-6 sm:space-y-8 text-center animate-fade-in">
               <div className="inline-block px-3 py-1 sm:px-4 sm:py-1.5 bg-white/10 backdrop-blur rounded-full text-xs sm:text-sm font-medium text-white/80 mb-2 sm:mb-4">

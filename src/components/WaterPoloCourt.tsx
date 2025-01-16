@@ -1,25 +1,17 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { gsap } from 'gsap';
 import Player from './Player';
 import Timeline from './Timeline';
-import { toast } from 'sonner';
 import DrawingCanvas from './DrawingCanvas';
 import Toolbar from './Toolbar';
+import Ball from './Ball';
+import Court from './Court';
+import { useAnimation } from '@/hooks/useAnimation';
+import { useKeyframes } from '@/hooks/useKeyframes';
 
 interface PlayerPosition {
   x: number;
   y: number;
-}
-
-interface KeyframeData {
-  time: number;
-  positions: {
-    [key: string]: PlayerPosition;
-  };
-  ballPosition?: {
-    x: number;
-    y: number;
-  };
 }
 
 interface WaterPoloCourtProps {
@@ -43,38 +35,26 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
   strokeColor: propStrokeColor,
   strokeWidth: propStrokeWidth
 }) => {
-  const courtRef = useRef<HTMLDivElement>(null);
-  const topGoalNetRef = useRef<HTMLDivElement>(null);
-  const bottomGoalNetRef = useRef<HTMLDivElement>(null);
   const [dimensions, setDimensions] = useState({ width: 1000, height: 1400 });
-  
   const [localIsDrawing, setLocalIsDrawing] = useState(propIsDrawing);
   const [localIsErasing, setLocalIsErasing] = useState(propIsErasing);
   const [localStrokeColor, setLocalStrokeColor] = useState(propStrokeColor);
   const [localStrokeWidth, setLocalStrokeWidth] = useState(propStrokeWidth);
-
   const [playerPositions, setPlayerPositions] = useState<{[key: string]: PlayerPosition}>({});
-  const lastInterpolatedPositions = useRef<{[key: string]: PlayerPosition}>({});
+  const lastInterpolatedPositions = React.useRef<{[key: string]: PlayerPosition}>({});
   const [ballPosition, setBallPosition] = useState({ x: 50, y: 50 });
-  const ballRef = useRef<HTMLDivElement>(null);
-  const isDraggingBall = useRef(false);
-  const ballStartPos = useRef({ x: 0, y: 0 });
-  const initialBallPos = useRef({ x: 0, y: 0 });
-
   const [currentTime, setCurrentTime] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [keyframes, setKeyframes] = useState<KeyframeData[]>([]);
-  const animationRef = useRef<number>();
   const ANIMATION_DURATION = 2500;
+
+  const { keyframes, recordKeyframe, interpolatePositions } = useKeyframes(currentTime);
 
   useEffect(() => {
     const updateDimensions = () => {
-      if (courtRef.current) {
-        const containerWidth = courtRef.current.parentElement?.clientWidth || 1000;
-        const width = Math.min(containerWidth - 40, 1000);
-        const height = (width * 7) / 5;
-        setDimensions({ width, height });
-      }
+      const containerWidth = window.innerWidth - 40;
+      const width = Math.min(containerWidth, 1000);
+      const height = (width * 7) / 5;
+      setDimensions({ width, height });
     };
 
     updateDimensions();
@@ -94,73 +74,8 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
     }));
   };
 
-  const recordKeyframe = () => {
-    const newKeyframe: KeyframeData = {
-      time: currentTime,
-      positions: { ...playerPositions },
-      ballPosition: { ...ballPosition }
-    };
-
-    setKeyframes(prev => {
-      const filtered = prev.filter(kf => kf.time !== currentTime);
-      return [...filtered, newKeyframe].sort((a, b) => a.time - b.time);
-    });
-
-    toast.success('Keyframe recorded', {
-      description: `Saved positions at ${currentTime/100} seconds`
-    });
-  };
-
-  const interpolatePositions = (time: number) => {
-    const prevKeyframe = [...keyframes]
-      .reverse()
-      .find(kf => kf.time <= time);
-    const nextKeyframe = keyframes
-      .find(kf => kf.time > time);
-
-    if (!prevKeyframe && !nextKeyframe) return;
-    if (!prevKeyframe) {
-      if (nextKeyframe?.ballPosition) {
-        setBallPosition(nextKeyframe.ballPosition);
-      }
-      return nextKeyframe?.positions;
-    }
-    if (!nextKeyframe) {
-      if (prevKeyframe?.ballPosition) {
-        setBallPosition(prevKeyframe.ballPosition);
-      }
-      return prevKeyframe.positions;
-    }
-
-    const factor = (time - prevKeyframe.time) / (nextKeyframe.time - prevKeyframe.time);
-
-    if (prevKeyframe.ballPosition && nextKeyframe.ballPosition) {
-      const interpolatedBallX = prevKeyframe.ballPosition.x + (nextKeyframe.ballPosition.x - prevKeyframe.ballPosition.x) * factor;
-      const interpolatedBallY = prevKeyframe.ballPosition.y + (nextKeyframe.ballPosition.y - prevKeyframe.ballPosition.y) * factor;
-      
-      if (ballRef.current) {
-        gsap.to(ballRef.current, {
-          left: `${interpolatedBallX}%`,
-          top: `${interpolatedBallY}%`,
-          duration: 0.1,
-          ease: "power2.out",
-          overwrite: true
-        });
-      }
-    }
-
-    const interpolated: {[key: string]: PlayerPosition} = {};
-    Object.keys(prevKeyframe.positions).forEach(playerId => {
-      const prev = prevKeyframe.positions[playerId];
-      const next = nextKeyframe.positions[playerId];
-      
-      interpolated[playerId] = {
-        x: prev.x + (next.x - prev.x) * factor,
-        y: prev.y + (next.y - prev.y) * factor
-      };
-    });
-
-    return interpolated;
+  const handleRecordKeyframe = () => {
+    recordKeyframe(playerPositions, ballPosition);
   };
 
   const animate = () => {
@@ -174,28 +89,16 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
       }
       return next;
     });
-
-    animationRef.current = requestAnimationFrame(animate);
   };
 
-  useEffect(() => {
-    if (isPlaying) {
-      animationRef.current = requestAnimationFrame(animate);
-    } else if (animationRef.current) {
-      cancelAnimationFrame(animationRef.current);
-    }
-
-    return () => {
-      if (animationRef.current) {
-        cancelAnimationFrame(animationRef.current);
-      }
-    };
-  }, [isPlaying]);
+  useAnimation(isPlaying, animate);
 
   useEffect(() => {
     const interpolated = interpolatePositions(currentTime);
     if (interpolated) {
-      Object.entries(interpolated).forEach(([playerId, position]) => {
+      const { positions, ballPosition: newBallPosition } = interpolated;
+      
+      Object.entries(positions).forEach(([playerId, position]) => {
         const lastPos = lastInterpolatedPositions.current[playerId];
         if (lastPos && (lastPos.x !== position.x || lastPos.y !== position.y)) {
           gsap.to(`#player-${playerId}`, {
@@ -206,62 +109,15 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
           });
         }
       });
-      lastInterpolatedPositions.current = interpolated;
-      setPlayerPositions(interpolated);
-    }
-  }, [currentTime]);
-
-  const togglePlayPause = () => {
-    setIsPlaying(!isPlaying);
-  };
-
-  const handleBallMouseDown = (e: React.MouseEvent) => {
-    if (ballRef.current) {
-      isDraggingBall.current = true;
-      ballStartPos.current = {
-        x: e.clientX,
-        y: e.clientY
-      };
-      initialBallPos.current = {
-        x: ballPosition.x,
-        y: ballPosition.y
-      };
-      e.preventDefault();
-    }
-  };
-
-  const handleBallMouseMove = (e: MouseEvent) => {
-    if (isDraggingBall.current && ballRef.current) {
-      const courtRect = ballRef.current.parentElement?.getBoundingClientRect();
-      if (courtRect) {
-        const deltaX = (e.clientX - ballStartPos.current.x) / courtRect.width * 100;
-        const deltaY = (e.clientY - ballStartPos.current.y) / courtRect.height * 100;
-        
-        let newX = initialBallPos.current.x + deltaX;
-        let newY = initialBallPos.current.y + deltaY;
-
-        newX = Math.max(-5, Math.min(105, newX));
-        newY = Math.max(-8, Math.min(108, newY));
-        
-        setBallPosition({ x: newX, y: newY });
+      
+      lastInterpolatedPositions.current = positions;
+      setPlayerPositions(positions);
+      
+      if (newBallPosition) {
+        setBallPosition(newBallPosition);
       }
     }
-  };
-
-  const handleBallMouseUp = () => {
-    isDraggingBall.current = false;
-  };
-
-  useEffect(() => {
-    if (isDraggingBall.current) {
-      window.addEventListener('mousemove', handleBallMouseMove);
-      window.addEventListener('mouseup', handleBallMouseUp);
-    }
-    return () => {
-      window.removeEventListener('mousemove', handleBallMouseMove);
-      window.removeEventListener('mouseup', handleBallMouseUp);
-    };
-  }, [isDraggingBall.current]);
+  }, [currentTime]);
 
   return (
     <div className="space-y-12 bg-black/20 backdrop-blur-sm px-8 sm:px-12 md:px-16 lg:px-20 py-8 rounded-3xl shadow-2xl border border-white/10">
@@ -271,20 +127,12 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
         keyframes={keyframes.map(kf => kf.time)}
         isPlaying={isPlaying}
         onTimeChange={setCurrentTime}
-        onPlayPause={togglePlayPause}
-        onRecordKeyframe={recordKeyframe}
+        onPlayPause={() => setIsPlaying(!isPlaying)}
+        onRecordKeyframe={handleRecordKeyframe}
       />
+      
       <div className="flex gap-6">
-        <div 
-          ref={courtRef}
-          className="court relative flex-1"
-          style={{ 
-            width: dimensions.width, 
-            height: dimensions.height,
-            margin: '60px auto',
-            overflow: 'visible'
-          }}
-        >
+        <Court width={dimensions.width} height={dimensions.height}>
           <DrawingCanvas 
             isDrawing={localIsDrawing}
             isErasing={localIsErasing}
@@ -294,31 +142,7 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
             strokeWidth={localStrokeWidth}
           />
           
-          <div className="goal goal-top">
-            <div ref={topGoalNetRef} className="goal-net" />
-          </div>
-          <div className="goal goal-bottom">
-            <div ref={bottomGoalNetRef} className="goal-net" />
-          </div>
-
-          <div className="line two-meter-line" style={{ top: '8%' }}></div>
-          <div className="line five-meter-line" style={{ top: '20%' }}></div>
-          <div className="line six-meter-line" style={{ top: '24%' }}></div>
-          <div className="line two-meter-line" style={{ bottom: '8%' }}></div>
-          <div className="line five-meter-line" style={{ bottom: '20%' }}></div>
-          <div className="line six-meter-line" style={{ bottom: '24%' }}></div>
-          <div className="line halfway-line" style={{ top: '50%' }}></div>
-
-          <div
-            ref={ballRef}
-            className="ball"
-            style={{
-              left: `${ballPosition.x}%`,
-              top: `${ballPosition.y}%`,
-              cursor: isDraggingBall.current ? 'grabbing' : 'grab',
-            }}
-            onMouseDown={handleBallMouseDown}
-          />
+          <Ball position={ballPosition} onPositionChange={setBallPosition} />
 
           <Player team={1} number="G" initialX={50} initialY={5} isGoalie onPositionChange={(pos) => updatePlayerPosition('1G', pos)} id="player-1G" style={{ backgroundColor: 'var(--goalie-color)' }} />
           <Player team={1} number={1} initialX={20} initialY={20} onPositionChange={(pos) => updatePlayerPosition('11', pos)} id="player-11" />
@@ -335,7 +159,7 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
           <Player team={2} number={4} initialX={30} initialY={80} onPositionChange={(pos) => updatePlayerPosition('24', pos)} id="player-24" />
           <Player team={2} number={5} initialX={50} initialY={80} onPositionChange={(pos) => updatePlayerPosition('25', pos)} id="player-25" />
           <Player team={2} number={6} initialX={70} initialY={80} onPositionChange={(pos) => updatePlayerPosition('26', pos)} id="player-26" />
-        </div>
+        </Court>
       </div>
     </div>
   );

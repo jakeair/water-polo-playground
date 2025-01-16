@@ -2,20 +2,20 @@ import React, { useRef, useEffect, useState } from 'react';
 
 interface DrawingCanvasProps {
   isDrawing: boolean;
-  isErasing: boolean;
   width: number;
   height: number;
   strokeColor: string;
   strokeWidth: number;
+  onUndoAvailable: (available: boolean) => void;
 }
 
 const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
   isDrawing,
-  isErasing,
   width,
   height,
   strokeColor,
-  strokeWidth
+  strokeWidth,
+  onUndoAvailable
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const contextRef = useRef<CanvasRenderingContext2D | null>(null);
@@ -52,6 +52,10 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
     contextRef.current.lineWidth = strokeWidth;
   }, [strokeWidth]);
 
+  useEffect(() => {
+    onUndoAvailable(paths.length > 0);
+  }, [paths, onUndoAvailable]);
+
   const getCoordinates = (event: MouseEvent | TouchEvent): { x: number, y: number } | null => {
     const canvas = canvasRef.current;
     if (!canvas) return null;
@@ -74,35 +78,11 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
     };
   };
 
-  const handleErase = (event: MouseEvent | TouchEvent) => {
-    event.preventDefault();
-    event.stopPropagation();
-    
-    const coords = getCoordinates(event);
-    if (!coords || !contextRef.current) return;
-
-    // Simple point-in-stroke detection with increased hit area
-    const eraserSize = 20;
-    const remainingPaths = paths.filter(path => {
-      const ctx = contextRef.current!;
-      ctx.save();
-      ctx.lineWidth += eraserSize;
-      const isPointInStroke = ctx.isPointInStroke(path, coords.x, coords.y);
-      ctx.restore();
-      return !isPointInStroke;
-    });
-
-    if (remainingPaths.length !== paths.length) {
-      setPaths(remainingPaths);
-      redrawCanvas();
-    }
-  };
-
   const startDrawing = (event: MouseEvent | TouchEvent) => {
     event.preventDefault();
     event.stopPropagation();
     
-    if (!isDrawing || isErasing) return;
+    if (!isDrawing) return;
 
     const coords = getCoordinates(event);
     if (!coords) return;
@@ -115,11 +95,6 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
   const draw = (event: MouseEvent | TouchEvent) => {
     event.preventDefault();
     event.stopPropagation();
-    
-    if (isErasing) {
-      handleErase(event);
-      return;
-    }
 
     if (!isDrawingActive || !isDrawing || !contextRef.current || !currentPath.current) return;
 
@@ -133,19 +108,31 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
 
   const stopDrawing = () => {
     if (isDrawingActive && currentPath.current) {
-      setPaths(prev => [...prev, currentPath.current!]);
+      setPaths(prev => {
+        const newPaths = [...prev, currentPath.current!];
+        // Keep only the last 10 paths
+        return newPaths.slice(-10);
+      });
     }
     setIsDrawingActive(false);
     currentPath.current = null;
   };
 
-  const redrawCanvas = () => {
+  const undoLastPath = () => {
+    setPaths(prev => {
+      const newPaths = prev.slice(0, -1);
+      redrawCanvas(newPaths);
+      return newPaths;
+    });
+  };
+
+  const redrawCanvas = (pathsToDraw = paths) => {
     const context = contextRef.current;
     const canvas = canvasRef.current;
     if (!context || !canvas) return;
 
     context.clearRect(0, 0, canvas.width, canvas.height);
-    paths.forEach(path => {
+    pathsToDraw.forEach(path => {
       context.stroke(path);
     });
   };
@@ -171,15 +158,15 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
       canvas.removeEventListener('touchmove', draw);
       canvas.removeEventListener('touchend', stopDrawing);
     };
-  }, [isDrawing, isErasing, isDrawingActive]);
+  }, [isDrawing, isDrawingActive]);
 
   return (
     <canvas
       ref={canvasRef}
       className="absolute inset-0 w-full h-full"
       style={{ 
-        cursor: isErasing ? 'crosshair' : isDrawing ? 'pointer' : 'default',
-        pointerEvents: isDrawing || isErasing ? 'auto' : 'none'
+        cursor: isDrawing ? 'pointer' : 'default',
+        pointerEvents: isDrawing ? 'auto' : 'none'
       }}
     />
   );

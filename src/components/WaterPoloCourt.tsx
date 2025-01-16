@@ -19,9 +19,7 @@ interface WaterPoloCourtProps {
   onTeam1ColorChange: (color: string) => void;
   onTeam2ColorChange: (color: string) => void;
   isDrawing: boolean;
-  isErasing: boolean;
   onDrawingChange: (isDrawing: boolean) => void;
-  onErasingChange: (isErasing: boolean) => void;
   strokeColor: string;
   onStrokeColorChange: (color: string) => void;
   strokeWidth: number;
@@ -34,9 +32,7 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
   onTeam1ColorChange,
   onTeam2ColorChange,
   isDrawing,
-  isErasing,
   onDrawingChange,
-  onErasingChange,
   strokeColor,
   onStrokeColorChange,
   strokeWidth,
@@ -48,6 +44,8 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
   const [ballPosition, setBallPosition] = useState({ x: 50, y: 50 });
   const [currentTime, setCurrentTime] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [canUndo, setCanUndo] = useState(false);
+  const canvasRef = React.useRef<any>(null);
   const ANIMATION_DURATION = 2500;
 
   const { keyframes, recordKeyframe, interpolatePositions } = useKeyframes(currentTime);
@@ -122,6 +120,12 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
     }
   }, [currentTime]);
 
+  const handleUndo = () => {
+    if (canvasRef.current) {
+      canvasRef.current.undoLastPath();
+    }
+  };
+
   return (
     <div className="space-y-12 bg-black/20 backdrop-blur-sm px-4 sm:px-8 md:px-12 lg:px-16 py-8 rounded-3xl shadow-2xl border border-white/10 w-full overflow-hidden">
       <Timeline
@@ -137,12 +141,13 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
       <div className="flex flex-col md:flex-row gap-6 w-full items-center justify-center">
         <Court width={dimensions.width} height={dimensions.height}>
           <DrawingCanvas
+            ref={canvasRef}
             isDrawing={isDrawing}
-            isErasing={isErasing}
             width={dimensions.width}
             height={dimensions.height}
             strokeColor={strokeColor}
             strokeWidth={strokeWidth}
+            onUndoAvailable={setCanUndo}
           />
           <Ball position={ballPosition} onPositionChange={setBallPosition} />
           

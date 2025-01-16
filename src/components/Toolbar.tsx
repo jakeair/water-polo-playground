@@ -1,8 +1,9 @@
 import React from 'react';
 import ColorPicker from './ColorPicker';
-import { Pencil, Eraser } from 'lucide-react';
+import { Pencil, Undo2 } from 'lucide-react';
 import { Separator } from "@/components/ui/separator";
 import { Toggle } from "@/components/ui/toggle";
+import { Button } from "@/components/ui/button";
 
 interface ToolbarProps {
   team1Color: string;
@@ -10,13 +11,13 @@ interface ToolbarProps {
   onTeam1ColorChange: (color: string) => void;
   onTeam2ColorChange: (color: string) => void;
   isDrawing: boolean;
-  isErasing: boolean;
   onDrawingChange: (isDrawing: boolean) => void;
-  onErasingChange: (isErasing: boolean) => void;
   strokeColor: string;
   onStrokeColorChange: (color: string) => void;
   strokeWidth: number;
   onStrokeWidthChange: (width: number) => void;
+  canUndo: boolean;
+  onUndo: () => void;
 }
 
 const Toolbar: React.FC<ToolbarProps> = ({
@@ -25,13 +26,13 @@ const Toolbar: React.FC<ToolbarProps> = ({
   onTeam1ColorChange,
   onTeam2ColorChange,
   isDrawing,
-  isErasing,
   onDrawingChange,
-  onErasingChange,
   strokeColor,
   onStrokeColorChange,
   strokeWidth,
-  onStrokeWidthChange
+  onStrokeWidthChange,
+  canUndo,
+  onUndo
 }) => {
   return (
     <div className="flex flex-col gap-2 sm:gap-4 bg-[#1A1F2C]/95 backdrop-blur-md p-2 sm:p-3 rounded-xl shadow-md">
@@ -55,26 +56,21 @@ const Toolbar: React.FC<ToolbarProps> = ({
       <div className="flex flex-col items-center gap-2">
         <Toggle 
           pressed={isDrawing} 
-          onPressedChange={(pressed) => {
-            onDrawingChange(pressed);
-            if (pressed) onErasingChange(false);
-          }}
+          onPressedChange={onDrawingChange}
           className="data-[state=on]:bg-primary p-2 hover:bg-primary/90 active:bg-primary"
           aria-label="Toggle drawing"
         >
           <Pencil className={`w-4 h-4 ${isDrawing ? 'fill-white stroke-white' : ''}`} />
         </Toggle>
-        <Toggle 
-          pressed={isErasing} 
-          onPressedChange={(pressed) => {
-            onErasingChange(pressed);
-            if (pressed) onDrawingChange(false);
-          }}
-          className="data-[state=on]:bg-destructive p-2 hover:bg-destructive/90 active:bg-destructive"
-          aria-label="Toggle erasing"
+        <Button
+          variant="destructive"
+          size="icon"
+          disabled={!canUndo}
+          onClick={onUndo}
+          className="p-2 h-auto"
         >
-          <Eraser className={`w-4 h-4 ${isErasing ? 'fill-white stroke-white' : ''}`} />
-        </Toggle>
+          <Undo2 className={`w-4 h-4 ${canUndo ? 'fill-white stroke-white' : ''}`} />
+        </Button>
         <ColorPicker
           color={strokeColor}
           onChange={onStrokeColorChange}

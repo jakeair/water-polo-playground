@@ -7,10 +7,6 @@ const Help = () => {
   return (
     <div className="w-full p-6 rounded-2xl bg-black/5 backdrop-blur-lg border border-white/10 shadow-2xl">
       <div className="space-y-4">
-        <h2 className="text-2xl font-bold bg-gradient-to-r from-white via-white/90 to-white/70 text-transparent bg-clip-text">
-          How to Create Animations
-        </h2>
-        
         <div className="grid gap-4">
           {/* Controls Overview */}
           <div className="space-y-3">

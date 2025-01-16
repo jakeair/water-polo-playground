@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState, forwardRef, ForwardedRef } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 
 interface DrawingCanvasProps {
   isDrawing: boolean;
@@ -6,25 +6,18 @@ interface DrawingCanvasProps {
   height: number;
   strokeColor: string;
   strokeWidth: number;
-  onUndoAvailable: (available: boolean) => void;
 }
 
-interface DrawingCanvasRef {
-  undoLastPath: () => void;
-}
-
-const DrawingCanvas = forwardRef<DrawingCanvasRef, DrawingCanvasProps>(({
+const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
   isDrawing,
   width,
   height,
   strokeColor,
   strokeWidth,
-  onUndoAvailable
-}, ref) => {
+}) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const contextRef = useRef<CanvasRenderingContext2D | null>(null);
   const [isDrawingActive, setIsDrawingActive] = useState(false);
-  const [paths, setPaths] = useState<Path2D[]>([]);
   const currentPath = useRef<Path2D | null>(null);
 
   useEffect(() => {
@@ -42,8 +35,6 @@ const DrawingCanvas = forwardRef<DrawingCanvasRef, DrawingCanvasProps>(({
     context.strokeStyle = strokeColor;
     context.lineWidth = strokeWidth;
     contextRef.current = context;
-    
-    redrawCanvas();
   }, [width, height]);
 
   useEffect(() => {
@@ -55,10 +46,6 @@ const DrawingCanvas = forwardRef<DrawingCanvasRef, DrawingCanvasProps>(({
     if (!contextRef.current) return;
     contextRef.current.lineWidth = strokeWidth;
   }, [strokeWidth]);
-
-  useEffect(() => {
-    onUndoAvailable(paths.length > 0);
-  }, [paths, onUndoAvailable]);
 
   const getCoordinates = (event: MouseEvent | TouchEvent): { x: number, y: number } | null => {
     const canvas = canvasRef.current;
@@ -111,34 +98,8 @@ const DrawingCanvas = forwardRef<DrawingCanvasRef, DrawingCanvasProps>(({
   };
 
   const stopDrawing = () => {
-    if (isDrawingActive && currentPath.current) {
-      setPaths(prev => {
-        const newPaths = [...prev, currentPath.current!];
-        // Keep only the last 10 paths
-        return newPaths.slice(-10);
-      });
-    }
     setIsDrawingActive(false);
     currentPath.current = null;
-  };
-
-  const undoLastPath = () => {
-    setPaths(prev => {
-      const newPaths = prev.slice(0, -1);
-      redrawCanvas(newPaths);
-      return newPaths;
-    });
-  };
-
-  const redrawCanvas = (pathsToDraw = paths) => {
-    const context = contextRef.current;
-    const canvas = canvasRef.current;
-    if (!context || !canvas) return;
-
-    context.clearRect(0, 0, canvas.width, canvas.height);
-    pathsToDraw.forEach(path => {
-      context.stroke(path);
-    });
   };
 
   useEffect(() => {
@@ -164,10 +125,6 @@ const DrawingCanvas = forwardRef<DrawingCanvasRef, DrawingCanvasProps>(({
     };
   }, [isDrawing, isDrawingActive]);
 
-  React.useImperativeHandle(ref, () => ({
-    undoLastPath
-  }));
-
   return (
     <canvas
       ref={canvasRef}
@@ -178,8 +135,6 @@ const DrawingCanvas = forwardRef<DrawingCanvasRef, DrawingCanvasProps>(({
       }}
     />
   );
-});
-
-DrawingCanvas.displayName = 'DrawingCanvas';
+};
 
 export default DrawingCanvas;

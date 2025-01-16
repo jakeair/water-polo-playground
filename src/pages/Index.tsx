@@ -13,14 +13,6 @@ const Index = () => {
   const [isDrawing, setIsDrawing] = useState(false);
   const [strokeColor, setStrokeColor] = useState('#ffffff');
   const [strokeWidth, setStrokeWidth] = useState(2);
-  const [canUndo, setCanUndo] = useState(false);
-  const canvasRef = React.useRef<{ undoLastPath: () => void }>(null);
-
-  const handleUndo = () => {
-    if (canvasRef.current) {
-      canvasRef.current.undoLastPath();
-    }
-  };
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800 text-white">
@@ -57,8 +49,6 @@ const Index = () => {
                 onStrokeColorChange={setStrokeColor}
                 strokeWidth={strokeWidth}
                 onStrokeWidthChange={setStrokeWidth}
-                canUndo={canUndo}
-                onUndo={handleUndo}
               />
             </div>
 

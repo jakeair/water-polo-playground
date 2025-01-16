@@ -3,6 +3,7 @@ import WaterPoloCourt from '@/components/WaterPoloCourt';
 import Toolbar from '@/components/Toolbar';
 import { SidebarProvider } from '@/components/ui/sidebar';
 import Navigation from '@/components/Navigation';
+import Help from '@/components/Help';
 
 const Index = () => {
   const [team1Color, setTeam1Color] = useState('#3b82f6');
@@ -56,8 +57,8 @@ const Index = () => {
                   </p>
                 </header>
                 
-                <div className="w-full flex justify-center px-1 sm:px-2 md:px-4">
-                  <div className="w-full max-w-[95vw] sm:max-w-[90vw] md:max-w-[85vw] lg:max-w-[80vw]">
+                <div className="w-full flex flex-col gap-8 px-1 sm:px-2 md:px-4">
+                  <div className="w-full max-w-[95vw] sm:max-w-[90vw] md:max-w-[85vw] lg:max-w-[80vw] mx-auto">
                     <WaterPoloCourt
                       team1Color={team1Color}
                       team2Color={team2Color}
@@ -68,6 +69,10 @@ const Index = () => {
                       strokeColor={strokeColor}
                       strokeWidth={strokeWidth}
                     />
+                  </div>
+                  
+                  <div className="w-full max-w-[95vw] sm:max-w-[90vw] md:max-w-[85vw] lg:max-w-[80vw] mx-auto">
+                    <Help />
                   </div>
                 </div>
               </div>

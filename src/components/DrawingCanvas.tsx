@@ -9,14 +9,18 @@ interface DrawingCanvasProps {
   onUndoAvailable: (available: boolean) => void;
 }
 
-const DrawingCanvas = forwardRef(({
+interface DrawingCanvasRef {
+  undoLastPath: () => void;
+}
+
+const DrawingCanvas = forwardRef<DrawingCanvasRef, DrawingCanvasProps>(({
   isDrawing,
   width,
   height,
   strokeColor,
   strokeWidth,
   onUndoAvailable
-}: DrawingCanvasProps, ref: ForwardedRef<{ undoLastPath: () => void }>) => {
+}, ref) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const contextRef = useRef<CanvasRenderingContext2D | null>(null);
   const [isDrawingActive, setIsDrawingActive] = useState(false);

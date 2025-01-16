@@ -44,6 +44,7 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
   const [ballPosition, setBallPosition] = useState({ x: 50, y: 50 });
   const [currentTime, setCurrentTime] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [drawingTool, setDrawingTool] = useState<'pen' | 'arrow' | 'dottedArrow'>('pen');
   const ANIMATION_DURATION = 2500;
 
   const { keyframes, recordKeyframe, interpolatePositions } = useKeyframes(currentTime);
@@ -138,6 +139,7 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
             height={dimensions.height}
             strokeColor={strokeColor}
             strokeWidth={strokeWidth}
+            drawingTool={drawingTool}
           />
           <Ball position={ballPosition} onPositionChange={setBallPosition} />
           

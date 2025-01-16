@@ -6,6 +6,7 @@ interface DrawingCanvasProps {
   height: number;
   strokeColor: string;
   strokeWidth: number;
+  drawingTool: 'pen' | 'arrow' | 'dottedArrow';
 }
 
 const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
@@ -14,11 +15,12 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
   height,
   strokeColor,
   strokeWidth,
+  drawingTool,
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const contextRef = useRef<CanvasRenderingContext2D | null>(null);
   const [isDrawingActive, setIsDrawingActive] = useState(false);
-  const currentPath = useRef<Path2D | null>(null);
+  const startPointRef = useRef<{ x: number; y: number } | null>(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -47,6 +49,39 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
     contextRef.current.lineWidth = strokeWidth;
   }, [strokeWidth]);
 
+  const drawArrow = (context: CanvasRenderingContext2D, from: { x: number; y: number }, to: { x: number; y: number }, isDotted: boolean) => {
+    const headLength = 20;
+    const dx = to.x - from.x;
+    const dy = to.y - from.y;
+    const angle = Math.atan2(dy, dx);
+    
+    context.beginPath();
+    if (isDotted) {
+      context.setLineDash([5, 5]);
+    } else {
+      context.setLineDash([]);
+    }
+    
+    // Draw the line
+    context.moveTo(from.x, from.y);
+    context.lineTo(to.x, to.y);
+    
+    // Draw the arrow head
+    context.moveTo(to.x, to.y);
+    context.lineTo(
+      to.x - headLength * Math.cos(angle - Math.PI / 6),
+      to.y - headLength * Math.sin(angle - Math.PI / 6)
+    );
+    context.moveTo(to.x, to.y);
+    context.lineTo(
+      to.x - headLength * Math.cos(angle + Math.PI / 6),
+      to.y - headLength * Math.sin(angle + Math.PI / 6)
+    );
+    
+    context.stroke();
+    context.setLineDash([]);
+  };
+
   const getCoordinates = (event: MouseEvent | TouchEvent): { x: number, y: number } | null => {
     const canvas = canvasRef.current;
     if (!canvas) return null;
@@ -73,33 +108,50 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
     event.preventDefault();
     event.stopPropagation();
     
-    if (!isDrawing) return;
+    if (!isDrawing || !contextRef.current) return;
 
     const coords = getCoordinates(event);
     if (!coords) return;
 
     setIsDrawingActive(true);
-    currentPath.current = new Path2D();
-    currentPath.current.moveTo(coords.x, coords.y);
+    startPointRef.current = coords;
+
+    if (drawingTool === 'pen') {
+      contextRef.current.beginPath();
+      contextRef.current.moveTo(coords.x, coords.y);
+    }
   };
 
   const draw = (event: MouseEvent | TouchEvent) => {
     event.preventDefault();
     event.stopPropagation();
 
-    if (!isDrawingActive || !isDrawing || !contextRef.current || !currentPath.current) return;
+    if (!isDrawingActive || !isDrawing || !contextRef.current) return;
 
     const coords = getCoordinates(event);
     if (!coords) return;
 
-    currentPath.current.lineTo(coords.x, coords.y);
-    contextRef.current.beginPath();
-    contextRef.current.stroke(currentPath.current);
+    if (drawingTool === 'pen') {
+      contextRef.current.lineTo(coords.x, coords.y);
+      contextRef.current.stroke();
+    } else if (startPointRef.current) {
+      // Clear the canvas and redraw
+      const canvas = canvasRef.current;
+      if (!canvas) return;
+      
+      contextRef.current.clearRect(0, 0, canvas.width, canvas.height);
+      drawArrow(
+        contextRef.current,
+        startPointRef.current,
+        coords,
+        drawingTool === 'dottedArrow'
+      );
+    }
   };
 
   const stopDrawing = () => {
     setIsDrawingActive(false);
-    currentPath.current = null;
+    startPointRef.current = null;
   };
 
   useEffect(() => {
@@ -123,7 +175,7 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
       canvas.removeEventListener('touchmove', draw);
       canvas.removeEventListener('touchend', stopDrawing);
     };
-  }, [isDrawing, isDrawingActive]);
+  }, [isDrawing, isDrawingActive, drawingTool]);
 
   return (
     <canvas

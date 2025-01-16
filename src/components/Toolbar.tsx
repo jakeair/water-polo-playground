@@ -1,8 +1,9 @@
 import React from 'react';
 import ColorPicker from './ColorPicker';
-import { Pencil } from 'lucide-react';
+import { Pencil, ArrowRight, ArrowRightDashed } from 'lucide-react';
 import { Separator } from "@/components/ui/separator";
 import { Toggle } from "@/components/ui/toggle";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 
 interface ToolbarProps {
   team1Color: string;
@@ -15,6 +16,8 @@ interface ToolbarProps {
   onStrokeColorChange: (color: string) => void;
   strokeWidth: number;
   onStrokeWidthChange: (width: number) => void;
+  drawingTool: 'pen' | 'arrow' | 'dottedArrow';
+  onDrawingToolChange: (tool: 'pen' | 'arrow' | 'dottedArrow') => void;
 }
 
 const Toolbar: React.FC<ToolbarProps> = ({
@@ -28,6 +31,8 @@ const Toolbar: React.FC<ToolbarProps> = ({
   onStrokeColorChange,
   strokeWidth,
   onStrokeWidthChange,
+  drawingTool,
+  onDrawingToolChange,
 }) => {
   return (
     <div className="flex flex-col gap-2 sm:gap-4 bg-[#1A1F2C]/95 backdrop-blur-md p-2 sm:p-3 rounded-xl shadow-md">
@@ -51,7 +56,6 @@ const Toolbar: React.FC<ToolbarProps> = ({
 
       {/* Drawing Tools Group */}
       <div className="flex flex-col items-center gap-2">
-        {/* Pen Tool and Color Controls */}
         <div className="flex items-center gap-2">
           <Toggle 
             pressed={isDrawing} 
@@ -61,25 +65,44 @@ const Toolbar: React.FC<ToolbarProps> = ({
           >
             <Pencil className={`w-4 h-4 ${isDrawing ? 'fill-white stroke-white' : ''}`} />
           </Toggle>
-          <ColorPicker
-            color={strokeColor}
-            onChange={onStrokeColorChange}
-            label="Pen Color"
-          />
+          
+          {isDrawing && (
+            <>
+              <ToggleGroup type="single" value={drawingTool} onValueChange={(value) => value && onDrawingToolChange(value as 'pen' | 'arrow' | 'dottedArrow')}>
+                <ToggleGroupItem value="pen" aria-label="Pen tool">
+                  <Pencil className="w-4 h-4" />
+                </ToggleGroupItem>
+                <ToggleGroupItem value="arrow" aria-label="Arrow tool">
+                  <ArrowRight className="w-4 h-4" />
+                </ToggleGroupItem>
+                <ToggleGroupItem value="dottedArrow" aria-label="Dotted arrow tool">
+                  <ArrowRightDashed className="w-4 h-4" />
+                </ToggleGroupItem>
+              </ToggleGroup>
+              
+              <ColorPicker
+                color={strokeColor}
+                onChange={onStrokeColorChange}
+                label="Drawing Color"
+              />
+            </>
+          )}
         </div>
 
-        {/* Stroke Width */}
-        <div className="flex items-center gap-2 w-full">
-          <input
-            type="range"
-            min="1"
-            max="20"
-            value={strokeWidth}
-            onChange={(e) => onStrokeWidthChange(Number(e.target.value))}
-            className="flex-1"
-            aria-label="Stroke width"
-          />
-        </div>
+        {/* Stroke Width - Smaller Scale */}
+        {isDrawing && (
+          <div className="flex items-center gap-2 w-full">
+            <input
+              type="range"
+              min="1"
+              max="10"
+              value={strokeWidth}
+              onChange={(e) => onStrokeWidthChange(Number(e.target.value))}
+              className="flex-1"
+              aria-label="Stroke width"
+            />
+          </div>
+        )}
       </div>
     </div>
   );

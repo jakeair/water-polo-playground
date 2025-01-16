@@ -38,21 +38,21 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
   team2Color,
   onTeam1ColorChange,
   onTeam2ColorChange,
-  isDrawing,
-  isErasing,
-  strokeColor,
-  strokeWidth
+  isDrawing: propIsDrawing,
+  isErasing: propIsErasing,
+  strokeColor: propStrokeColor,
+  strokeWidth: propStrokeWidth
 }) => {
   const courtRef = useRef<HTMLDivElement>(null);
   const topGoalNetRef = useRef<HTMLDivElement>(null);
   const bottomGoalNetRef = useRef<HTMLDivElement>(null);
   const [dimensions, setDimensions] = useState({ width: 1000, height: 1400 });
   
-  const [localIsDrawing, setIsDrawing] = useState(isDrawing);
-  const [localIsErasing, setIsErasing] = useState(isErasing);
-  const [localStrokeColor, setStrokeColor] = useState(strokeColor);
-  const [localStrokeWidth, setStrokeWidth] = useState(strokeWidth);
-  
+  const [localIsDrawing, setLocalIsDrawing] = useState(propIsDrawing);
+  const [localIsErasing, setLocalIsErasing] = useState(propIsErasing);
+  const [localStrokeColor, setLocalStrokeColor] = useState(propStrokeColor);
+  const [localStrokeWidth, setLocalStrokeWidth] = useState(propStrokeWidth);
+
   const [playerPositions, setPlayerPositions] = useState<{[key: string]: PlayerPosition}>({});
   const lastInterpolatedPositions = useRef<{[key: string]: PlayerPosition}>({});
   const [ballPosition, setBallPosition] = useState({ x: 50, y: 50 });
@@ -266,10 +266,26 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
   return (
     <div className="space-y-24 bg-black/20 backdrop-blur-sm px-8 sm:px-12 md:px-16 lg:px-20 py-16 rounded-3xl shadow-2xl border border-white/10">
       <div className="flex gap-6">
+        <div className="flex-shrink-0">
+          <Toolbar
+            team1Color={team1Color}
+            team2Color={team2Color}
+            onTeam1ColorChange={onTeam1ColorChange}
+            onTeam2ColorChange={onTeam2ColorChange}
+            isDrawing={localIsDrawing}
+            isErasing={localIsErasing}
+            onDrawingChange={setLocalIsDrawing}
+            onErasingChange={setLocalIsErasing}
+            strokeColor={localStrokeColor}
+            onStrokeColorChange={setLocalStrokeColor}
+            strokeWidth={localStrokeWidth}
+            onStrokeWidthChange={setLocalStrokeWidth}
+          />
+        </div>
         
         <div 
           ref={courtRef}
-          className="court relative"
+          className="court relative flex-1"
           style={{ 
             width: dimensions.width, 
             height: dimensions.height,

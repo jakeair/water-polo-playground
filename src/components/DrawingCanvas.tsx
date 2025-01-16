@@ -9,19 +9,19 @@ interface DrawingCanvasProps {
   strokeWidth: number;
 }
 
-const DrawingCanvas: React.FC<DrawingCanvasProps> = ({ 
-  isDrawing, 
-  isErasing, 
-  width, 
+const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
+  isDrawing,
+  isErasing,
+  width,
   height,
   strokeColor,
-  strokeWidth 
+  strokeWidth
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const contextRef = useRef<CanvasRenderingContext2D | null>(null);
   const isDrawingRef = useRef(false);
-  const lastPosRef = useRef({ x: 0, y: 0 });
   const [paths, setPaths] = useState<Path2D[]>([]);
+  const currentPath = useRef<Path2D | null>(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -29,33 +29,32 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
 
     canvas.width = width;
     canvas.height = height;
-
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-
-    ctx.lineCap = 'round';
-    ctx.lineJoin = 'round';
-    contextRef.current = ctx;
-
+    
+    const context = canvas.getContext('2d');
+    if (!context) return;
+    
+    context.lineCap = 'round';
+    context.strokeStyle = strokeColor;
+    context.lineWidth = strokeWidth;
+    contextRef.current = context;
+    
     redrawCanvas();
   }, [width, height]);
 
-  const redrawCanvas = () => {
-    const ctx = contextRef.current;
-    if (!ctx) return;
+  useEffect(() => {
+    if (!contextRef.current) return;
+    contextRef.current.strokeStyle = strokeColor;
+  }, [strokeColor]);
 
-    ctx.clearRect(0, 0, width, height);
-    paths.forEach(path => {
-      ctx.stroke(path);
-    });
-  };
+  useEffect(() => {
+    if (!contextRef.current) return;
+    contextRef.current.lineWidth = strokeWidth;
+  }, [strokeWidth]);
 
   const updateBrushStyle = () => {
-    const ctx = contextRef.current;
-    if (!ctx) return;
-    
-    ctx.strokeStyle = strokeColor;
-    ctx.lineWidth = strokeWidth;
+    if (!contextRef.current) return;
+    contextRef.current.strokeStyle = strokeColor;
+    contextRef.current.lineWidth = strokeWidth;
   };
 
   const getCoordinates = (event: React.MouseEvent | TouchEvent | MouseEvent): { x: number, y: number } => {
@@ -81,59 +80,60 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
   };
 
   const handleStart = (event: React.MouseEvent | TouchEvent | MouseEvent) => {
-    if (!isDrawing) return;
+    if (!isDrawing && !isErasing) return;
     
+    event.stopPropagation();
     isDrawingRef.current = true;
     const coords = getCoordinates(event);
-    lastPosRef.current = coords;
+    currentPath.current = new Path2D();
+    currentPath.current.moveTo(coords.x, coords.y);
     updateBrushStyle();
   };
 
   const handleMove = (event: React.MouseEvent | TouchEvent | MouseEvent) => {
-    if (!isDrawingRef.current || !contextRef.current || !isDrawing) return;
-
-    const coords = getCoordinates(event);
-    const path = new Path2D();
-    path.moveTo(lastPosRef.current.x, lastPosRef.current.y);
-    path.lineTo(coords.x, coords.y);
+    if (!isDrawingRef.current || !contextRef.current || (!isDrawing && !isErasing)) return;
     
-    contextRef.current.stroke(path);
-    setPaths(prevPaths => [...prevPaths, path]);
-
-    lastPosRef.current = coords;
+    event.stopPropagation();
+    const coords = getCoordinates(event);
+    
+    if (currentPath.current) {
+      currentPath.current.lineTo(coords.x, coords.y);
+      redrawCanvas();
+      contextRef.current.stroke(currentPath.current);
+    }
   };
 
   const handleEnd = () => {
     isDrawingRef.current = false;
+    if (currentPath.current) {
+      setPaths(prev => [...prev, currentPath.current]);
+      currentPath.current = null;
+    }
   };
 
-  const handleCanvasClick = (event: React.MouseEvent) => {
-    if (!isErasing) return;
+  const redrawCanvas = () => {
+    const context = contextRef.current;
+    const canvas = canvasRef.current;
+    if (!context || !canvas) return;
 
-    const coords = getCoordinates(event);
-    const ctx = contextRef.current;
-    if (!ctx) return;
-
-    const remainingPaths = paths.filter(path => {
-      ctx.save();
-      ctx.lineWidth = strokeWidth + 10;
-      const isClicked = ctx.isPointInStroke(path, coords.x, coords.y);
-      ctx.restore();
-      return !isClicked;
+    context.clearRect(0, 0, canvas.width, canvas.height);
+    paths.forEach(path => {
+      context.stroke(path);
     });
-
-    setPaths(remainingPaths);
-    redrawCanvas();
   };
 
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    const handleMouseDown = (e: MouseEvent) => handleStart(e);
+    const handleMouseDown = (e: MouseEvent) => {
+      handleStart(e);
+    };
     const handleMouseMove = (e: MouseEvent) => {
-      if (!isDrawingRef.current) return;
       handleMove(e);
+    };
+    const handleMouseUp = () => {
+      handleEnd();
     };
     const handleTouchStart = (e: TouchEvent) => {
       e.preventDefault();
@@ -141,40 +141,37 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
     };
     const handleTouchMove = (e: TouchEvent) => {
       e.preventDefault();
-      if (!isDrawingRef.current) return;
       handleMove(e);
+    };
+    const handleTouchEnd = () => {
+      handleEnd();
     };
 
     canvas.addEventListener('mousedown', handleMouseDown);
-    window.addEventListener('mousemove', handleMouseMove);
-    window.addEventListener('mouseup', handleEnd);
+    canvas.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('mouseup', handleMouseUp);
     canvas.addEventListener('touchstart', handleTouchStart);
-    window.addEventListener('touchmove', handleTouchMove);
-    window.addEventListener('touchend', handleEnd);
+    canvas.addEventListener('touchmove', handleTouchMove);
+    canvas.addEventListener('touchend', handleTouchEnd);
 
     return () => {
       canvas.removeEventListener('mousedown', handleMouseDown);
-      window.removeEventListener('mousemove', handleMouseMove);
-      window.removeEventListener('mouseup', handleEnd);
+      canvas.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('mouseup', handleMouseUp);
       canvas.removeEventListener('touchstart', handleTouchStart);
-      window.removeEventListener('touchmove', handleTouchMove);
-      window.removeEventListener('touchend', handleEnd);
+      canvas.removeEventListener('touchmove', handleTouchMove);
+      canvas.removeEventListener('touchend', handleTouchEnd);
     };
-  }, [isDrawing, strokeColor, strokeWidth]);
+  }, [isDrawing, isErasing]);
 
   return (
     <canvas
       ref={canvasRef}
-      width={width}
-      height={height}
-      className="absolute inset-0 pointer-events-auto z-10"
+      className="absolute inset-0 w-full h-full"
       style={{ 
-        width: '100%',
-        height: '100%',
-        cursor: isDrawing ? 'crosshair' : isErasing ? 'not-allowed' : 'default',
-        touchAction: 'none'
+        cursor: isErasing ? 'crosshair' : isDrawing ? 'pointer' : 'default',
+        pointerEvents: isDrawing || isErasing ? 'auto' : 'none'
       }}
-      onClick={handleCanvasClick}
     />
   );
 };

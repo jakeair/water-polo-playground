@@ -2,8 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { gsap } from 'gsap';
 import Player from './Player';
 import Timeline from './Timeline';
-import DrawingCanvas from './DrawingCanvas';
-import Toolbar from './Toolbar';
 import Ball from './Ball';
 import Court from './Court';
 import { useAnimation } from '@/hooks/useAnimation';
@@ -19,10 +17,6 @@ interface WaterPoloCourtProps {
   team2Color: string;
   onTeam1ColorChange: (color: string) => void;
   onTeam2ColorChange: (color: string) => void;
-  isDrawing: boolean;
-  isErasing: boolean;
-  strokeColor: string;
-  strokeWidth: number;
 }
 
 const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
@@ -30,16 +24,8 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
   team2Color,
   onTeam1ColorChange,
   onTeam2ColorChange,
-  isDrawing: propIsDrawing,
-  isErasing: propIsErasing,
-  strokeColor: propStrokeColor,
-  strokeWidth: propStrokeWidth
 }) => {
   const [dimensions, setDimensions] = useState({ width: 1000, height: 1400 });
-  const [localIsDrawing, setLocalIsDrawing] = useState(propIsDrawing);
-  const [localIsErasing, setLocalIsErasing] = useState(propIsErasing);
-  const [localStrokeColor, setLocalStrokeColor] = useState(propStrokeColor);
-  const [localStrokeWidth, setLocalStrokeWidth] = useState(propStrokeWidth);
   const [playerPositions, setPlayerPositions] = useState<{[key: string]: PlayerPosition}>({});
   const lastInterpolatedPositions = React.useRef<{[key: string]: PlayerPosition}>({});
   const [ballPosition, setBallPosition] = useState({ x: 50, y: 50 });
@@ -133,15 +119,6 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
       
       <div className="flex flex-col md:flex-row gap-6 w-full items-center justify-center">
         <Court width={dimensions.width} height={dimensions.height}>
-          <DrawingCanvas 
-            isDrawing={localIsDrawing}
-            isErasing={localIsErasing}
-            width={dimensions.width}
-            height={dimensions.height}
-            strokeColor={localStrokeColor}
-            strokeWidth={localStrokeWidth}
-          />
-          
           <Ball position={ballPosition} onPositionChange={setBallPosition} />
 
           <Player team={1} number="G" initialX={50} initialY={5} isGoalie onPositionChange={(pos) => updatePlayerPosition('1G', pos)} id="player-1G" style={{ backgroundColor: 'var(--goalie-color)' }} />

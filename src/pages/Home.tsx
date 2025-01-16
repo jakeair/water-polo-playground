@@ -21,11 +21,11 @@ const Home = () => {
         </div>
 
         {/* Logo */}
-        <div className="absolute top-4 left-4 z-50">
+        <div className="absolute top-6 left-6 sm:top-8 sm:left-8 z-50">
           <img 
             src="/lovable-uploads/3d2e9fbd-02ec-4aed-8cf5-8960a9a8ea77.png" 
             alt="Water Polo Strategy Logo" 
-            className="w-16 h-16 object-contain filter drop-shadow-lg hover:scale-105 transition-transform duration-200"
+            className="w-14 h-14 sm:w-16 sm:h-16 object-contain filter drop-shadow-lg hover:scale-105 transition-transform duration-200"
           />
         </div>
 

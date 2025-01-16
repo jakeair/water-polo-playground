@@ -14,7 +14,7 @@ const Navigation = () => {
   const isActive = (path: string) => location.pathname === path;
 
   return (
-    <nav className="fixed top-0 right-0 p-3 sm:p-4 z-50 flex items-center gap-2 sm:gap-6">
+    <nav className="fixed top-6 right-6 sm:top-8 sm:right-8 z-50 flex items-center gap-2 sm:gap-6">
       <TooltipProvider>
         <Tooltip>
           <TooltipTrigger asChild>

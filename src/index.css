@@ -82,8 +82,7 @@
 }
 
 .goal-top {
-  top: -8%;
-  margin-top: 20px;
+  top: -6%;
   transform: translateX(-50%) perspective(100px) rotateX(5deg);
   border-width: 6px;
   border-style: solid;
@@ -94,8 +93,7 @@
 }
 
 .goal-bottom {
-  bottom: -8%;
-  margin-bottom: 20px;
+  bottom: -6%;
   transform: translateX(-50%) perspective(100px) rotateX(-5deg);
   border-width: 6px;
   border-style: solid;

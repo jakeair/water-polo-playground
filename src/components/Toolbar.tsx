@@ -36,9 +36,6 @@ const Toolbar: React.FC<ToolbarProps> = ({
   return (
     <div className="flex flex-col gap-2 sm:gap-4 bg-[#1A1F2C]/95 backdrop-blur-md p-2 sm:p-3 rounded-xl shadow-md">
       <div className="space-y-2 sm:space-y-3">
-        <div className="flex justify-center">
-          <Palette className="w-3 h-3 sm:w-4 sm:h-4 text-white/60" />
-        </div>
         <div className="flex flex-col items-center gap-1.5 sm:gap-2">
           <ColorPicker
             color={team1Color}
@@ -55,48 +52,43 @@ const Toolbar: React.FC<ToolbarProps> = ({
 
       <Separator className="bg-white/10" />
 
-      <div className="space-y-2">
-        <div className="flex justify-center">
-          <Pencil className="w-3 h-3 sm:w-4 sm:h-4 text-white/60" />
-        </div>
-        <div className="flex flex-col items-center gap-2">
-          <Toggle 
-            pressed={isDrawing} 
-            onPressedChange={(pressed) => {
-              onDrawingChange(pressed);
-              if (pressed) onErasingChange(false);
-            }}
-            className="data-[state=on]:bg-primary p-2"
-            aria-label="Toggle drawing"
-          >
-            <Pencil className="w-4 h-4" />
-          </Toggle>
-          <Toggle 
-            pressed={isErasing} 
-            onPressedChange={(pressed) => {
-              onErasingChange(pressed);
-              if (pressed) onDrawingChange(false);
-            }}
-            className="data-[state=on]:bg-destructive p-2"
-            aria-label="Toggle erasing"
-          >
-            <Eraser className="w-4 h-4" />
-          </Toggle>
-          <ColorPicker
-            color={strokeColor}
-            onChange={onStrokeColorChange}
-            label="Stroke"
-          />
-          <input
-            type="range"
-            min="1"
-            max="20"
-            value={strokeWidth}
-            onChange={(e) => onStrokeWidthChange(Number(e.target.value))}
-            className="w-full"
-            aria-label="Stroke width"
-          />
-        </div>
+      <div className="flex flex-col items-center gap-2">
+        <Toggle 
+          pressed={isDrawing} 
+          onPressedChange={(pressed) => {
+            onDrawingChange(pressed);
+            if (pressed) onErasingChange(false);
+          }}
+          className="data-[state=on]:bg-primary p-2"
+          aria-label="Toggle drawing"
+        >
+          <Pencil className="w-4 h-4" />
+        </Toggle>
+        <Toggle 
+          pressed={isErasing} 
+          onPressedChange={(pressed) => {
+            onErasingChange(pressed);
+            if (pressed) onDrawingChange(false);
+          }}
+          className="data-[state=on]:bg-destructive p-2"
+          aria-label="Toggle erasing"
+        >
+          <Eraser className="w-4 h-4" />
+        </Toggle>
+        <ColorPicker
+          color={strokeColor}
+          onChange={onStrokeColorChange}
+          label="Stroke"
+        />
+        <input
+          type="range"
+          min="1"
+          max="20"
+          value={strokeWidth}
+          onChange={(e) => onStrokeWidthChange(Number(e.target.value))}
+          className="w-full"
+          aria-label="Stroke width"
+        />
       </div>
     </div>
   );

@@ -21,6 +21,7 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
   const contextRef = useRef<CanvasRenderingContext2D | null>(null);
   const [isDrawingActive, setIsDrawingActive] = useState(false);
   const startPointRef = useRef<{ x: number; y: number } | null>(null);
+  const lastDrawRef = useRef<ImageData | null>(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -50,7 +51,7 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
   }, [strokeWidth]);
 
   const drawArrow = (context: CanvasRenderingContext2D, from: { x: number; y: number }, to: { x: number; y: number }, isDotted: boolean) => {
-    const headLength = 20;
+    const headLength = Math.min(20, Math.sqrt(Math.pow(to.x - from.x, 2) + Math.pow(to.y - from.y, 2)) / 3);
     const dx = to.x - from.x;
     const dy = to.y - from.y;
     const angle = Math.atan2(dy, dx);
@@ -116,6 +117,14 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
     setIsDrawingActive(true);
     startPointRef.current = coords;
 
+    // Store the current canvas state for arrow drawing
+    if (drawingTool !== 'pen') {
+      const canvas = canvasRef.current;
+      if (canvas) {
+        lastDrawRef.current = contextRef.current.getImageData(0, 0, canvas.width, canvas.height);
+      }
+    }
+
     if (drawingTool === 'pen') {
       contextRef.current.beginPath();
       contextRef.current.moveTo(coords.x, coords.y);
@@ -134,12 +143,14 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
     if (drawingTool === 'pen') {
       contextRef.current.lineTo(coords.x, coords.y);
       contextRef.current.stroke();
-    } else if (startPointRef.current) {
-      // Clear the canvas and redraw
+    } else if (startPointRef.current && lastDrawRef.current) {
+      // Restore the previous canvas state
       const canvas = canvasRef.current;
       if (!canvas) return;
       
-      contextRef.current.clearRect(0, 0, canvas.width, canvas.height);
+      contextRef.current.putImageData(lastDrawRef.current, 0, 0);
+      
+      // Draw the new arrow
       drawArrow(
         contextRef.current,
         startPointRef.current,
@@ -150,6 +161,13 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
   };
 
   const stopDrawing = () => {
+    if (drawingTool !== 'pen' && contextRef.current) {
+      // Save the final arrow state
+      const canvas = canvasRef.current;
+      if (canvas) {
+        lastDrawRef.current = contextRef.current.getImageData(0, 0, canvas.width, canvas.height);
+      }
+    }
     setIsDrawingActive(false);
     startPointRef.current = null;
   };
@@ -182,7 +200,7 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
       ref={canvasRef}
       className="absolute inset-0 w-full h-full"
       style={{ 
-        cursor: isDrawing ? 'pointer' : 'default',
+        cursor: isDrawing ? 'crosshair' : 'default',
         pointerEvents: isDrawing ? 'auto' : 'none'
       }}
     />

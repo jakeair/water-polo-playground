@@ -3,6 +3,7 @@ import WaterPoloCourt from '@/components/WaterPoloCourt';
 import Toolbar from '@/components/Toolbar';
 import Help from '@/components/Help';
 import { Toaster } from 'sonner';
+import { SidebarProvider } from '@/components/ui/sidebar';
 
 const Index = () => {
   const [team1Color, setTeam1Color] = useState('#FF0000');
@@ -18,31 +19,33 @@ const Index = () => {
         {/* Help Section at the top */}
         <Help />
         
-        <Toolbar
-          team1Color={team1Color}
-          team2Color={team2Color}
-          onTeam1ColorChange={setTeam1Color}
-          onTeam2ColorChange={setTeam2Color}
-          isDrawing={isDrawing}
-          setIsDrawing={setIsDrawing}
-          isErasing={isErasing}
-          setIsErasing={setIsErasing}
-          strokeColor={strokeColor}
-          setStrokeColor={setStrokeColor}
-          strokeWidth={strokeWidth}
-          setStrokeWidth={setStrokeWidth}
-        />
+        <SidebarProvider>
+          <div className="w-full flex">
+            <Toolbar
+              team1Color={team1Color}
+              team2Color={team2Color}
+              onTeam1ColorChange={setTeam1Color}
+              onTeam2ColorChange={setTeam2Color}
+              isDrawing={isDrawing}
+              isErasing={isErasing}
+              onDrawingChange={setIsDrawing}
+              onErasingChange={setIsErasing}
+              strokeColor={strokeColor}
+              onStrokeColorChange={setStrokeColor}
+              strokeWidth={strokeWidth}
+              onStrokeWidthChange={setStrokeWidth}
+            />
 
-        <WaterPoloCourt
-          team1Color={team1Color}
-          team2Color={team2Color}
-          onTeam1ColorChange={setTeam1Color}
-          onTeam2ColorChange={setTeam2Color}
-          isDrawing={isDrawing}
-          isErasing={isErasing}
-          strokeColor={strokeColor}
-          strokeWidth={strokeWidth}
-        />
+            <WaterPoloCourt
+              team1Color={team1Color}
+              team2Color={team2Color}
+              isDrawing={isDrawing}
+              isErasing={isErasing}
+              strokeColor={strokeColor}
+              strokeWidth={strokeWidth}
+            />
+          </div>
+        </SidebarProvider>
       </div>
       <Toaster />
     </div>

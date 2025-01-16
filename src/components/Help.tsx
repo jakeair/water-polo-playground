@@ -37,35 +37,35 @@ const Help = () => {
             </div>
           </div>
 
-          {/* Steps */}
+          {/* Steps Grid */}
           <div className="space-y-4">
             <h3 className="text-lg font-semibold text-white/90">Animation Steps</h3>
-            <div className="grid gap-6">
-              <Step
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <StepPanel
                 number={1}
                 icon={MousePointerClick}
                 title="Set Starting Positions"
                 description="Move players and ball to starting positions, then click Add Keyframe"
               />
-              <Step
+              <StepPanel
                 number={2}
                 icon={Clock}
                 title="Move Forward in Time"
                 description="Drag the timeline forward to when you want the next movement"
               />
-              <Step
+              <StepPanel
                 number={3}
                 icon={Move}
                 title="Set New Positions"
                 description="Move pieces to new positions and click Add Keyframe"
               />
-              <Step
+              <StepPanel
                 number={4}
                 icon={PlayCircle}
                 title="Preview Animation"
                 description="Go back to start and click Play to watch"
               />
-              <Step
+              <StepPanel
                 number={5}
                 icon={Repeat}
                 title="Build Your Animation"
@@ -98,20 +98,22 @@ const Help = () => {
   );
 };
 
-const Step = ({ number, icon: Icon, title, description }: {
+const StepPanel = ({ number, icon: Icon, title, description }: {
   number: number;
   icon: React.ElementType;
   title: string;
   description: string;
 }) => {
   return (
-    <div className="flex items-start gap-4">
-      <div className="flex-shrink-0 w-10 h-10 rounded-full bg-white/10 flex items-center justify-center">
-        <Icon className="h-5 w-5 text-white/80" />
-      </div>
-      <div className="space-y-1">
-        <h4 className="text-white/90 font-medium">{title}</h4>
-        <p className="text-white/70 text-sm">{description}</p>
+    <div className="p-4 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-colors">
+      <div className="flex items-start gap-4">
+        <div className="flex-shrink-0 w-10 h-10 rounded-full bg-white/10 flex items-center justify-center">
+          <Icon className="h-5 w-5 text-white/80" />
+        </div>
+        <div className="space-y-1">
+          <h4 className="text-white/90 font-medium">{title}</h4>
+          <p className="text-white/70 text-sm">{description}</p>
+        </div>
       </div>
     </div>
   );

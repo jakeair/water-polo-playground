@@ -11,7 +11,6 @@ const Index = () => {
   const [team1Color, setTeam1Color] = useState('#3b82f6');
   const [team2Color, setTeam2Color] = useState('#ef4444');
   const [isDrawing, setIsDrawing] = useState(false);
-  const [isErasing, setIsErasing] = useState(false);
   const [strokeColor, setStrokeColor] = useState('#ffffff');
   const [strokeWidth, setStrokeWidth] = useState(2);
 
@@ -45,9 +44,7 @@ const Index = () => {
                 onTeam1ColorChange={setTeam1Color}
                 onTeam2ColorChange={setTeam2Color}
                 isDrawing={isDrawing}
-                isErasing={isErasing}
                 onDrawingChange={setIsDrawing}
-                onErasingChange={setIsErasing}
                 strokeColor={strokeColor}
                 onStrokeColorChange={setStrokeColor}
                 strokeWidth={strokeWidth}
@@ -62,9 +59,7 @@ const Index = () => {
                 onTeam1ColorChange={setTeam1Color}
                 onTeam2ColorChange={setTeam2Color}
                 isDrawing={isDrawing}
-                isErasing={isErasing}
                 onDrawingChange={setIsDrawing}
-                onErasingChange={setIsErasing}
                 strokeColor={strokeColor}
                 onStrokeColorChange={setStrokeColor}
                 strokeWidth={strokeWidth}

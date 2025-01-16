@@ -45,7 +45,7 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
   const [currentTime, setCurrentTime] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
   const [canUndo, setCanUndo] = useState(false);
-  const canvasRef = React.useRef<any>(null);
+  const canvasRef = React.useRef<{ undoLastPath: () => void }>(null);
   const ANIMATION_DURATION = 2500;
 
   const { keyframes, recordKeyframe, interpolatePositions } = useKeyframes(currentTime);

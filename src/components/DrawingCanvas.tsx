@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect, useState, forwardRef, ForwardedRef } from 'react';
 
 interface DrawingCanvasProps {
   isDrawing: boolean;
@@ -9,14 +9,14 @@ interface DrawingCanvasProps {
   onUndoAvailable: (available: boolean) => void;
 }
 
-const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
+const DrawingCanvas = forwardRef(({
   isDrawing,
   width,
   height,
   strokeColor,
   strokeWidth,
   onUndoAvailable
-}) => {
+}: DrawingCanvasProps, ref: ForwardedRef<{ undoLastPath: () => void }>) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const contextRef = useRef<CanvasRenderingContext2D | null>(null);
   const [isDrawingActive, setIsDrawingActive] = useState(false);
@@ -160,6 +160,10 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
     };
   }, [isDrawing, isDrawingActive]);
 
+  React.useImperativeHandle(ref, () => ({
+    undoLastPath
+  }));
+
   return (
     <canvas
       ref={canvasRef}
@@ -170,6 +174,8 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
       }}
     />
   );
-};
+});
+
+DrawingCanvas.displayName = 'DrawingCanvas';
 
 export default DrawingCanvas;

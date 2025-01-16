@@ -25,6 +25,10 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
     const canvas = canvasRef.current;
     if (!canvas) return;
 
+    // Set canvas dimensions to match display dimensions
+    canvas.width = width;
+    canvas.height = height;
+
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
@@ -45,23 +49,35 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
       }
     };
 
-    const handleStart = (x: number, y: number) => {
+    const getCoordinates = (e: MouseEvent | Touch): { x: number, y: number } => {
+      const rect = canvas.getBoundingClientRect();
+      const scaleX = canvas.width / rect.width;
+      const scaleY = canvas.height / rect.height;
+      return {
+        x: (e.clientX - rect.left) * scaleX,
+        y: (e.clientY - rect.top) * scaleY
+      };
+    };
+
+    const handleStart = (e: MouseEvent | Touch) => {
       if (!isDrawing && !isErasing) return;
       
       isDrawingRef.current = true;
-      lastPosRef.current = { x, y };
+      const coords = getCoordinates(e);
+      lastPosRef.current = coords;
       updateBrushStyle();
     };
 
-    const handleMove = (x: number, y: number) => {
+    const handleMove = (e: MouseEvent | Touch) => {
       if (!isDrawingRef.current || !ctx || (!isDrawing && !isErasing)) return;
 
+      const coords = getCoordinates(e);
       ctx.beginPath();
       ctx.moveTo(lastPosRef.current.x, lastPosRef.current.y);
-      ctx.lineTo(x, y);
+      ctx.lineTo(coords.x, coords.y);
       ctx.stroke();
 
-      lastPosRef.current = { x, y };
+      lastPosRef.current = coords;
     };
 
     const handleEnd = () => {
@@ -69,37 +85,25 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
     };
 
     const handleMouseDown = (e: MouseEvent) => {
-      const rect = canvas.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-      handleStart(x, y);
+      handleStart(e);
     };
 
     const handleMouseMove = (e: MouseEvent) => {
       if (!isDrawingRef.current) return;
-      const rect = canvas.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-      handleMove(x, y);
+      handleMove(e);
     };
 
     const handleTouchStart = (e: TouchEvent) => {
       e.preventDefault();
-      const rect = canvas.getBoundingClientRect();
       const touch = e.touches[0];
-      const x = touch.clientX - rect.left;
-      const y = touch.clientY - rect.top;
-      handleStart(x, y);
+      handleStart(touch);
     };
 
     const handleTouchMove = (e: TouchEvent) => {
       e.preventDefault();
       if (!isDrawingRef.current) return;
-      const rect = canvas.getBoundingClientRect();
       const touch = e.touches[0];
-      const x = touch.clientX - rect.left;
-      const y = touch.clientY - rect.top;
-      handleMove(x, y);
+      handleMove(touch);
     };
 
     canvas.addEventListener('mousedown', handleMouseDown);
@@ -119,7 +123,7 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
       window.removeEventListener('touchmove', handleTouchMove);
       window.removeEventListener('touchend', handleEnd);
     };
-  }, [isDrawing, isErasing, strokeColor, strokeWidth]);
+  }, [isDrawing, isErasing, strokeColor, strokeWidth, width, height]);
 
   return (
     <canvas
@@ -128,6 +132,8 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
       height={height}
       className="absolute inset-0 pointer-events-auto z-10"
       style={{ 
+        width: '100%',
+        height: '100%',
         cursor: isDrawing ? 'crosshair' : isErasing ? 'not-allowed' : 'default',
         touchAction: 'none'
       }}

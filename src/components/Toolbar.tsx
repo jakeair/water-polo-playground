@@ -48,11 +48,11 @@ const Toolbar: React.FC<ToolbarProps> = ({
   return (
     <Sidebar 
       variant="floating" 
-      className="w-[80px] sm:w-[90px] md:w-[100px] bg-[#1A1F2C]/95 backdrop-blur-md mt-24 sm:mt-28"
+      className="w-[80px] sm:w-[90px] md:w-[100px] bg-[#1A1F2C]/95 backdrop-blur-md mt-24 sm:mt-28 mr-4 rounded-xl"
     >
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupContent className="space-y-6 p-2 sm:p-3 md:p-4">
+          <SidebarGroupContent className="space-y-6 p-3 sm:p-4 md:p-5">
             <div className="space-y-4 sm:space-y-5 md:space-y-6">
               <div className="flex justify-center">
                 <Palette className="w-4 h-4 sm:w-5 sm:h-5 text-white/60" />

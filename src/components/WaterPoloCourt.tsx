@@ -266,22 +266,6 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
   return (
     <div className="space-y-24 bg-black/20 backdrop-blur-sm px-8 sm:px-12 md:px-16 lg:px-20 py-16 rounded-3xl shadow-2xl border border-white/10">
       <div className="flex gap-6">
-        <div className="flex-shrink-0">
-          <Toolbar
-            team1Color={team1Color}
-            team2Color={team2Color}
-            onTeam1ColorChange={onTeam1ColorChange}
-            onTeam2ColorChange={onTeam2ColorChange}
-            isDrawing={localIsDrawing}
-            isErasing={localIsErasing}
-            onDrawingChange={setLocalIsDrawing}
-            onErasingChange={setLocalIsErasing}
-            strokeColor={localStrokeColor}
-            onStrokeColorChange={setLocalStrokeColor}
-            strokeWidth={localStrokeWidth}
-            onStrokeWidthChange={setLocalStrokeWidth}
-          />
-        </div>
         
         <div 
           ref={courtRef}

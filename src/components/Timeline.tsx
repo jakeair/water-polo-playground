@@ -24,7 +24,7 @@ const Timeline: React.FC<TimelineProps> = ({
   onRecordKeyframe
 }) => {
   return (
-    <div className="w-full space-y-8 mt-24 p-8 rounded-2xl bg-black/5 backdrop-blur-md border border-white/10 shadow-xl">
+    <div className="w-full space-y-8 p-8 rounded-2xl bg-black/5 backdrop-blur-md border border-white/10 shadow-xl">
       <div className="flex items-center justify-center gap-6">
         <TooltipProvider>
           <Tooltip>
@@ -33,11 +33,11 @@ const Timeline: React.FC<TimelineProps> = ({
                 variant="ghost" 
                 size="icon"
                 onClick={onPlayPause}
-                className="w-12 h-12 rounded-full hover:bg-white/10 transition-colors"
+                className="w-14 h-14 rounded-full hover:bg-white/10 transition-colors"
               >
                 {isPlaying ? 
-                  <PauseCircle className="h-8 w-8 text-white/80" /> : 
-                  <PlayCircle className="h-8 w-8 text-white/80" />
+                  <PauseCircle className="h-10 w-10 text-white/80" /> : 
+                  <PlayCircle className="h-10 w-10 text-white/80" />
                 }
               </Button>
             </TooltipTrigger>
@@ -54,9 +54,9 @@ const Timeline: React.FC<TimelineProps> = ({
                 variant="outline"
                 size="icon"
                 onClick={onRecordKeyframe}
-                className="w-12 h-12 rounded-full border-red-500/30 hover:bg-red-500/10 hover:border-red-500/50 transition-all duration-200"
+                className="w-14 h-14 rounded-full border-red-500/30 hover:bg-red-500/10 hover:border-red-500/50 transition-all duration-200"
               >
-                <Plus className="h-6 w-6 text-red-500/80" />
+                <Plus className="h-8 w-8 text-red-500/80" />
               </Button>
             </TooltipTrigger>
             <TooltipContent>
@@ -75,11 +75,11 @@ const Timeline: React.FC<TimelineProps> = ({
           className="flex-1"
         />
         
-        <div className="relative h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
+        <div className="relative h-2.5 w-full bg-white/5 rounded-full overflow-hidden">
           {keyframes.map((time, index) => (
             <div
               key={index}
-              className="absolute w-1 h-full bg-red-500/60"
+              className="absolute w-2 h-full bg-red-500/80"
               style={{ 
                 left: `${(time / duration) * 100}%`,
                 transform: 'translateX(-50%)',
@@ -87,7 +87,7 @@ const Timeline: React.FC<TimelineProps> = ({
             />
           ))}
           <div 
-            className="absolute h-full w-1 bg-blue-500/80"
+            className="absolute h-full w-1.5 bg-blue-500"
             style={{ 
               left: `${(currentTime / duration) * 100}%`,
               transform: 'translateX(-50%)',

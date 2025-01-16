@@ -5,10 +5,22 @@ import { Card } from "@/components/ui/card";
 
 const PricingPage = () => {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 to-slate-800">
-      <Navigation />
-      
-      <div className="container px-4 py-16 mx-auto">
+    <div className="relative min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+      {/* Navigation Bar */}
+      <div className="fixed top-0 left-0 right-0 bg-gray-900/80 backdrop-blur-sm border-b border-white/10 z-50">
+        <div className="max-w-[1800px] mx-auto px-6 sm:px-8 py-3 sm:py-4 flex items-center justify-between">
+          <Link to="/" className="flex items-center space-x-4 group">
+            <img 
+              src="/lovable-uploads/909e2d5e-f8a8-493f-9d95-f0d86ecd99be.png" 
+              alt="Logo" 
+              className="h-12 sm:h-14 w-auto opacity-90 transition-all duration-200 group-hover:opacity-100"
+            />
+          </Link>
+          <Navigation />
+        </div>
+      </div>
+
+      <div className="container px-4 py-16 mx-auto pt-24 sm:pt-28">
         {/* Hero Section */}
         <div className="text-center mb-16 max-w-3xl mx-auto">
           <h1 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-blue-600 mb-4">

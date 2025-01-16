@@ -22,7 +22,6 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
   const [isDrawingActive, setIsDrawingActive] = useState(false);
   const [paths, setPaths] = useState<Path2D[]>([]);
   const currentPath = useRef<Path2D | null>(null);
-  const lastPoint = useRef<{ x: number; y: number } | null>(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -75,15 +74,21 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
     };
   };
 
-  const handleErase = (event: MouseEvent) => {
+  const handleErase = (event: MouseEvent | TouchEvent) => {
+    event.preventDefault();
+    event.stopPropagation();
+    
     const coords = getCoordinates(event);
     if (!coords || !contextRef.current) return;
 
+    // Simple point-in-stroke detection with increased hit area
+    const eraserSize = 20;
     const remainingPaths = paths.filter(path => {
-      contextRef.current!.save();
-      contextRef.current!.lineWidth += 20; // Increased hit area for easier erasing
-      const isPointInStroke = contextRef.current!.isPointInStroke(path, coords.x, coords.y);
-      contextRef.current!.restore();
+      const ctx = contextRef.current!;
+      ctx.save();
+      ctx.lineWidth += eraserSize;
+      const isPointInStroke = ctx.isPointInStroke(path, coords.x, coords.y);
+      ctx.restore();
       return !isPointInStroke;
     });
 
@@ -95,6 +100,8 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
 
   const startDrawing = (event: MouseEvent | TouchEvent) => {
     event.preventDefault();
+    event.stopPropagation();
+    
     if (!isDrawing || isErasing) return;
 
     const coords = getCoordinates(event);
@@ -103,18 +110,18 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
     setIsDrawingActive(true);
     currentPath.current = new Path2D();
     currentPath.current.moveTo(coords.x, coords.y);
-    lastPoint.current = coords;
   };
 
   const draw = (event: MouseEvent | TouchEvent) => {
     event.preventDefault();
+    event.stopPropagation();
     
-    if (isErasing && event instanceof MouseEvent) {
+    if (isErasing) {
       handleErase(event);
       return;
     }
 
-    if (!isDrawingActive || !isDrawing || !contextRef.current || !currentPath.current || !lastPoint.current) return;
+    if (!isDrawingActive || !isDrawing || !contextRef.current || !currentPath.current) return;
 
     const coords = getCoordinates(event);
     if (!coords) return;
@@ -122,7 +129,6 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
     currentPath.current.lineTo(coords.x, coords.y);
     contextRef.current.beginPath();
     contextRef.current.stroke(currentPath.current);
-    lastPoint.current = coords;
   };
 
   const stopDrawing = () => {
@@ -131,7 +137,6 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
     }
     setIsDrawingActive(false);
     currentPath.current = null;
-    lastPoint.current = null;
   };
 
   const redrawCanvas = () => {

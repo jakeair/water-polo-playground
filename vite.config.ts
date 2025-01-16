@@ -17,27 +17,20 @@ export default defineConfig(({ mode }) => ({
     port: 8080,
     host: "::",
     proxy: {
-      // Redirect all 404s to index.html for SPA routing
-      '*': {
+      '/api': {
         target: '/',
-        bypass: (req) => {
-          if (req.headers.accept?.includes('text/html')) {
-            return '/index.html';
-          }
-        },
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, ''),
       },
     },
   },
   preview: {
     port: 8080,
     proxy: {
-      '*': {
+      '/api': {
         target: '/',
-        bypass: (req) => {
-          if (req.headers.accept?.includes('text/html')) {
-            return '/index.html';
-          }
-        },
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, ''),
       },
     },
   },

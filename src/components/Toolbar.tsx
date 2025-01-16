@@ -46,7 +46,10 @@ const Toolbar: React.FC<ToolbarProps> = ({
   };
 
   return (
-    <Sidebar variant="floating" className="w-[80px] sm:w-[90px] md:w-[100px] bg-white/5 backdrop-blur-md border-r border-white/10">
+    <Sidebar 
+      variant="floating" 
+      className="w-[80px] sm:w-[90px] md:w-[100px] bg-[#1A1F2C]/95 backdrop-blur-md mt-24 sm:mt-28"
+    >
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupContent className="space-y-6 p-2 sm:p-3 md:p-4">

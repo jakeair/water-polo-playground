@@ -123,7 +123,7 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
   }, [currentTime]);
 
   return (
-    <div className="space-y-12 bg-black/20 backdrop-blur-sm px-4 sm:px-8 md:px-12 lg:px-16 py-8 rounded-3xl shadow-2xl border border-white/10 w-full overflow-hidden">
+    <div className="space-y-12 bg-black/20 backdrop-blur-sm px-4 sm:px-8 md:px-12 lg:px-16 py-8 pb-24 rounded-3xl shadow-2xl border border-white/10 w-full overflow-hidden">
       <Timeline
         currentTime={currentTime}
         duration={ANIMATION_DURATION}

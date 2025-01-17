@@ -1,96 +1,120 @@
 import React from 'react';
 import { Button } from "@/components/ui/button";
-import { PlayCircle, Plus, Clock, MousePointerClick, Move, Repeat } from "lucide-react";
+import { PlayCircle, Plus, Clock, MousePointerClick, Move, Repeat, HelpCircle } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 const Help = () => {
   return (
-    <div className="w-full p-6 rounded-2xl bg-black/5 backdrop-blur-lg border border-white/10 shadow-2xl">
-      <div className="space-y-4">
-        <div className="grid gap-4">
-          {/* Controls Overview */}
-          <div className="space-y-3">
-            <h3 className="text-lg font-semibold text-white/90">Quick Controls</h3>
-            <div className="flex flex-wrap gap-3">
-              <div className="flex items-center gap-2 text-white/80 bg-white/5 p-2 rounded-xl hover:bg-white/10 transition-all flex-1 min-w-[240px]">
-                <Button variant="ghost" size="icon" className="w-8 h-8 rounded-lg hover:bg-white/10">
-                  <PlayCircle className="h-4 w-4" />
-                </Button>
-                <span className="text-sm">Play/pause animation</span>
+    <Dialog>
+      <DialogTrigger asChild>
+        <Button 
+          variant="outline" 
+          size="lg"
+          className="gap-2 bg-black/5 backdrop-blur-lg border border-white/10 hover:bg-white/10 text-white"
+        >
+          <HelpCircle className="w-5 h-5" />
+          How to Use
+        </Button>
+      </DialogTrigger>
+      <DialogContent className="max-w-3xl max-h-[80vh] bg-black/90 border-white/10">
+        <DialogHeader>
+          <DialogTitle className="text-2xl font-bold text-white">How to Create Animations</DialogTitle>
+        </DialogHeader>
+        <ScrollArea className="h-full max-h-[calc(80vh-8rem)] pr-4">
+          <div className="space-y-4">
+            <div className="grid gap-4">
+              {/* Controls Overview */}
+              <div className="space-y-3">
+                <h3 className="text-lg font-semibold text-white/90">Quick Controls</h3>
+                <div className="flex flex-wrap gap-3">
+                  <div className="flex items-center gap-2 text-white/80 bg-white/5 p-2 rounded-xl hover:bg-white/10 transition-all flex-1 min-w-[240px]">
+                    <Button variant="ghost" size="icon" className="w-8 h-8 rounded-lg hover:bg-white/10">
+                      <PlayCircle className="h-4 w-4" />
+                    </Button>
+                    <span className="text-sm">Play/pause animation</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-white/80 bg-white/5 p-2 rounded-xl hover:bg-white/10 transition-all flex-1 min-w-[240px]">
+                    <Button variant="ghost" size="icon" className="w-8 h-8 rounded-lg hover:bg-white/10">
+                      <Plus className="h-4 w-4" />
+                    </Button>
+                    <span className="text-sm">Add current positions as keyframe</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-white/80 bg-white/5 p-2 rounded-xl hover:bg-white/10 transition-all flex-1 min-w-[240px]">
+                    <Button variant="ghost" size="icon" className="w-8 h-8 rounded-lg hover:bg-white/10">
+                      <Clock className="h-4 w-4" />
+                    </Button>
+                    <span className="text-sm">Timeline: <span className="text-red-400">red</span> = keyframes, <span className="text-blue-400">blue</span> = current time</span>
+                  </div>
+                </div>
               </div>
-              <div className="flex items-center gap-2 text-white/80 bg-white/5 p-2 rounded-xl hover:bg-white/10 transition-all flex-1 min-w-[240px]">
-                <Button variant="ghost" size="icon" className="w-8 h-8 rounded-lg hover:bg-white/10">
-                  <Plus className="h-4 w-4" />
-                </Button>
-                <span className="text-sm">Add current positions as keyframe</span>
-              </div>
-              <div className="flex items-center gap-2 text-white/80 bg-white/5 p-2 rounded-xl hover:bg-white/10 transition-all flex-1 min-w-[240px]">
-                <Button variant="ghost" size="icon" className="w-8 h-8 rounded-lg hover:bg-white/10">
-                  <Clock className="h-4 w-4" />
-                </Button>
-                <span className="text-sm">Timeline: <span className="text-red-400">red</span> = keyframes, <span className="text-blue-400">blue</span> = current time</span>
-              </div>
-            </div>
-          </div>
 
-          {/* Steps Grid */}
-          <div className="space-y-3">
-            <h3 className="text-lg font-semibold text-white/90">Animation Steps</h3>
-            <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-5 gap-3">
-              <StepPanel
-                number={1}
-                icon={MousePointerClick}
-                title="Set Start"
-                description="Position players & ball, add keyframe"
-              />
-              <StepPanel
-                number={2}
-                icon={Clock}
-                title="Move Time"
-                description="Drag timeline to next position"
-              />
-              <StepPanel
-                number={3}
-                icon={Move}
-                title="New Position"
-                description="Move pieces, add keyframe"
-              />
-              <StepPanel
-                number={4}
-                icon={PlayCircle}
-                title="Preview"
-                description="Go to start, click play"
-              />
-              <StepPanel
-                number={5}
-                icon={Repeat}
-                title="Build More"
-                description="Add keyframes for complexity"
-              />
-            </div>
-          </div>
+              {/* Steps Grid */}
+              <div className="space-y-3">
+                <h3 className="text-lg font-semibold text-white/90">Animation Steps</h3>
+                <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-5 gap-3">
+                  <StepPanel
+                    number={1}
+                    icon={MousePointerClick}
+                    title="Set Start"
+                    description="Position players & ball, add keyframe"
+                  />
+                  <StepPanel
+                    number={2}
+                    icon={Clock}
+                    title="Move Time"
+                    description="Drag timeline to next position"
+                  />
+                  <StepPanel
+                    number={3}
+                    icon={Move}
+                    title="New Position"
+                    description="Move pieces, add keyframe"
+                  />
+                  <StepPanel
+                    number={4}
+                    icon={PlayCircle}
+                    title="Preview"
+                    description="Go to start, click play"
+                  />
+                  <StepPanel
+                    number={5}
+                    icon={Repeat}
+                    title="Build More"
+                    description="Add keyframes for complexity"
+                  />
+                </div>
+              </div>
 
-          {/* Tips */}
-          <div className="space-y-2">
-            <h3 className="text-lg font-semibold text-white/90">Pro Tips</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3 bg-white/5 p-4 rounded-xl">
-              <div className="flex items-start gap-2 text-white/80">
-                <span className="text-primary text-lg leading-none">•</span>
-                <span className="text-sm">Closer keyframes = faster movement</span>
-              </div>
-              <div className="flex items-start gap-2 text-white/80">
-                <span className="text-primary text-lg leading-none">•</span>
-                <span className="text-sm">Spread keyframes for slower transitions</span>
-              </div>
-              <div className="flex items-start gap-2 text-white/80">
-                <span className="text-primary text-lg leading-none">•</span>
-                <span className="text-sm">Use timeline to fine-tune timing</span>
+              {/* Tips */}
+              <div className="space-y-2">
+                <h3 className="text-lg font-semibold text-white/90">Pro Tips</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3 bg-white/5 p-4 rounded-xl">
+                  <div className="flex items-start gap-2 text-white/80">
+                    <span className="text-primary text-lg leading-none">•</span>
+                    <span className="text-sm">Closer keyframes = faster movement</span>
+                  </div>
+                  <div className="flex items-start gap-2 text-white/80">
+                    <span className="text-primary text-lg leading-none">•</span>
+                    <span className="text-sm">Spread keyframes for slower transitions</span>
+                  </div>
+                  <div className="flex items-start gap-2 text-white/80">
+                    <span className="text-primary text-lg leading-none">•</span>
+                    <span className="text-sm">Use timeline to fine-tune timing</span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </div>
-    </div>
+        </ScrollArea>
+      </DialogContent>
+    </Dialog>
   );
 };
 

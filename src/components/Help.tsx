@@ -15,12 +15,11 @@ const Help = () => {
     <Dialog>
       <DialogTrigger asChild>
         <Button 
-          variant="outline" 
-          size="lg"
-          className="gap-2 bg-black/5 backdrop-blur-lg border border-white/10 hover:bg-white/10 text-white"
+          variant="ghost" 
+          size="icon"
+          className="w-8 h-8 rounded-lg hover:bg-white/10"
         >
-          <HelpCircle className="w-5 h-5" />
-          How to Use
+          <HelpCircle className="w-4 h-4 text-white/70 hover:text-white" />
         </Button>
       </DialogTrigger>
       <DialogContent className="max-w-3xl max-h-[80vh] bg-black/90 border-white/10">

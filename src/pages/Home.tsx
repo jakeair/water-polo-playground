@@ -35,12 +35,9 @@ const Home = () => {
         </div>
 
         <main className="relative flex flex-col items-center justify-center min-h-screen px-4 sm:px-6 md:px-8 lg:px-16 max-w-[1400px] mx-auto pt-24 sm:pt-28">
-          <div className="w-full space-y-8 sm:space-y-12 md:space-y-16 lg:space-y-24 py-20 sm:py-24">
+          <div className="w-full space-y-8 sm:space-y-12 md:space-y-16 lg:space-y-20 pt-12 sm:pt-16">
             <div className="space-y-6 sm:space-y-8 text-center animate-fade-in">
-              <div className="inline-block px-3 py-1 sm:px-4 sm:py-1.5 bg-white/10 backdrop-blur rounded-full text-xs sm:text-sm font-medium text-white/80 mb-2 sm:mb-4">
-                🎯 Professional Water Polo Strategy Platform
-              </div>
-              <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold bg-gradient-to-r from-white via-white/90 to-white/70 text-transparent bg-clip-text leading-[1.15] px-2 sm:px-4 pb-2">
+              <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold bg-gradient-to-r from-white via-white/90 to-white/70 text-transparent bg-clip-text leading-[1.15] px-2 sm:px-4">
                 Elevate Your Water Polo Strategy
               </h1>
               <p className="text-lg sm:text-xl md:text-2xl text-white/60 max-w-3xl mx-auto leading-relaxed px-2">

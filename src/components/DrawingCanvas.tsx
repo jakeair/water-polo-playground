@@ -22,77 +22,59 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasStateRef = useRef<ImageData | null>(null);
   const [isCanvasReady, setIsCanvasReady] = useState(false);
+  const lastMouseEvent = useRef<MouseEvent | TouchEvent | null>(null);
 
+  // Initialize ResizeObserver to track container dimensions
   useEffect(() => {
-    const resizeObserver = new ResizeObserver((entries) => {
-      for (const entry of entries) {
-        const { width, height } = entry.contentRect;
-        if (width > 0 && height > 0) {
-          setDimensions({ width, height });
-        }
+    if (!containerRef.current) return;
+
+    const updateDimensions = () => {
+      if (!containerRef.current) return;
+      const { width, height } = containerRef.current.getBoundingClientRect();
+      if (width > 0 && height > 0) {
+        setDimensions({ width, height });
       }
+    };
+
+    // Initial dimensions
+    updateDimensions();
+
+    const resizeObserver = new ResizeObserver(() => {
+      updateDimensions();
     });
 
-    if (containerRef.current) {
-      resizeObserver.observe(containerRef.current);
-    }
-
+    resizeObserver.observe(containerRef.current);
     return () => resizeObserver.disconnect();
   }, []);
 
+  // Initialize canvas when dimensions are available
   useEffect(() => {
-    const updateCanvasSize = () => {
-      const canvas = canvasRef.current;
-      const container = containerRef.current;
-      if (!canvas || !container || dimensions.width === 0 || dimensions.height === 0) return;
+    const canvas = canvasRef.current;
+    if (!canvas || dimensions.width === 0 || dimensions.height === 0) return;
 
-      canvas.width = dimensions.width;
-      canvas.height = dimensions.height;
+    canvas.width = dimensions.width;
+    canvas.height = dimensions.height;
 
-      const context = canvas.getContext('2d');
-      if (!context) return;
+    const context = canvas.getContext('2d');
+    if (!context) return;
 
-      context.lineCap = 'round';
-      context.lineJoin = 'round';
-      context.strokeStyle = strokeColor;
-      context.lineWidth = strokeWidth;
-      contextRef.current = context;
+    context.lineCap = 'round';
+    context.lineJoin = 'round';
+    context.strokeStyle = strokeColor;
+    context.lineWidth = strokeWidth;
+    contextRef.current = context;
 
-      // Only try to restore canvas state if dimensions are valid
-      if (canvasStateRef.current && dimensions.width > 0 && dimensions.height > 0) {
-        try {
-          context.putImageData(canvasStateRef.current, 0, 0);
-        } catch (error) {
-          console.warn('Failed to restore canvas state:', error);
-          // Clear the invalid state
-          canvasStateRef.current = null;
-        }
-      }
-
-      setIsCanvasReady(true);
-    };
-
-    updateCanvasSize();
+    setIsCanvasReady(true);
   }, [dimensions, strokeColor, strokeWidth]);
 
+  // Update canvas properties when drawing settings change
   useEffect(() => {
-    if (!isCanvasReady || !contextRef.current || !canvasRef.current) return;
+    if (!contextRef.current || !isCanvasReady) return;
 
-    try {
-      canvasStateRef.current = contextRef.current.getImageData(
-        0,
-        0,
-        canvasRef.current.width,
-        canvasRef.current.height
-      );
-      
-      if (drawingTool !== 'eraser') {
-        contextRef.current.strokeStyle = strokeColor;
-      }
-      contextRef.current.lineWidth = strokeWidth;
-    } catch (error) {
-      console.warn('Failed to save canvas state:', error);
+    if (drawingTool !== 'eraser') {
+      contextRef.current.strokeStyle = strokeColor;
     }
+    contextRef.current.lineWidth = strokeWidth;
   }, [strokeColor, strokeWidth, drawingTool, isCanvasReady]);
 
   const drawArrowhead = (context: CanvasRenderingContext2D, from: { x: number; y: number }, to: { x: number; y: number }) => {
@@ -121,7 +103,6 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
     context.stroke();
     context.setLineDash([]);
     
-    // Draw arrowhead
     drawArrowhead(context, from, to);
   }
 
@@ -158,16 +139,7 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
     startPointRef.current = coords;
 
     if (drawingTool === 'dottedLine' && canvasRef.current) {
-      try {
-        lastDrawRef.current = contextRef.current.getImageData(
-          0,
-          0,
-          canvasRef.current.width,
-          canvasRef.current.height
-        );
-      } catch (error) {
-        console.warn('Failed to save last draw state:', error);
-      }
+      lastDrawRef.current = contextRef.current.getImageData(0, 0, canvasRef.current.width, canvasRef.current.height);
     } else {
       contextRef.current.beginPath();
       contextRef.current.moveTo(coords.x, coords.y);
@@ -182,46 +154,35 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
 
   const draw = (event: MouseEvent | TouchEvent) => {
     event.preventDefault();
-    if (!isDrawingActive || !contextRef.current || !startPointRef.current) return;
+    if (!isDrawingActive || !contextRef.current || !startPointRef.current || !isCanvasReady) return;
 
     const coords = getCoordinates(event);
     if (!coords) return;
 
-    if (drawingTool === 'dottedLine') {
-      if (lastDrawRef.current) {
-        contextRef.current.putImageData(lastDrawRef.current, 0, 0);
-        drawDottedLine(contextRef.current, startPointRef.current, coords);
-      }
+    if (drawingTool === 'dottedLine' && lastDrawRef.current && canvasRef.current) {
+      contextRef.current.putImageData(lastDrawRef.current, 0, 0);
+      drawDottedLine(contextRef.current, startPointRef.current, coords);
     } else {
       contextRef.current.lineTo(coords.x, coords.y);
       contextRef.current.stroke();
     }
 
-    // Save the current state after drawing
-    if (canvasRef.current) {
-      canvasStateRef.current = contextRef.current.getImageData(0, 0, canvasRef.current.width, canvasRef.current.height);
-    }
+    lastMouseEvent.current = event;
   };
 
   const stopDrawing = () => {
-    if (!isDrawingActive || !contextRef.current || !startPointRef.current) return;
+    if (!isDrawingActive || !contextRef.current || !startPointRef.current || !isCanvasReady) return;
 
-    if (drawingTool === 'dottedLine') {
-      const coords = getCoordinates(lastMouseEvent.current as MouseEvent | TouchEvent);
+    if (drawingTool === 'dottedLine' && lastMouseEvent.current) {
+      const coords = getCoordinates(lastMouseEvent.current);
       if (coords && lastDrawRef.current) {
         contextRef.current.putImageData(lastDrawRef.current, 0, 0);
         drawDottedLine(contextRef.current, startPointRef.current, coords);
       }
     }
     
-    // Reset composite operation
     if (drawingTool === 'eraser') {
       contextRef.current.globalCompositeOperation = 'source-over';
-    }
-    
-    // Save the final state after drawing is complete
-    if (canvasRef.current) {
-      canvasStateRef.current = contextRef.current.getImageData(0, 0, canvasRef.current.width, canvasRef.current.height);
     }
     
     setIsDrawingActive(false);
@@ -229,11 +190,9 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
     lastDrawRef.current = null;
   };
 
-  const lastMouseEvent = useRef<MouseEvent | TouchEvent | null>(null);
-
   useEffect(() => {
     const canvas = canvasRef.current;
-    if (!canvas) return;
+    if (!canvas || !isCanvasReady) return;
 
     const handleMouseMove = (e: MouseEvent | TouchEvent) => {
       lastMouseEvent.current = e;
@@ -276,7 +235,11 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
   };
 
   return (
-    <div ref={containerRef} className="absolute inset-0 w-full h-full">
+    <div 
+      ref={containerRef} 
+      className="absolute inset-0 w-full h-full"
+      style={{ minHeight: '200px' }}
+    >
       <canvas
         ref={canvasRef}
         className="absolute inset-0 w-full h-full"

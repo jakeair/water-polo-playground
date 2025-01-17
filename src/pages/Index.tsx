@@ -13,7 +13,7 @@ const Index = () => {
   const [isDrawing, setIsDrawing] = useState(false);
   const [strokeColor, setStrokeColor] = useState('#ffffff');
   const [strokeWidth, setStrokeWidth] = useState(2);
-  const [drawingTool, setDrawingTool] = useState<'pen' | 'dottedLine'>('pen');
+  const [drawingTool, setDrawingTool] = useState<'pen' | 'dottedLine' | 'eraser'>('pen');
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800 text-white">

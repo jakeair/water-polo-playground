@@ -1,14 +1,9 @@
 import React from 'react';
 import ColorPicker from './ColorPicker';
-import { Pencil, Eraser, HelpCircle } from 'lucide-react';
+import { Pencil, Eraser } from 'lucide-react';
 import { Separator } from "@/components/ui/separator";
 import { Toggle } from "@/components/ui/toggle";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+import Help from './Help';
 
 interface ToolbarProps {
   team1Color: string;
@@ -67,25 +62,6 @@ const Toolbar: React.FC<ToolbarProps> = ({
 
   return (
     <div className="flex flex-col gap-3 w-full h-full max-w-[280px] mx-auto lg:max-w-[320px]">
-      {/* Help Icon at Top */}
-      <TooltipProvider>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <button 
-              className="w-8 h-8 rounded-lg flex items-center justify-center text-white/70 hover:text-white hover:bg-white/10 transition-colors self-end"
-              onClick={() => window.open('#help', '_blank')}
-            >
-              <span className="text-lg font-semibold">?</span>
-            </button>
-          </TooltipTrigger>
-          <TooltipContent>
-            <p>Need help?</p>
-          </TooltipContent>
-        </Tooltip>
-      </TooltipProvider>
-
-      <Separator className="bg-white/10" />
-
       {/* Team Colors */}
       <div className="flex flex-col items-center gap-2">
         <ColorPicker
@@ -194,6 +170,9 @@ const Toolbar: React.FC<ToolbarProps> = ({
             />
           </div>
         )}
+
+        {/* Help Component at Bottom */}
+        <Help />
       </div>
     </div>
   );

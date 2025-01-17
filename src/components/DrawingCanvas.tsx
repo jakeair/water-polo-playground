@@ -21,17 +21,20 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasStateRef = useRef<ImageData | null>(null);
+  const [isCanvasReady, setIsCanvasReady] = useState(false);
 
   useEffect(() => {
     const updateCanvasSize = () => {
       const container = containerRef.current;
-      if (!container || !canvasRef.current) return;
+      if (!container) return;
 
       const { width, height } = container.getBoundingClientRect();
+      if (width === 0 || height === 0) return; // Don't proceed if dimensions are invalid
+
       setDimensions({ width, height });
       
       const canvas = canvasRef.current;
-      const prevState = canvasStateRef.current;
+      if (!canvas) return;
       
       canvas.width = width;
       canvas.height = height;
@@ -39,33 +42,47 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
       const context = canvas.getContext('2d');
       if (!context) return;
       
-      // Restore previous canvas state if it exists
-      if (prevState) {
-        context.putImageData(prevState, 0, 0);
-      }
-      
       context.lineCap = 'round';
       context.lineJoin = 'round';
       context.strokeStyle = strokeColor;
       context.lineWidth = strokeWidth;
       contextRef.current = context;
+      
+      setIsCanvasReady(true);
     };
 
+    const resizeObserver = new ResizeObserver(() => {
+      requestAnimationFrame(updateCanvasSize);
+    });
+
+    if (containerRef.current) {
+      resizeObserver.observe(containerRef.current);
+    }
+
     updateCanvasSize();
-    window.addEventListener('resize', updateCanvasSize);
-    return () => window.removeEventListener('resize', updateCanvasSize);
+
+    return () => {
+      resizeObserver.disconnect();
+    };
   }, [strokeColor, strokeWidth]);
 
   // Save canvas state before any context changes
   useEffect(() => {
-    if (contextRef.current && canvasRef.current) {
-      canvasStateRef.current = contextRef.current.getImageData(0, 0, canvasRef.current.width, canvasRef.current.height);
+    if (!isCanvasReady || !contextRef.current || !canvasRef.current) return;
+    
+    const canvas = canvasRef.current;
+    const context = contextRef.current;
+    
+    try {
+      canvasStateRef.current = context.getImageData(0, 0, canvas.width, canvas.height);
       if (drawingTool !== 'eraser') {
-        contextRef.current.strokeStyle = strokeColor;
+        context.strokeStyle = strokeColor;
       }
-      contextRef.current.lineWidth = strokeWidth;
+      context.lineWidth = strokeWidth;
+    } catch (error) {
+      console.error('Error saving canvas state:', error);
     }
-  }, [strokeColor, strokeWidth, drawingTool]);
+  }, [strokeColor, strokeWidth, drawingTool, isCanvasReady]);
 
   const drawArrowhead = (context: CanvasRenderingContext2D, from: { x: number; y: number }, to: { x: number; y: number }) => {
     const headLength = 10 + strokeWidth;
@@ -121,7 +138,7 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
 
   const startDrawing = (event: MouseEvent | TouchEvent) => {
     event.preventDefault();
-    if (!isDrawing || !contextRef.current) return;
+    if (!isDrawing || !contextRef.current || !isCanvasReady) return;
 
     const coords = getCoordinates(event);
     if (!coords) return;
@@ -129,8 +146,12 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
     setIsDrawingActive(true);
     startPointRef.current = coords;
 
-    if (drawingTool === 'dottedLine') {
-      lastDrawRef.current = contextRef.current.getImageData(0, 0, dimensions.width, dimensions.height);
+    if (drawingTool === 'dottedLine' && contextRef.current && canvasRef.current) {
+      try {
+        lastDrawRef.current = contextRef.current.getImageData(0, 0, canvasRef.current.width, canvasRef.current.height);
+      } catch (error) {
+        console.error('Error saving last draw state:', error);
+      }
     } else {
       contextRef.current.beginPath();
       contextRef.current.moveTo(coords.x, coords.y);
@@ -220,14 +241,13 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
       canvas.removeEventListener('touchmove', handleMouseMove);
       canvas.removeEventListener('touchend', stopDrawing);
     };
-  }, [isDrawing, isDrawingActive, drawingTool]);
+  }, [isDrawing, isDrawingActive, drawingTool, isCanvasReady]);
 
-  // Create custom cursor styles
   const getCursorStyle = () => {
     if (!isDrawing) return 'default';
     
     if (drawingTool === 'eraser') {
-      const size = strokeWidth;  // Now the cursor size matches the actual eraser size
+      const size = strokeWidth;
       const cursor = `
         <svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" xmlns="http://www.w3.org/2000/svg">
           <circle cx="${size/2}" cy="${size/2}" r="${size/2 - 1}" fill="rgba(255, 255, 255, 0.3)" stroke="white"/>

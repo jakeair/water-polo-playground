@@ -20,11 +20,10 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
   const lastDrawRef = useRef<ImageData | null>(null);
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
   const containerRef = useRef<HTMLDivElement>(null);
-  const canvasStateRef = useRef<ImageData | null>(null);
   const [isCanvasReady, setIsCanvasReady] = useState(false);
   const lastMouseEvent = useRef<MouseEvent | TouchEvent | null>(null);
+  const persistentCanvasState = useRef<ImageData | null>(null);
 
-  // Initialize ResizeObserver to track container dimensions
   useEffect(() => {
     if (!containerRef.current) return;
 
@@ -45,7 +44,6 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
     return () => resizeObserver.disconnect();
   }, []);
 
-  // Initialize canvas when dimensions are available
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas || dimensions.width === 0 || dimensions.height === 0) return;
@@ -62,32 +60,28 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
     context.lineWidth = strokeWidth;
     contextRef.current = context;
 
-    // Restore previous canvas state if it exists
-    if (canvasStateRef.current) {
-      context.putImageData(canvasStateRef.current, 0, 0);
+    // Restore the persistent canvas state if it exists
+    if (persistentCanvasState.current) {
+      context.putImageData(persistentCanvasState.current, 0, 0);
     }
 
     setIsCanvasReady(true);
-  }, [dimensions, strokeColor, strokeWidth]);
+  }, [dimensions]);
 
   // Update canvas properties when drawing settings change
   useEffect(() => {
     if (!contextRef.current || !isCanvasReady) return;
 
-    // Save current canvas state before updating properties
-    if (canvasRef.current) {
-      canvasStateRef.current = contextRef.current.getImageData(0, 0, canvasRef.current.width, canvasRef.current.height);
-    }
+    const currentContext = contextRef.current;
+    const previousStrokeStyle = currentContext.strokeStyle;
+    const previousLineWidth = currentContext.lineWidth;
 
     if (drawingTool !== 'eraser') {
-      contextRef.current.strokeStyle = strokeColor;
+      currentContext.strokeStyle = strokeColor;
     }
-    contextRef.current.lineWidth = strokeWidth;
+    currentContext.lineWidth = strokeWidth;
 
-    // Restore canvas state after updating properties
-    if (canvasStateRef.current) {
-      contextRef.current.putImageData(canvasStateRef.current, 0, 0);
-    }
+    // No need to restore/save here as we're just updating properties
   }, [strokeColor, strokeWidth, drawingTool, isCanvasReady]);
 
   const drawArrowhead = (context: CanvasRenderingContext2D, from: { x: number; y: number }, to: { x: number; y: number }) => {
@@ -151,11 +145,6 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
     setIsDrawingActive(true);
     startPointRef.current = coords;
 
-    // Save canvas state before starting new drawing
-    if (canvasRef.current) {
-      canvasStateRef.current = contextRef.current.getImageData(0, 0, canvasRef.current.width, canvasRef.current.height);
-    }
-
     if (drawingTool === 'dottedLine' && canvasRef.current) {
       lastDrawRef.current = contextRef.current.getImageData(0, 0, canvasRef.current.width, canvasRef.current.height);
     } else {
@@ -201,6 +190,13 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
     
     if (drawingTool === 'eraser') {
       contextRef.current.globalCompositeOperation = 'source-over';
+    }
+
+    // Save the current state after completing the drawing
+    if (canvasRef.current) {
+      persistentCanvasState.current = contextRef.current.getImageData(
+        0, 0, canvasRef.current.width, canvasRef.current.height
+      );
     }
     
     setIsDrawingActive(false);

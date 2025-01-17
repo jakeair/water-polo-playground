@@ -33,7 +33,6 @@ const Toolbar: React.FC<ToolbarProps> = ({
   drawingTool,
   onDrawingToolChange,
 }) => {
-  // Helper function to get the appropriate min/max values based on the tool
   const getStrokeWidthRange = (tool: 'pen' | 'dottedLine' | 'eraser') => {
     switch (tool) {
       case 'eraser':
@@ -44,9 +43,9 @@ const Toolbar: React.FC<ToolbarProps> = ({
   };
 
   return (
-    <div className="flex flex-col sm:flex-row gap-4 bg-[#1A1F2C]/95 backdrop-blur-md p-3 rounded-xl shadow-md">
+    <div className="flex lg:flex-col gap-4 bg-[#1A1F2C]/95 backdrop-blur-md p-3 rounded-xl shadow-md overflow-x-auto lg:overflow-x-visible">
       {/* Team Colors */}
-      <div className="flex flex-row sm:flex-col items-center gap-3">
+      <div className="flex flex-row lg:flex-col items-center gap-3">
         <ColorPicker
           color={team1Color}
           onChange={onTeam1ColorChange}
@@ -59,11 +58,11 @@ const Toolbar: React.FC<ToolbarProps> = ({
         />
       </div>
 
-      <Separator orientation="vertical" className="hidden sm:block h-auto bg-white/10" />
-      <Separator orientation="horizontal" className="block sm:hidden w-auto bg-white/10" />
+      <Separator orientation="vertical" className="hidden lg:block h-auto bg-white/10" />
+      <Separator orientation="horizontal" className="block lg:hidden w-auto bg-white/10" />
 
-      {/* Drawing Tools - Horizontal Layout on Small Screens */}
-      <div className="flex flex-row sm:flex-col items-center gap-4 flex-1">
+      {/* Drawing Tools */}
+      <div className="flex flex-row lg:flex-col items-center gap-4">
         {/* Pen Tool */}
         <div className="flex flex-col items-center gap-2">
           <Toggle 
@@ -78,7 +77,7 @@ const Toolbar: React.FC<ToolbarProps> = ({
             <Pencil className={`w-4 h-4 ${isDrawing && drawingTool === 'pen' ? 'fill-white stroke-white' : ''}`} />
           </Toggle>
           {isDrawing && drawingTool === 'pen' && (
-            <div className="flex flex-row sm:flex-col items-center gap-2">
+            <div className="flex flex-row lg:flex-col items-center gap-2">
               <ColorPicker
                 color={strokeColor}
                 onChange={onStrokeColorChange}
@@ -90,7 +89,7 @@ const Toolbar: React.FC<ToolbarProps> = ({
                 max={getStrokeWidthRange('pen').max}
                 value={strokeWidth}
                 onChange={(e) => onStrokeWidthChange(Number(e.target.value))}
-                className="w-24 sm:w-full"
+                className="w-24 lg:w-full"
                 aria-label="Stroke width"
               />
             </div>
@@ -111,7 +110,7 @@ const Toolbar: React.FC<ToolbarProps> = ({
             <MinusIcon className={`w-4 h-4 ${isDrawing && drawingTool === 'dottedLine' ? 'fill-white stroke-white' : ''}`} />
           </Toggle>
           {isDrawing && drawingTool === 'dottedLine' && (
-            <div className="flex flex-row sm:flex-col items-center gap-2">
+            <div className="flex flex-row lg:flex-col items-center gap-2">
               <ColorPicker
                 color={strokeColor}
                 onChange={onStrokeColorChange}
@@ -123,7 +122,7 @@ const Toolbar: React.FC<ToolbarProps> = ({
                 max={getStrokeWidthRange('dottedLine').max}
                 value={strokeWidth}
                 onChange={(e) => onStrokeWidthChange(Number(e.target.value))}
-                className="w-24 sm:w-full"
+                className="w-24 lg:w-full"
                 aria-label="Line width"
               />
             </div>
@@ -138,7 +137,6 @@ const Toolbar: React.FC<ToolbarProps> = ({
               onDrawingChange(pressed);
               if (pressed) {
                 onDrawingToolChange('eraser');
-                // Set initial eraser size to minimum when selecting the tool
                 onStrokeWidthChange(getStrokeWidthRange('eraser').min);
               }
             }}
@@ -148,14 +146,14 @@ const Toolbar: React.FC<ToolbarProps> = ({
             <Eraser className={`w-4 h-4 ${isDrawing && drawingTool === 'eraser' ? 'fill-white stroke-white' : ''}`} />
           </Toggle>
           {isDrawing && drawingTool === 'eraser' && (
-            <div className="flex flex-row sm:flex-col items-center gap-2">
+            <div className="flex flex-row lg:flex-col items-center gap-2">
               <input
                 type="range"
                 min={getStrokeWidthRange('eraser').min}
                 max={getStrokeWidthRange('eraser').max}
                 value={strokeWidth}
                 onChange={(e) => onStrokeWidthChange(Number(e.target.value))}
-                className="w-24 sm:w-full"
+                className="w-24 lg:w-full"
                 aria-label="Eraser width"
               />
             </div>

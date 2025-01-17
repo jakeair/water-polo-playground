@@ -33,24 +33,30 @@ const Index = () => {
 
       {/* Main Content */}
       <div className="fixed inset-0 pt-16 pb-0">
-        <div className="h-full w-full flex">
+        <div className="h-full w-full flex flex-col lg:flex-row">
           <SidebarProvider>
-            {/* Left Toolbar */}
-            <div className="w-auto p-4 flex-shrink-0 bg-black/20 border-r border-white/10">
-              <Toolbar
-                team1Color={team1Color}
-                team2Color={team2Color}
-                onTeam1ColorChange={setTeam1Color}
-                onTeam2ColorChange={setTeam2Color}
-                isDrawing={isDrawing}
-                onDrawingChange={setIsDrawing}
-                strokeColor={strokeColor}
-                onStrokeColorChange={setStrokeColor}
-                strokeWidth={strokeWidth}
-                onStrokeWidthChange={setStrokeWidth}
-                drawingTool={drawingTool}
-                onDrawingToolChange={setDrawingTool}
-              />
+            {/* Left Toolbar - Responsive */}
+            <div className="w-full lg:w-auto p-4 flex-shrink-0 bg-black/20 border-b lg:border-b-0 lg:border-r border-white/10">
+              <div className="flex flex-row lg:flex-col gap-4 items-start">
+                <Toolbar
+                  team1Color={team1Color}
+                  team2Color={team2Color}
+                  onTeam1ColorChange={setTeam1Color}
+                  onTeam2ColorChange={setTeam2Color}
+                  isDrawing={isDrawing}
+                  onDrawingChange={setIsDrawing}
+                  strokeColor={strokeColor}
+                  onStrokeColorChange={setStrokeColor}
+                  strokeWidth={strokeWidth}
+                  onStrokeWidthChange={setStrokeWidth}
+                  drawingTool={drawingTool}
+                  onDrawingToolChange={setDrawingTool}
+                />
+                {/* Help button moved into toolbar */}
+                <div className="lg:mt-4">
+                  <Help />
+                </div>
+              </div>
             </div>
 
             {/* Main Court Area */}
@@ -71,11 +77,6 @@ const Index = () => {
                   onDrawingToolChange={setDrawingTool}
                 />
               </div>
-            </div>
-
-            {/* Help Panel */}
-            <div className="w-64 p-4 flex-shrink-0 border-l border-white/10 bg-black/20">
-              <Help />
             </div>
           </SidebarProvider>
         </div>

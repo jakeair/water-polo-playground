@@ -12,7 +12,7 @@ const Court: React.FC<CourtProps> = ({ width, height, children }) => {
       className="court relative w-full h-full"
       style={{ 
         aspectRatio: '5/7',
-        maxHeight: '100vh',
+        maxHeight: 'calc(100vh - 120px)', // Adjusted to prevent bottom cutoff
         margin: '0 auto',
         overflow: 'visible'
       }}

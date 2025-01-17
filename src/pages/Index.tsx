@@ -36,7 +36,7 @@ const Index = () => {
         <div className="h-full w-full flex">
           <SidebarProvider>
             {/* Left Toolbar */}
-            <div className="w-auto p-4 flex-shrink-0">
+            <div className="w-auto p-4 flex-shrink-0 bg-black/20 border-r border-white/10">
               <Toolbar
                 team1Color={team1Color}
                 team2Color={team2Color}
@@ -54,24 +54,26 @@ const Index = () => {
             </div>
 
             {/* Main Court Area */}
-            <div className="flex-1 p-4 overflow-hidden flex items-center justify-center">
-              <WaterPoloCourt
-                team1Color={team1Color}
-                team2Color={team2Color}
-                onTeam1ColorChange={setTeam1Color}
-                onTeam2ColorChange={setTeam2Color}
-                isDrawing={isDrawing}
-                onDrawingChange={setIsDrawing}
-                strokeColor={strokeColor}
-                onStrokeColorChange={setStrokeColor}
-                strokeWidth={strokeWidth}
-                onStrokeWidthChange={setStrokeWidth}
-                drawingTool={drawingTool}
-                onDrawingToolChange={setDrawingTool}
-              />
+            <div className="flex-1 flex items-center justify-center p-4 overflow-hidden">
+              <div className="w-full h-full flex items-center justify-center">
+                <WaterPoloCourt
+                  team1Color={team1Color}
+                  team2Color={team2Color}
+                  onTeam1ColorChange={setTeam1Color}
+                  onTeam2ColorChange={setTeam2Color}
+                  isDrawing={isDrawing}
+                  onDrawingChange={setIsDrawing}
+                  strokeColor={strokeColor}
+                  onStrokeColorChange={setStrokeColor}
+                  strokeWidth={strokeWidth}
+                  onStrokeWidthChange={setStrokeWidth}
+                  drawingTool={drawingTool}
+                  onDrawingToolChange={setDrawingTool}
+                />
+              </div>
             </div>
 
-            {/* Help Panel (Optional) */}
+            {/* Help Panel */}
             <div className="w-64 p-4 flex-shrink-0 border-l border-white/10 bg-black/20">
               <Help />
             </div>

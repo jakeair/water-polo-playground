@@ -20,6 +20,7 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
   const lastDrawRef = useRef<ImageData | null>(null);
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
   const containerRef = useRef<HTMLDivElement>(null);
+  const canvasStateRef = useRef<ImageData | null>(null);
 
   useEffect(() => {
     const updateCanvasSize = () => {
@@ -30,11 +31,18 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
       setDimensions({ width, height });
       
       const canvas = canvasRef.current;
+      const prevState = canvasStateRef.current;
+      
       canvas.width = width;
       canvas.height = height;
       
       const context = canvas.getContext('2d');
       if (!context) return;
+      
+      // Restore previous canvas state if it exists
+      if (prevState) {
+        context.putImageData(prevState, 0, 0);
+      }
       
       context.lineCap = 'round';
       context.lineJoin = 'round';
@@ -47,6 +55,15 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
     window.addEventListener('resize', updateCanvasSize);
     return () => window.removeEventListener('resize', updateCanvasSize);
   }, [strokeColor, strokeWidth]);
+
+  // Save canvas state before any context changes
+  useEffect(() => {
+    if (contextRef.current && canvasRef.current) {
+      canvasStateRef.current = contextRef.current.getImageData(0, 0, canvasRef.current.width, canvasRef.current.height);
+      contextRef.current.strokeStyle = strokeColor;
+      contextRef.current.lineWidth = strokeWidth;
+    }
+  }, [strokeColor, strokeWidth, drawingTool]);
 
   const drawArrowhead = (context: CanvasRenderingContext2D, from: { x: number; y: number }, to: { x: number; y: number }) => {
     const headLength = 10 + strokeWidth;
@@ -134,6 +151,11 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
       contextRef.current.lineTo(coords.x, coords.y);
       contextRef.current.stroke();
     }
+
+    // Save the current state after drawing
+    if (canvasRef.current) {
+      canvasStateRef.current = contextRef.current.getImageData(0, 0, canvasRef.current.width, canvasRef.current.height);
+    }
   };
 
   const stopDrawing = () => {
@@ -145,6 +167,11 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
         contextRef.current.putImageData(lastDrawRef.current, 0, 0);
         drawDottedLine(contextRef.current, startPointRef.current, coords);
       }
+    }
+    
+    // Save the final state after drawing is complete
+    if (canvasRef.current) {
+      canvasStateRef.current = contextRef.current.getImageData(0, 0, canvasRef.current.width, canvasRef.current.height);
     }
     
     setIsDrawingActive(false);

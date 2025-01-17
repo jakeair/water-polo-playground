@@ -36,13 +36,14 @@
   border: clamp(2px, 0.5vw, 5px) solid #0044CC;
   border-radius: clamp(6px, 1vw, 12px);
   overflow: visible;
-  height: calc(100vh - 200px);
+  height: calc(100vh - 180px);
   min-height: 500px;
+  max-width: 1400px;
 }
 
 @media (max-width: 768px) {
   .court {
-    height: calc(100vh - 180px);
+    height: calc(100vh - 160px);
     min-height: 400px;
     width: 100%;
     margin-bottom: 1rem;

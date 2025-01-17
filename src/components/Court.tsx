@@ -8,7 +8,7 @@ interface CourtProps {
 
 const Court: React.FC<CourtProps> = ({ children }) => {
   return (
-    <div className="px-3 sm:px-4 md:px-6 lg:px-8 h-full py-20">
+    <div className="flex-1 relative px-3 sm:px-4 md:px-6 lg:px-8 py-4">
       <div 
         className="court relative w-full h-full"
         style={{ 

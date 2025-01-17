@@ -37,11 +37,9 @@
   border-radius: clamp(6px, 1vw, 12px);
   overflow: visible;
   width: 100%;
-  max-width: 1400px;
+  height: 100%;
   margin: 0 auto;
   transition: all 0.3s ease;
-  height: calc(100vh - 160px);
-  min-height: 500px;
 }
 
 .goal {

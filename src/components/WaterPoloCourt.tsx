@@ -104,8 +104,8 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
   }, [currentTime]);
 
   return (
-    <div className="flex flex-col h-[calc(100vh-4rem)] relative">
-      <div className="flex-1 relative min-h-0 overflow-hidden">
+    <div className="flex flex-col h-[calc(100vh-4rem)] max-h-[calc(100vh-4rem)]">
+      <div className="flex-1 relative">
         <Court>
           <DrawingCanvas
             isDrawing={isDrawing}

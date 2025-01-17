@@ -32,10 +32,10 @@
 
 .fixed-court-container {
   position: fixed;
-  top: 10vh; /* Changed to 10vh for equal spacing */
+  top: 10vh;
   left: calc(4rem + 1px);
   right: 1rem;
-  bottom: 10vh; /* Changed to 10vh for equal spacing */
+  bottom: 17vh;
   padding: 1rem;
   z-index: 0;
 }

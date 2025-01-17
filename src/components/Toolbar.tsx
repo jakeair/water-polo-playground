@@ -33,6 +33,16 @@ const Toolbar: React.FC<ToolbarProps> = ({
   drawingTool,
   onDrawingToolChange,
 }) => {
+  // Helper function to get the appropriate min/max values based on the tool
+  const getStrokeWidthRange = (tool: 'pen' | 'dottedLine' | 'eraser') => {
+    switch (tool) {
+      case 'eraser':
+        return { min: 20, max: 50 };
+      default:
+        return { min: 1, max: 10 };
+    }
+  };
+
   return (
     <div className="flex flex-col sm:flex-row gap-4 bg-[#1A1F2C]/95 backdrop-blur-md p-3 rounded-xl shadow-md">
       {/* Team Colors */}
@@ -76,8 +86,8 @@ const Toolbar: React.FC<ToolbarProps> = ({
               />
               <input
                 type="range"
-                min="1"
-                max="10"
+                min={getStrokeWidthRange('pen').min}
+                max={getStrokeWidthRange('pen').max}
                 value={strokeWidth}
                 onChange={(e) => onStrokeWidthChange(Number(e.target.value))}
                 className="w-24 sm:w-full"
@@ -109,8 +119,8 @@ const Toolbar: React.FC<ToolbarProps> = ({
               />
               <input
                 type="range"
-                min="1"
-                max="10"
+                min={getStrokeWidthRange('dottedLine').min}
+                max={getStrokeWidthRange('dottedLine').max}
                 value={strokeWidth}
                 onChange={(e) => onStrokeWidthChange(Number(e.target.value))}
                 className="w-24 sm:w-full"
@@ -126,7 +136,11 @@ const Toolbar: React.FC<ToolbarProps> = ({
             pressed={isDrawing && drawingTool === 'eraser'} 
             onPressedChange={(pressed) => {
               onDrawingChange(pressed);
-              if (pressed) onDrawingToolChange('eraser');
+              if (pressed) {
+                onDrawingToolChange('eraser');
+                // Set initial eraser size to minimum when selecting the tool
+                onStrokeWidthChange(getStrokeWidthRange('eraser').min);
+              }
             }}
             className="data-[state=on]:bg-primary p-2 hover:bg-primary/90 active:bg-primary"
             aria-label="Eraser tool"
@@ -137,8 +151,8 @@ const Toolbar: React.FC<ToolbarProps> = ({
             <div className="flex flex-row sm:flex-col items-center gap-2">
               <input
                 type="range"
-                min="1"
-                max="20"
+                min={getStrokeWidthRange('eraser').min}
+                max={getStrokeWidthRange('eraser').max}
                 value={strokeWidth}
                 onChange={(e) => onStrokeWidthChange(Number(e.target.value))}
                 className="w-24 sm:w-full"

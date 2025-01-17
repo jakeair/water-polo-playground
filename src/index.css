@@ -30,44 +30,19 @@
   }
 }
 
-@keyframes pulse-subtle {
-  0%, 100% {
-    transform: scale(1);
-    opacity: 1;
-  }
-  50% {
-    transform: scale(1.05);
-    opacity: 0.9;
-  }
-}
-
-.animate-pulse-subtle {
-  animation: pulse-subtle 2s ease-in-out infinite;
-}
-
-@layer base {
-  * {
-    @apply border-border;
-  }
-  body {
-    @apply bg-background text-foreground antialiased;
-  }
-}
-
 .court {
   position: relative;
   background-color: #d9f0ff;
   border: clamp(2px, 0.5vw, 5px) solid #0044CC;
   border-radius: clamp(6px, 1vw, 12px);
   overflow: visible;
-  width: 100%;
-  max-height: calc(100vh - 140px);
 }
 
 @media (max-width: 768px) {
   .court {
-    max-height: calc(100vh - 200px);
-    margin-top: 1rem;
+    margin: 0.5rem auto;
+    max-width: 95vw;
+    min-height: 300px;
   }
 }
 

@@ -9,19 +9,20 @@ interface CourtProps {
 const Court: React.FC<CourtProps> = ({ width, height, children }) => {
   return (
     <div 
-      className="court relative w-full h-full"
+      className="court relative w-full"
       style={{ 
         aspectRatio: '5/7',
-        height: 'calc(100vh - 140px)', // Reduced padding since timeline is smaller
-        maxWidth: '95%',
+        maxHeight: 'calc(100vh - 200px)', // Adjusted for mobile
+        width: '100%',
+        maxWidth: '95vw',
         margin: '0 auto',
         overflow: 'visible',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
         position: 'relative',
-        paddingTop: '1rem',
-        paddingBottom: '1rem'
+        paddingTop: '0.5rem',
+        paddingBottom: '0.5rem'
       }}
     >
       <div className="goal goal-top">

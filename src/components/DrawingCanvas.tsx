@@ -6,7 +6,7 @@ interface DrawingCanvasProps {
   height: number;
   strokeColor: string;
   strokeWidth: number;
-  drawingTool: 'pen' | 'dottedLine';
+  drawingTool: 'pen' | 'dottedLine' | 'eraser';
 }
 
 const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
@@ -42,8 +42,13 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
 
   useEffect(() => {
     if (!contextRef.current) return;
-    contextRef.current.strokeStyle = strokeColor;
-  }, [strokeColor]);
+    contextRef.current.strokeStyle = drawingTool === 'eraser' ? '#000000' : strokeColor;
+    if (drawingTool === 'eraser') {
+      contextRef.current.globalCompositeOperation = 'destination-out';
+    } else {
+      contextRef.current.globalCompositeOperation = 'source-over';
+    }
+  }, [strokeColor, drawingTool]);
 
   useEffect(() => {
     if (!contextRef.current) return;
@@ -106,12 +111,14 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
     const coords = getCoordinates(event);
     if (!coords) return;
 
-    if (drawingTool === 'pen') {
+    if (drawingTool === 'dottedLine') {
+      if (lastDrawRef.current) {
+        contextRef.current.putImageData(lastDrawRef.current, 0, 0);
+        drawDottedLine(contextRef.current, startPointRef.current, coords);
+      }
+    } else {
       contextRef.current.lineTo(coords.x, coords.y);
       contextRef.current.stroke();
-    } else if (lastDrawRef.current) {
-      contextRef.current.putImageData(lastDrawRef.current, 0, 0);
-      drawDottedLine(contextRef.current, startPointRef.current, coords);
     }
   };
 
@@ -166,7 +173,7 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
       ref={canvasRef}
       className="absolute inset-0 w-full h-full"
       style={{ 
-        cursor: isDrawing ? 'crosshair' : 'default',
+        cursor: isDrawing ? (drawingTool === 'eraser' ? 'crosshair' : 'crosshair') : 'default',
         pointerEvents: isDrawing ? 'auto' : 'none'
       }}
     />

@@ -1,6 +1,6 @@
 import React from 'react';
 import ColorPicker from './ColorPicker';
-import { Pencil, MinusIcon } from 'lucide-react';
+import { Pencil, MinusIcon, Eraser } from 'lucide-react';
 import { Separator } from "@/components/ui/separator";
 import { Toggle } from "@/components/ui/toggle";
 
@@ -15,8 +15,8 @@ interface ToolbarProps {
   onStrokeColorChange: (color: string) => void;
   strokeWidth: number;
   onStrokeWidthChange: (width: number) => void;
-  drawingTool: 'pen' | 'dottedLine';
-  onDrawingToolChange: (tool: 'pen' | 'dottedLine') => void;
+  drawingTool: 'pen' | 'dottedLine' | 'eraser';
+  onDrawingToolChange: (tool: 'pen' | 'dottedLine' | 'eraser') => void;
 }
 
 const Toolbar: React.FC<ToolbarProps> = ({
@@ -115,6 +115,34 @@ const Toolbar: React.FC<ToolbarProps> = ({
                 onChange={(e) => onStrokeWidthChange(Number(e.target.value))}
                 className="w-24 sm:w-full"
                 aria-label="Line width"
+              />
+            </div>
+          )}
+        </div>
+
+        {/* Eraser Tool */}
+        <div className="flex flex-col items-center gap-2">
+          <Toggle 
+            pressed={isDrawing && drawingTool === 'eraser'} 
+            onPressedChange={(pressed) => {
+              onDrawingChange(pressed);
+              if (pressed) onDrawingToolChange('eraser');
+            }}
+            className="data-[state=on]:bg-primary p-2 hover:bg-primary/90 active:bg-primary"
+            aria-label="Eraser tool"
+          >
+            <Eraser className={`w-4 h-4 ${isDrawing && drawingTool === 'eraser' ? 'fill-white stroke-white' : ''}`} />
+          </Toggle>
+          {isDrawing && drawingTool === 'eraser' && (
+            <div className="flex flex-row sm:flex-col items-center gap-2">
+              <input
+                type="range"
+                min="1"
+                max="20"
+                value={strokeWidth}
+                onChange={(e) => onStrokeWidthChange(Number(e.target.value))}
+                className="w-24 sm:w-full"
+                aria-label="Eraser width"
               />
             </div>
           )}

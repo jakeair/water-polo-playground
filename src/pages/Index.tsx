@@ -32,32 +32,12 @@ const Index = () => {
       </div>
 
       {/* Main Content */}
-      <div className="fixed inset-0 pt-16 pb-0">
-        <div className="h-full w-full flex flex-col lg:flex-row">
+      <div className="fixed inset-0 pt-16">
+        <div className="h-full w-full flex">
           <SidebarProvider>
-            {/* Main Court Area */}
-            <div className="flex-1 relative flex items-center justify-center p-4 overflow-hidden">
-              <div className="w-full h-[calc(100vh-8rem)] max-w-[1200px] mx-auto">
-                <WaterPoloCourt
-                  team1Color={team1Color}
-                  team2Color={team2Color}
-                  onTeam1ColorChange={setTeam1Color}
-                  onTeam2ColorChange={setTeam2Color}
-                  isDrawing={isDrawing}
-                  onDrawingChange={setIsDrawing}
-                  strokeColor={strokeColor}
-                  onStrokeColorChange={setStrokeColor}
-                  strokeWidth={strokeWidth}
-                  onStrokeWidthChange={setStrokeWidth}
-                  drawingTool={drawingTool}
-                  onDrawingToolChange={setDrawingTool}
-                />
-              </div>
-            </div>
-
-            {/* Right Toolbar - Fixed Position */}
-            <div className="lg:fixed lg:right-0 lg:top-16 lg:bottom-0 lg:w-[280px] p-2 bg-black/20 border-t lg:border-t-0 lg:border-l border-white/10 overflow-y-auto">
-              <div className="flex flex-row lg:flex-col gap-2 items-start lg:items-stretch">
+            {/* Left Toolbar - Minimal Sidebar */}
+            <div className="w-16 lg:w-[220px] flex-shrink-0 bg-black/20 border-r border-white/10">
+              <div className="h-full flex flex-col items-center lg:items-stretch p-2 gap-2">
                 <Toolbar
                   team1Color={team1Color}
                   team2Color={team2Color}
@@ -72,9 +52,29 @@ const Index = () => {
                   drawingTool={drawingTool}
                   onDrawingToolChange={setDrawingTool}
                 />
-                <div className="lg:mt-2">
+                <div className="mt-auto">
                   <Help />
                 </div>
+              </div>
+            </div>
+
+            {/* Main Court Area */}
+            <div className="flex-1 relative flex items-center justify-center p-2 overflow-hidden">
+              <div className="w-full h-full max-w-[1200px] mx-auto">
+                <WaterPoloCourt
+                  team1Color={team1Color}
+                  team2Color={team2Color}
+                  onTeam1ColorChange={setTeam1Color}
+                  onTeam2ColorChange={setTeam2Color}
+                  isDrawing={isDrawing}
+                  onDrawingChange={setIsDrawing}
+                  strokeColor={strokeColor}
+                  onStrokeColorChange={setStrokeColor}
+                  strokeWidth={strokeWidth}
+                  onStrokeWidthChange={setStrokeWidth}
+                  drawingTool={drawingTool}
+                  onDrawingToolChange={setDrawingTool}
+                />
               </div>
             </div>
           </SidebarProvider>

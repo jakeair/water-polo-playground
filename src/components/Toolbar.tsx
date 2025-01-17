@@ -43,9 +43,9 @@ const Toolbar: React.FC<ToolbarProps> = ({
   };
 
   return (
-    <div className="flex lg:flex-col gap-4 bg-[#1A1F2C]/95 backdrop-blur-md p-3 rounded-xl shadow-md overflow-x-auto lg:overflow-x-visible">
+    <div className="flex flex-col gap-3 w-full">
       {/* Team Colors */}
-      <div className="flex flex-row lg:flex-col items-center gap-3">
+      <div className="flex flex-col items-center gap-2">
         <ColorPicker
           color={team1Color}
           onChange={onTeam1ColorChange}
@@ -58,107 +58,100 @@ const Toolbar: React.FC<ToolbarProps> = ({
         />
       </div>
 
-      <Separator orientation="vertical" className="hidden lg:block h-auto bg-white/10" />
-      <Separator orientation="horizontal" className="block lg:hidden w-auto bg-white/10" />
+      <Separator className="bg-white/10" />
 
       {/* Drawing Tools */}
-      <div className="flex flex-row lg:flex-col items-center gap-4">
+      <div className="flex flex-col items-center gap-2">
         {/* Pen Tool */}
-        <div className="flex flex-col items-center gap-2">
-          <Toggle 
-            pressed={isDrawing && drawingTool === 'pen'} 
-            onPressedChange={(pressed) => {
-              onDrawingChange(pressed);
-              if (pressed) onDrawingToolChange('pen');
-            }}
-            className="data-[state=on]:bg-primary p-2 hover:bg-primary/90 active:bg-primary"
-            aria-label="Pen tool"
-          >
-            <Pencil className={`w-4 h-4 ${isDrawing && drawingTool === 'pen' ? 'fill-white stroke-white' : ''}`} />
-          </Toggle>
-          {isDrawing && drawingTool === 'pen' && (
-            <div className="flex flex-row lg:flex-col items-center gap-2">
-              <ColorPicker
-                color={strokeColor}
-                onChange={onStrokeColorChange}
-                label="Pen Color"
-              />
-              <input
-                type="range"
-                min={getStrokeWidthRange('pen').min}
-                max={getStrokeWidthRange('pen').max}
-                value={strokeWidth}
-                onChange={(e) => onStrokeWidthChange(Number(e.target.value))}
-                className="w-24 lg:w-full"
-                aria-label="Stroke width"
-              />
-            </div>
-          )}
-        </div>
+        <Toggle 
+          pressed={isDrawing && drawingTool === 'pen'} 
+          onPressedChange={(pressed) => {
+            onDrawingChange(pressed);
+            if (pressed) onDrawingToolChange('pen');
+          }}
+          className="data-[state=on]:bg-primary p-2 hover:bg-primary/90 active:bg-primary w-10 h-10"
+          aria-label="Pen tool"
+        >
+          <Pencil className={`w-4 h-4 ${isDrawing && drawingTool === 'pen' ? 'fill-white stroke-white' : ''}`} />
+        </Toggle>
+        {isDrawing && drawingTool === 'pen' && (
+          <div className="flex flex-col items-center gap-2">
+            <ColorPicker
+              color={strokeColor}
+              onChange={onStrokeColorChange}
+              label="Color"
+            />
+            <input
+              type="range"
+              min={getStrokeWidthRange('pen').min}
+              max={getStrokeWidthRange('pen').max}
+              value={strokeWidth}
+              onChange={(e) => onStrokeWidthChange(Number(e.target.value))}
+              className="w-full"
+              aria-label="Stroke width"
+            />
+          </div>
+        )}
 
         {/* Dotted Line Tool */}
-        <div className="flex flex-col items-center gap-2">
-          <Toggle 
-            pressed={isDrawing && drawingTool === 'dottedLine'} 
-            onPressedChange={(pressed) => {
-              onDrawingChange(pressed);
-              if (pressed) onDrawingToolChange('dottedLine');
-            }}
-            className="data-[state=on]:bg-primary p-2 hover:bg-primary/90 active:bg-primary"
-            aria-label="Dotted line tool"
-          >
-            <MinusIcon className={`w-4 h-4 ${isDrawing && drawingTool === 'dottedLine' ? 'fill-white stroke-white' : ''}`} />
-          </Toggle>
-          {isDrawing && drawingTool === 'dottedLine' && (
-            <div className="flex flex-row lg:flex-col items-center gap-2">
-              <ColorPicker
-                color={strokeColor}
-                onChange={onStrokeColorChange}
-                label="Line Color"
-              />
-              <input
-                type="range"
-                min={getStrokeWidthRange('dottedLine').min}
-                max={getStrokeWidthRange('dottedLine').max}
-                value={strokeWidth}
-                onChange={(e) => onStrokeWidthChange(Number(e.target.value))}
-                className="w-24 lg:w-full"
-                aria-label="Line width"
-              />
-            </div>
-          )}
-        </div>
+        <Toggle 
+          pressed={isDrawing && drawingTool === 'dottedLine'} 
+          onPressedChange={(pressed) => {
+            onDrawingChange(pressed);
+            if (pressed) onDrawingToolChange('dottedLine');
+          }}
+          className="data-[state=on]:bg-primary p-2 hover:bg-primary/90 active:bg-primary w-10 h-10"
+          aria-label="Dotted line tool"
+        >
+          <MinusIcon className={`w-4 h-4 ${isDrawing && drawingTool === 'dottedLine' ? 'fill-white stroke-white' : ''}`} />
+        </Toggle>
+        {isDrawing && drawingTool === 'dottedLine' && (
+          <div className="flex flex-col items-center gap-2">
+            <ColorPicker
+              color={strokeColor}
+              onChange={onStrokeColorChange}
+              label="Color"
+            />
+            <input
+              type="range"
+              min={getStrokeWidthRange('dottedLine').min}
+              max={getStrokeWidthRange('dottedLine').max}
+              value={strokeWidth}
+              onChange={(e) => onStrokeWidthChange(Number(e.target.value))}
+              className="w-full"
+              aria-label="Line width"
+            />
+          </div>
+        )}
 
         {/* Eraser Tool */}
-        <div className="flex flex-col items-center gap-2">
-          <Toggle 
-            pressed={isDrawing && drawingTool === 'eraser'} 
-            onPressedChange={(pressed) => {
-              onDrawingChange(pressed);
-              if (pressed) {
-                onDrawingToolChange('eraser');
-                onStrokeWidthChange(getStrokeWidthRange('eraser').min);
-              }
-            }}
-            className="data-[state=on]:bg-primary p-2 hover:bg-primary/90 active:bg-primary"
-            aria-label="Eraser tool"
-          >
-            <Eraser className={`w-4 h-4 ${isDrawing && drawingTool === 'eraser' ? 'fill-white stroke-white' : ''}`} />
-          </Toggle>
-          {isDrawing && drawingTool === 'eraser' && (
-            <div className="flex flex-row lg:flex-col items-center gap-2">
-              <input
-                type="range"
-                min={getStrokeWidthRange('eraser').min}
-                max={getStrokeWidthRange('eraser').max}
-                value={strokeWidth}
-                onChange={(e) => onStrokeWidthChange(Number(e.target.value))}
-                className="w-24 lg:w-full"
-                aria-label="Eraser width"
-              />
-            </div>
-          )}
-        </div>
+        <Toggle 
+          pressed={isDrawing && drawingTool === 'eraser'} 
+          onPressedChange={(pressed) => {
+            onDrawingChange(pressed);
+            if (pressed) {
+              onDrawingToolChange('eraser');
+              onStrokeWidthChange(getStrokeWidthRange('eraser').min);
+            }
+          }}
+          className="data-[state=on]:bg-primary p-2 hover:bg-primary/90 active:bg-primary w-10 h-10"
+          aria-label="Eraser tool"
+        >
+          <Eraser className={`w-4 h-4 ${isDrawing && drawingTool === 'eraser' ? 'fill-white stroke-white' : ''}`} />
+        </Toggle>
+        {isDrawing && drawingTool === 'eraser' && (
+          <div className="flex flex-col items-center gap-2">
+            <input
+              type="range"
+              min={getStrokeWidthRange('eraser').min}
+              max={getStrokeWidthRange('eraser').max}
+              value={strokeWidth}
+              onChange={(e) => onStrokeWidthChange(Number(e.target.value))}
+              className="w-full"
+              aria-label="Eraser width"
+            />
+          </div>
+        )}
       </div>
     </div>
   );

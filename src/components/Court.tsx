@@ -12,7 +12,7 @@ const Court: React.FC<CourtProps> = ({ width, height, children }) => {
       className="court relative w-full h-full"
       style={{ 
         aspectRatio: '5/7',
-        height: 'calc(100vh - 180px)', // Increased padding to prevent cutoff
+        height: 'calc(100vh - 140px)', // Reduced padding since timeline is smaller
         maxWidth: '95%',
         margin: '0 auto',
         overflow: 'visible',
@@ -20,8 +20,8 @@ const Court: React.FC<CourtProps> = ({ width, height, children }) => {
         alignItems: 'center',
         justifyContent: 'center',
         position: 'relative',
-        paddingTop: '2rem',
-        paddingBottom: '2rem'
+        paddingTop: '1rem',
+        paddingBottom: '1rem'
       }}
     >
       <div className="goal goal-top">

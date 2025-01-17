@@ -61,7 +61,14 @@
   border-radius: clamp(6px, 1vw, 12px);
   overflow: visible;
   width: 100%;
-  max-height: calc(100vh - 180px);
+  max-height: calc(100vh - 140px);
+}
+
+@media (max-width: 768px) {
+  .court {
+    max-height: calc(100vh - 200px);
+    margin-top: 1rem;
+  }
 }
 
 .goal {

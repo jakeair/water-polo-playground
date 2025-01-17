@@ -34,6 +34,7 @@ const Court: React.FC<CourtProps> = ({ children }) => {
 
         {children}
       </div>
+      <div className="h-[5vh]" /> {/* Fixed 5% viewport height spacing */}
     </div>
   );
 };

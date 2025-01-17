@@ -14,7 +14,7 @@ const Court: React.FC<CourtProps> = ({ width, height, children }) => {
         aspectRatio: '5/7',
         height: 'calc(100% - 80px)', // Reduced timeline space for desktop
         width: '100%',
-        maxWidth: '1000px', // Limit maximum width on large screens
+        maxWidth: '1200px', // Increased maximum width
         margin: '0 auto',
         overflow: 'visible',
         display: 'flex',

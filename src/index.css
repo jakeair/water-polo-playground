@@ -42,7 +42,7 @@
   .court {
     height: calc(100vh - 180px); /* Space for timeline on mobile */
     min-height: 400px;
-    width: 100%;
+    width: 95%; /* Slightly increased width on mobile */
     margin-bottom: 1rem;
   }
 }

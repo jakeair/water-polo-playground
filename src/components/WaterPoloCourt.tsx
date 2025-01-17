@@ -57,14 +57,12 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
       const container = document.querySelector('.court-container');
       if (!container) return;
 
-      const containerWidth = container.clientWidth - 48; // Account for padding
-      const containerHeight = container.clientHeight - 180; // Account for timeline height
+      const containerWidth = container.clientWidth - 48;
+      const containerHeight = container.clientHeight - 180;
 
-      // Calculate dimensions while maintaining 5:7 aspect ratio
       let width = containerWidth;
       let height = (width * 7) / 5;
 
-      // If height is too tall, calculate based on height instead
       if (height > containerHeight) {
         height = containerHeight;
         width = (height * 5) / 7;
@@ -137,17 +135,7 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
 
   return (
     <div className="flex flex-col h-full">
-      <Timeline
-        currentTime={currentTime}
-        duration={ANIMATION_DURATION}
-        keyframes={keyframes.map(kf => kf.time)}
-        isPlaying={isPlaying}
-        onTimeChange={setCurrentTime}
-        onPlayPause={() => setIsPlaying(!isPlaying)}
-        onRecordKeyframe={handleRecordKeyframe}
-      />
-      
-      <div className="flex-1 court-container flex items-center justify-center">
+      <div className="flex-1 court-container flex items-center justify-center mb-4">
         <Court width={dimensions.width} height={dimensions.height}>
           <DrawingCanvas
             isDrawing={isDrawing}
@@ -176,6 +164,16 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
           <Player team={2} number={6} initialX={70} initialY={80} onPositionChange={(pos) => updatePlayerPosition('26', pos)} id="player-26" />
         </Court>
       </div>
+      
+      <Timeline
+        currentTime={currentTime}
+        duration={ANIMATION_DURATION}
+        keyframes={keyframes.map(kf => kf.time)}
+        isPlaying={isPlaying}
+        onTimeChange={setCurrentTime}
+        onPlayPause={() => setIsPlaying(!isPlaying)}
+        onRecordKeyframe={handleRecordKeyframe}
+      />
     </div>
   );
 };

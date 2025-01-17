@@ -35,9 +35,9 @@ const Index = () => {
       <div className="fixed inset-0 pt-16">
         <div className="h-full w-full flex">
           <SidebarProvider>
-            {/* Left Toolbar - Minimal Sidebar */}
-            <div className="w-16 lg:w-[220px] flex-shrink-0 bg-black/20 border-r border-white/10">
-              <div className="h-full flex flex-col items-center lg:items-stretch p-2 gap-2">
+            {/* Left Toolbar - Always Compact */}
+            <div className="w-16 flex-shrink-0 bg-black/20 border-r border-white/10">
+              <div className="h-full flex flex-col items-center p-2 gap-2">
                 <Toolbar
                   team1Color={team1Color}
                   team2Color={team2Color}

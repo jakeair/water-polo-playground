@@ -133,7 +133,7 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
         </Court>
       </div>
       
-      <div className="mt-1 sm:mt-2 md:mt-3">
+      <div className="mt-8 sm:mt-10 md:mt-12 lg:mt-16 xl:mt-20">
         <Timeline
           currentTime={currentTime}
           duration={ANIMATION_DURATION}

@@ -24,8 +24,8 @@ interface WaterPoloCourtProps {
   onStrokeColorChange: (color: string) => void;
   strokeWidth: number;
   onStrokeWidthChange: (width: number) => void;
-  drawingTool: 'pen' | 'dottedLine';
-  onDrawingToolChange: (tool: 'pen' | 'dottedLine') => void;
+  drawingTool: 'pen' | 'dottedLine' | 'eraser';
+  onDrawingToolChange: (tool: 'pen' | 'dottedLine' | 'eraser') => void;
 }
 
 const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({

@@ -36,9 +36,7 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
       }
     };
 
-    // Initial dimensions
     updateDimensions();
-
     const resizeObserver = new ResizeObserver(() => {
       updateDimensions();
     });
@@ -64,6 +62,11 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
     context.lineWidth = strokeWidth;
     contextRef.current = context;
 
+    // Restore previous canvas state if it exists
+    if (canvasStateRef.current) {
+      context.putImageData(canvasStateRef.current, 0, 0);
+    }
+
     setIsCanvasReady(true);
   }, [dimensions, strokeColor, strokeWidth]);
 
@@ -71,10 +74,20 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
   useEffect(() => {
     if (!contextRef.current || !isCanvasReady) return;
 
+    // Save current canvas state before updating properties
+    if (canvasRef.current) {
+      canvasStateRef.current = contextRef.current.getImageData(0, 0, canvasRef.current.width, canvasRef.current.height);
+    }
+
     if (drawingTool !== 'eraser') {
       contextRef.current.strokeStyle = strokeColor;
     }
     contextRef.current.lineWidth = strokeWidth;
+
+    // Restore canvas state after updating properties
+    if (canvasStateRef.current) {
+      contextRef.current.putImageData(canvasStateRef.current, 0, 0);
+    }
   }, [strokeColor, strokeWidth, drawingTool, isCanvasReady]);
 
   const drawArrowhead = (context: CanvasRenderingContext2D, from: { x: number; y: number }, to: { x: number; y: number }) => {
@@ -137,6 +150,11 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
 
     setIsDrawingActive(true);
     startPointRef.current = coords;
+
+    // Save canvas state before starting new drawing
+    if (canvasRef.current) {
+      canvasStateRef.current = contextRef.current.getImageData(0, 0, canvasRef.current.width, canvasRef.current.height);
+    }
 
     if (drawingTool === 'dottedLine' && canvasRef.current) {
       lastDrawRef.current = contextRef.current.getImageData(0, 0, canvasRef.current.width, canvasRef.current.height);

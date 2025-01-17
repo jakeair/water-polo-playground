@@ -36,13 +36,11 @@
   border: clamp(2px, 0.5vw, 5px) solid #0044CC;
   border-radius: clamp(6px, 1vw, 12px);
   overflow: visible;
-  height: 100%;
-  width: 100%;
 }
 
 @media (max-width: 768px) {
   .court {
-    height: calc(100vh - 180px); /* Increased space for timeline */
+    height: calc(100vh - 180px); /* Space for timeline on mobile */
     min-height: 400px;
     width: 100%;
     margin-bottom: 1rem;

@@ -37,7 +37,7 @@ const Toolbar: React.FC<ToolbarProps> = ({
   const getStrokeWidthRange = (tool: 'pen' | 'dottedLine' | 'eraser') => {
     switch (tool) {
       case 'eraser':
-        return { min: 20, max: 50 };
+        return { min: 30, max: 60 };
       default:
         return { min: 1, max: 10 };
     }

@@ -195,7 +195,7 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
     if (!isDrawing) return 'default';
     
     if (drawingTool === 'eraser') {
-      const size = strokeWidth * 2;
+      const size = strokeWidth;  // Now the cursor size matches the actual eraser size
       const cursor = `
         <svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" xmlns="http://www.w3.org/2000/svg">
           <circle cx="${size/2}" cy="${size/2}" r="${size/2 - 1}" fill="rgba(255, 255, 255, 0.3)" stroke="white"/>

@@ -59,11 +59,9 @@
   background-color: #d9f0ff;
   border: clamp(2px, 0.5vw, 5px) solid #0044CC;
   border-radius: clamp(6px, 1vw, 12px);
-  margin: clamp(10px, 2vw, 20px) auto;
   overflow: visible;
-  padding: clamp(20px, 4vw, 40px) 0;
-  width: min(95vw, 1000px);
-  aspect-ratio: 5/7;
+  width: 100%;
+  max-height: calc(100vh - 180px);
 }
 
 .goal {
@@ -80,6 +78,7 @@
   overflow: hidden;
   left: 50%;
   transform: translateX(-50%);
+  z-index: 10;
 }
 
 .goal-net {

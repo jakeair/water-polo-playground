@@ -8,6 +8,11 @@ import DrawingCanvas from './DrawingCanvas';
 import { useAnimation } from '@/hooks/useAnimation';
 import { useKeyframes } from '@/hooks/useKeyframes';
 
+interface PlayerPosition {
+  x: number;
+  y: number;
+}
+
 interface WaterPoloCourtProps {
   team1Color: string;
   team2Color: string;
@@ -99,8 +104,8 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
   }, [currentTime]);
 
   return (
-    <div className="flex flex-col h-full pb-24">
-      <div className="flex-1 relative min-h-0 mb-4">
+    <div className="flex flex-col h-full">
+      <div className="flex-1 relative min-h-0 mb-16">
         <Court>
           <DrawingCanvas
             isDrawing={isDrawing}

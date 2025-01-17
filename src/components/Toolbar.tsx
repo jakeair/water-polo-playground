@@ -3,12 +3,7 @@ import ColorPicker from './ColorPicker';
 import { Pencil, Eraser, HelpCircle } from 'lucide-react';
 import { Separator } from "@/components/ui/separator";
 import { Toggle } from "@/components/ui/toggle";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+import Help from './Help';
 
 interface ToolbarProps {
   team1Color: string;
@@ -67,6 +62,11 @@ const Toolbar: React.FC<ToolbarProps> = ({
 
   return (
     <div className="flex flex-col gap-3 w-full h-full">
+      {/* Help Component at the top */}
+      <Help />
+      
+      <Separator className="bg-white/10" />
+
       {/* Team Colors */}
       <div className="flex flex-col items-center gap-2">
         <ColorPicker
@@ -176,23 +176,6 @@ const Toolbar: React.FC<ToolbarProps> = ({
           </div>
         )}
       </div>
-
-      {/* Help Icon at Bottom */}
-      <TooltipProvider>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <button 
-              className="w-10 h-10 rounded-full flex items-center justify-center text-white/70 hover:text-white hover:bg-white/10 transition-colors"
-              onClick={() => {/* Add help functionality here */}}
-            >
-              <HelpCircle className="w-5 h-5" />
-            </button>
-          </TooltipTrigger>
-          <TooltipContent>
-            <p>Need help?</p>
-          </TooltipContent>
-        </Tooltip>
-      </TooltipProvider>
     </div>
   );
 };

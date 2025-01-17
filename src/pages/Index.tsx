@@ -36,8 +36,8 @@ const Index = () => {
         <div className="h-full w-full flex flex-col lg:flex-row">
           <SidebarProvider>
             {/* Left Toolbar - Responsive */}
-            <div className="w-full lg:w-auto p-4 flex-shrink-0 bg-black/20 border-b lg:border-b-0 lg:border-r border-white/10">
-              <div className="flex flex-row lg:flex-col gap-4 items-start">
+            <div className="w-full lg:w-[280px] p-2 flex-shrink-0 bg-black/20 border-b lg:border-b-0 lg:border-r border-white/10 overflow-y-auto">
+              <div className="flex flex-row lg:flex-col gap-2 items-start lg:items-stretch">
                 <Toolbar
                   team1Color={team1Color}
                   team2Color={team2Color}
@@ -53,14 +53,14 @@ const Index = () => {
                   onDrawingToolChange={setDrawingTool}
                 />
                 {/* Help button moved into toolbar */}
-                <div className="lg:mt-4">
+                <div className="lg:mt-2">
                   <Help />
                 </div>
               </div>
             </div>
 
             {/* Main Court Area */}
-            <div className="flex-1 flex items-center justify-center p-4 overflow-hidden">
+            <div className="flex-1 flex items-center justify-center p-2 overflow-hidden">
               <div className="w-full h-full flex items-center justify-center">
                 <WaterPoloCourt
                   team1Color={team1Color}

@@ -59,8 +59,8 @@ const Index = () => {
             </div>
 
             {/* Main Court Area */}
-            <div className="flex-1 relative flex items-center justify-center p-2 overflow-hidden">
-              <div className="w-full h-full max-w-[1200px] mx-auto">
+            <div className="flex-1 relative flex flex-col overflow-hidden p-4">
+              <div className="flex-1 min-h-0">
                 <WaterPoloCourt
                   team1Color={team1Color}
                   team2Color={team2Color}

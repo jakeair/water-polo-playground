@@ -9,12 +9,11 @@ interface CourtProps {
 const Court: React.FC<CourtProps> = ({ width, height, children }) => {
   return (
     <div 
-      className="court relative w-full"
+      className="court relative"
       style={{ 
         aspectRatio: '5/7',
-        maxHeight: 'calc(100vh - 200px)', // Adjusted for mobile
+        height: '100%',
         width: '100%',
-        maxWidth: '95vw',
         margin: '0 auto',
         overflow: 'visible',
         display: 'flex',

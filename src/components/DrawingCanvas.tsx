@@ -60,7 +60,9 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
   useEffect(() => {
     if (contextRef.current && canvasRef.current) {
       canvasStateRef.current = contextRef.current.getImageData(0, 0, canvasRef.current.width, canvasRef.current.height);
-      contextRef.current.strokeStyle = strokeColor;
+      if (drawingTool !== 'eraser') {
+        contextRef.current.strokeStyle = strokeColor;
+      }
       contextRef.current.lineWidth = strokeWidth;
     }
   }, [strokeColor, strokeWidth, drawingTool]);
@@ -132,6 +134,12 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
     } else {
       contextRef.current.beginPath();
       contextRef.current.moveTo(coords.x, coords.y);
+      
+      if (drawingTool === 'eraser') {
+        contextRef.current.globalCompositeOperation = 'destination-out';
+      } else {
+        contextRef.current.globalCompositeOperation = 'source-over';
+      }
     }
   };
 
@@ -167,6 +175,11 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
         contextRef.current.putImageData(lastDrawRef.current, 0, 0);
         drawDottedLine(contextRef.current, startPointRef.current, coords);
       }
+    }
+    
+    // Reset composite operation
+    if (drawingTool === 'eraser') {
+      contextRef.current.globalCompositeOperation = 'source-over';
     }
     
     // Save the final state after drawing is complete

@@ -42,7 +42,7 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
   drawingTool,
   onDrawingToolChange
 }) => {
-  const [dimensions, setDimensions] = useState({ width: 1000, height: 1400 });
+  const [dimensions, setDimensions] = useState({ width: 800, height: 1120 });
   const [playerPositions, setPlayerPositions] = useState<{[key: string]: PlayerPosition}>({});
   const lastInterpolatedPositions = React.useRef<{[key: string]: PlayerPosition}>({});
   const [ballPosition, setBallPosition] = useState({ x: 50, y: 50 });
@@ -54,9 +54,22 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
 
   useEffect(() => {
     const updateDimensions = () => {
-      const containerWidth = window.innerWidth - 40;
-      const width = Math.min(containerWidth, 1000);
-      const height = (width * 7) / 5;
+      const container = document.querySelector('.court-container');
+      if (!container) return;
+
+      const containerWidth = container.clientWidth - 48; // Account for padding
+      const containerHeight = container.clientHeight - 180; // Account for timeline height
+
+      // Calculate dimensions while maintaining 5:7 aspect ratio
+      let width = containerWidth;
+      let height = (width * 7) / 5;
+
+      // If height is too tall, calculate based on height instead
+      if (height > containerHeight) {
+        height = containerHeight;
+        width = (height * 5) / 7;
+      }
+
       setDimensions({ width, height });
     };
 
@@ -123,7 +136,7 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
   }, [currentTime]);
 
   return (
-    <div className="space-y-12 bg-black/20 backdrop-blur-sm px-4 sm:px-8 md:px-12 lg:px-16 py-8 pb-24 rounded-3xl shadow-2xl border border-white/10 w-full overflow-hidden">
+    <div className="flex flex-col h-full">
       <Timeline
         currentTime={currentTime}
         duration={ANIMATION_DURATION}
@@ -134,7 +147,7 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
         onRecordKeyframe={handleRecordKeyframe}
       />
       
-      <div className="flex flex-col md:flex-row gap-6 w-full items-center justify-center">
+      <div className="flex-1 court-container flex items-center justify-center">
         <Court width={dimensions.width} height={dimensions.height}>
           <DrawingCanvas
             isDrawing={isDrawing}

@@ -57,10 +57,10 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
       const container = document.querySelector('.court-container');
       if (!container) return;
 
-      const containerWidth = container.clientWidth - 48;
-      const containerHeight = container.clientHeight - 180;
+      const containerWidth = container.clientWidth;
+      const containerHeight = container.clientHeight;
 
-      let width = containerWidth;
+      let width = Math.min(containerWidth, 1400);
       let height = (width * 7) / 5;
 
       if (height > containerHeight) {
@@ -75,11 +75,6 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
     window.addEventListener('resize', updateDimensions);
     return () => window.removeEventListener('resize', updateDimensions);
   }, []);
-
-  useEffect(() => {
-    document.documentElement.style.setProperty('--team1-color', team1Color);
-    document.documentElement.style.setProperty('--team2-color', team2Color);
-  }, [team1Color, team2Color]);
 
   const updatePlayerPosition = (playerId: string, position: PlayerPosition) => {
     setPlayerPositions(prev => ({
@@ -135,7 +130,7 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
 
   return (
     <div className="flex flex-col h-full">
-      <div className="flex-1 court-container flex items-center justify-center mb-4">
+      <div className="flex-1 court-container flex items-center justify-center p-4 md:p-6 mb-4">
         <Court width={dimensions.width} height={dimensions.height}>
           <DrawingCanvas
             isDrawing={isDrawing}

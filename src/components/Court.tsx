@@ -11,10 +11,11 @@ const Court: React.FC<CourtProps> = ({ children, width, height }) => {
     <div 
       className="court relative"
       style={{ 
-        aspectRatio: '5/7',
         width: '100%',
-        maxWidth: '100%',
+        maxWidth: '1400px',
         margin: '0 auto',
+        minHeight: '500px',
+        height: 'calc(100vh - 240px)',
         overflow: 'visible',
         display: 'flex',
         alignItems: 'center',

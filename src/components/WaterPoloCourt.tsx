@@ -105,7 +105,7 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
 
   return (
     <div className="flex flex-col h-full">
-      <div className="flex-1 relative min-h-0 mb-16">
+      <div className="flex-1 relative min-h-0 mb-24">
         <Court>
           <DrawingCanvas
             isDrawing={isDrawing}

@@ -42,32 +42,40 @@
   transition: all 0.3s ease;
 }
 
+/* Mobile Portrait */
 @media (max-width: 640px) {
   .court {
-    min-height: 550px;
+    min-height: 65vh;
     aspect-ratio: 3/4;
     margin-top: 0.25rem;
+    margin-bottom: 6rem;
   }
 }
 
+/* Tablet Portrait */
 @media (min-width: 641px) and (max-width: 768px) {
   .court {
-    min-height: 600px;
+    min-height: 70vh;
     aspect-ratio: 4/5;
+    margin-bottom: 7rem;
   }
 }
 
+/* Tablet Landscape */
 @media (min-width: 769px) and (max-width: 1024px) {
   .court {
-    min-height: 700px;
+    min-height: 75vh;
     aspect-ratio: 5/6;
+    margin-bottom: 8rem;
   }
 }
 
+/* Desktop */
 @media (min-width: 1025px) {
   .court {
-    min-height: 750px;
+    min-height: 75vh;
     aspect-ratio: 16/9;
+    margin-bottom: 9rem;
   }
 }
 

@@ -32,10 +32,10 @@
 
 .fixed-court-container {
   position: fixed;
-  top: 5rem;
-  left: calc(4rem + 1px); /* 4rem (64px) for toolbar width + 1px for border */
+  top: 6vh; /* Changed from 5rem to 6vh for 1% extra space from top */
+  left: calc(4rem + 1px);
   right: 1rem;
-  bottom: 7rem;
+  bottom: 9vh; /* Changed from 7rem to 9vh for 2% more space from bottom */
   padding: 1rem;
   z-index: 0;
 }

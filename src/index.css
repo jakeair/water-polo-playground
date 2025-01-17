@@ -44,28 +44,28 @@
 
 @media (max-width: 640px) {
   .court {
-    min-height: 400px;
-    aspect-ratio: 4/5;
+    min-height: 450px;
+    aspect-ratio: 3/4;
   }
 }
 
 @media (min-width: 641px) and (max-width: 768px) {
   .court {
-    min-height: 500px;
-    aspect-ratio: 5/6;
+    min-height: 550px;
+    aspect-ratio: 4/5;
   }
 }
 
 @media (min-width: 769px) and (max-width: 1024px) {
   .court {
-    min-height: 600px;
-    aspect-ratio: 3/4;
+    min-height: 650px;
+    aspect-ratio: 5/6;
   }
 }
 
 @media (min-width: 1025px) {
   .court {
-    min-height: 700px;
+    min-height: 750px;
     aspect-ratio: 16/9;
   }
 }

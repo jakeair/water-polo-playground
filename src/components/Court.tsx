@@ -9,17 +9,13 @@ interface CourtProps {
 const Court: React.FC<CourtProps> = ({ children, width, height }) => {
   return (
     <div 
-      className="court relative"
+      className="court relative w-full h-full"
       style={{ 
-        width: '100%',
-        maxWidth: '1400px',
+        aspectRatio: '5/7',
+        maxWidth: '100%',
         margin: '0 auto',
         minHeight: '500px',
-        height: 'calc(100vh - 240px)',
         overflow: 'visible',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center'
       }}
     >
       <div className="goal goal-top">

@@ -42,7 +42,6 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
   drawingTool,
   onDrawingToolChange
 }) => {
-  const [dimensions, setDimensions] = useState({ width: 800, height: 1120 });
   const [playerPositions, setPlayerPositions] = useState<{[key: string]: PlayerPosition}>({});
   const lastInterpolatedPositions = React.useRef<{[key: string]: PlayerPosition}>({});
   const [ballPosition, setBallPosition] = useState({ x: 50, y: 50 });
@@ -51,30 +50,6 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
   const ANIMATION_DURATION = 2500;
 
   const { keyframes, recordKeyframe, interpolatePositions } = useKeyframes(currentTime);
-
-  useEffect(() => {
-    const updateDimensions = () => {
-      const container = document.querySelector('.court-container');
-      if (!container) return;
-
-      const containerWidth = container.clientWidth;
-      const containerHeight = container.clientHeight;
-
-      let width = Math.min(containerWidth, 1400);
-      let height = (width * 7) / 5;
-
-      if (height > containerHeight) {
-        height = containerHeight;
-        width = (height * 5) / 7;
-      }
-
-      setDimensions({ width, height });
-    };
-
-    updateDimensions();
-    window.addEventListener('resize', updateDimensions);
-    return () => window.removeEventListener('resize', updateDimensions);
-  }, []);
 
   const updatePlayerPosition = (playerId: string, position: PlayerPosition) => {
     setPlayerPositions(prev => ({
@@ -130,12 +105,10 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
 
   return (
     <div className="flex flex-col h-full">
-      <div className="flex-1 court-container flex items-center justify-center p-4 md:p-6 mb-4">
-        <Court width={dimensions.width} height={dimensions.height}>
+      <div className="flex-1 relative min-h-0 mb-4">
+        <Court>
           <DrawingCanvas
             isDrawing={isDrawing}
-            width={dimensions.width}
-            height={dimensions.height}
             strokeColor={strokeColor}
             strokeWidth={strokeWidth}
             drawingTool={drawingTool}

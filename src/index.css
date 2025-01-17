@@ -45,28 +45,25 @@
 /* Mobile Portrait */
 @media (max-width: 640px) {
   .court {
-    min-height: 65vh;
+    min-height: 60vh;
     aspect-ratio: 3/4;
     margin-top: 0.25rem;
-    margin-bottom: 6rem;
   }
 }
 
 /* Tablet Portrait */
 @media (min-width: 641px) and (max-width: 768px) {
   .court {
-    min-height: 70vh;
+    min-height: 65vh;
     aspect-ratio: 4/5;
-    margin-bottom: 7rem;
   }
 }
 
 /* Tablet Landscape */
 @media (min-width: 769px) and (max-width: 1024px) {
   .court {
-    min-height: 75vh;
+    min-height: 70vh;
     aspect-ratio: 5/6;
-    margin-bottom: 8rem;
   }
 }
 
@@ -75,7 +72,6 @@
   .court {
     min-height: 75vh;
     aspect-ratio: 16/9;
-    margin-bottom: 9rem;
   }
 }
 
@@ -111,11 +107,13 @@
 .goal-top {
   top: -6%;
   transform: translateX(-50%) perspective(100px) rotateX(5deg);
+  margin-bottom: 6rem;
 }
 
 .goal-bottom {
   bottom: -6%;
   transform: translateX(-50%) perspective(100px) rotateX(-5deg);
+  margin-bottom: 6rem;
 }
 
 .line {

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { gsap } from 'gsap';
 import Player from './Player';
 import Timeline from './Timeline';
@@ -77,7 +77,7 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
 
   useAnimation(isPlaying, animate);
 
-  useEffect(() => {
+  React.useEffect(() => {
     const interpolated = interpolatePositions(currentTime);
     if (interpolated) {
       const { positions, ballPosition: newBallPosition } = interpolated;

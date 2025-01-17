@@ -2,8 +2,6 @@ import React, { useRef, useEffect, useState } from 'react';
 
 interface DrawingCanvasProps {
   isDrawing: boolean;
-  width: number;
-  height: number;
   strokeColor: string;
   strokeWidth: number;
   drawingTool: 'pen' | 'dottedLine' | 'eraser';
@@ -11,8 +9,6 @@ interface DrawingCanvasProps {
 
 const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
   isDrawing,
-  width,
-  height,
   strokeColor,
   strokeWidth,
   drawingTool,
@@ -22,39 +18,35 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
   const [isDrawingActive, setIsDrawingActive] = useState(false);
   const startPointRef = useRef<{ x: number; y: number } | null>(null);
   const lastDrawRef = useRef<ImageData | null>(null);
-  const cursorCanvasRef = useRef<HTMLCanvasElement>(null);
+  const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
+  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
+    const updateCanvasSize = () => {
+      const container = containerRef.current;
+      if (!container || !canvasRef.current) return;
 
-    canvas.width = width;
-    canvas.height = height;
-    
-    const context = canvas.getContext('2d');
-    if (!context) return;
-    
-    context.lineCap = 'round';
-    context.lineJoin = 'round';
-    context.strokeStyle = strokeColor;
-    context.lineWidth = strokeWidth;
-    contextRef.current = context;
-  }, [width, height]);
+      const { width, height } = container.getBoundingClientRect();
+      setDimensions({ width, height });
+      
+      const canvas = canvasRef.current;
+      canvas.width = width;
+      canvas.height = height;
+      
+      const context = canvas.getContext('2d');
+      if (!context) return;
+      
+      context.lineCap = 'round';
+      context.lineJoin = 'round';
+      context.strokeStyle = strokeColor;
+      context.lineWidth = strokeWidth;
+      contextRef.current = context;
+    };
 
-  useEffect(() => {
-    if (!contextRef.current) return;
-    contextRef.current.strokeStyle = drawingTool === 'eraser' ? '#000000' : strokeColor;
-    if (drawingTool === 'eraser') {
-      contextRef.current.globalCompositeOperation = 'destination-out';
-    } else {
-      contextRef.current.globalCompositeOperation = 'source-over';
-    }
-  }, [strokeColor, drawingTool]);
-
-  useEffect(() => {
-    if (!contextRef.current) return;
-    contextRef.current.lineWidth = strokeWidth;
-  }, [strokeWidth]);
+    updateCanvasSize();
+    window.addEventListener('resize', updateCanvasSize);
+    return () => window.removeEventListener('resize', updateCanvasSize);
+  }, [strokeColor, strokeWidth]);
 
   const drawArrowhead = (context: CanvasRenderingContext2D, from: { x: number; y: number }, to: { x: number; y: number }) => {
     const headLength = 10 + strokeWidth;
@@ -119,7 +111,7 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
     startPointRef.current = coords;
 
     if (drawingTool === 'dottedLine') {
-      lastDrawRef.current = contextRef.current.getImageData(0, 0, width, height);
+      lastDrawRef.current = contextRef.current.getImageData(0, 0, dimensions.width, dimensions.height);
     } else {
       contextRef.current.beginPath();
       contextRef.current.moveTo(coords.x, coords.y);
@@ -208,14 +200,16 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
   };
 
   return (
-    <canvas
-      ref={canvasRef}
-      className="absolute inset-0 w-full h-full"
-      style={{ 
-        cursor: getCursorStyle(),
-        pointerEvents: isDrawing ? 'auto' : 'none'
-      }}
-    />
+    <div ref={containerRef} className="absolute inset-0 w-full h-full">
+      <canvas
+        ref={canvasRef}
+        className="absolute inset-0 w-full h-full"
+        style={{ 
+          cursor: getCursorStyle(),
+          pointerEvents: isDrawing ? 'auto' : 'none'
+        }}
+      />
+    </div>
   );
 };
 

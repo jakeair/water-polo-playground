@@ -104,8 +104,8 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
   }, [currentTime]);
 
   return (
-    <div className="flex flex-col h-[calc(100vh-4rem)] max-h-[calc(100vh-4rem)]">
-      <div className="flex-1 relative">
+    <div className="flex flex-col h-full">
+      <div className="flex-1 relative min-h-0">
         <Court>
           <DrawingCanvas
             isDrawing={isDrawing}
@@ -133,15 +133,19 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
         </Court>
       </div>
       
-      <Timeline
-        currentTime={currentTime}
-        duration={ANIMATION_DURATION}
-        keyframes={keyframes.map(kf => kf.time)}
-        isPlaying={isPlaying}
-        onTimeChange={setCurrentTime}
-        onPlayPause={() => setIsPlaying(!isPlaying)}
-        onRecordKeyframe={handleRecordKeyframe}
-      />
+      <div className="h-[5vh]" /> {/* Fixed 5% viewport height spacing */}
+      
+      <div>
+        <Timeline
+          currentTime={currentTime}
+          duration={ANIMATION_DURATION}
+          keyframes={keyframes.map(kf => kf.time)}
+          isPlaying={isPlaying}
+          onTimeChange={setCurrentTime}
+          onPlayPause={() => setIsPlaying(!isPlaying)}
+          onRecordKeyframe={handleRecordKeyframe}
+        />
+      </div>
     </div>
   );
 };

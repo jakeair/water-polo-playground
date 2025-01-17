@@ -21,7 +21,6 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasStateRef = useRef<ImageData | null>(null);
-  const [isInitialized, setIsInitialized] = useState(false);
 
   useEffect(() => {
     const updateCanvasSize = () => {
@@ -29,29 +28,27 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
       if (!container || !canvasRef.current) return;
 
       const { width, height } = container.getBoundingClientRect();
-      if (width === 0 || height === 0) return; // Don't proceed if dimensions are invalid
-
       setDimensions({ width, height });
       
       const canvas = canvasRef.current;
+      const prevState = canvasStateRef.current;
+      
       canvas.width = width;
       canvas.height = height;
       
       const context = canvas.getContext('2d');
       if (!context) return;
       
+      // Restore previous canvas state if it exists
+      if (prevState) {
+        context.putImageData(prevState, 0, 0);
+      }
+      
       context.lineCap = 'round';
       context.lineJoin = 'round';
       context.strokeStyle = strokeColor;
       context.lineWidth = strokeWidth;
       contextRef.current = context;
-
-      // Only try to restore state if we have valid dimensions
-      if (canvasStateRef.current && width > 0 && height > 0) {
-        context.putImageData(canvasStateRef.current, 0, 0);
-      }
-
-      setIsInitialized(true);
     };
 
     updateCanvasSize();
@@ -61,17 +58,14 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
 
   // Save canvas state before any context changes
   useEffect(() => {
-    if (!isInitialized || !contextRef.current || !canvasRef.current) return;
-    
-    const canvas = canvasRef.current;
-    if (canvas.width > 0 && canvas.height > 0) {
-      canvasStateRef.current = contextRef.current.getImageData(0, 0, canvas.width, canvas.height);
+    if (contextRef.current && canvasRef.current) {
+      canvasStateRef.current = contextRef.current.getImageData(0, 0, canvasRef.current.width, canvasRef.current.height);
       if (drawingTool !== 'eraser') {
         contextRef.current.strokeStyle = strokeColor;
       }
       contextRef.current.lineWidth = strokeWidth;
     }
-  }, [strokeColor, strokeWidth, drawingTool, isInitialized]);
+  }, [strokeColor, strokeWidth, drawingTool]);
 
   const drawArrowhead = (context: CanvasRenderingContext2D, from: { x: number; y: number }, to: { x: number; y: number }) => {
     const headLength = 10 + strokeWidth;
@@ -108,8 +102,6 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
     if (!canvas) return null;
 
     const rect = canvas.getBoundingClientRect();
-    if (rect.width === 0 || rect.height === 0) return null;
-
     const scaleX = canvas.width / rect.width;
     const scaleY = canvas.height / rect.height;
 
@@ -204,7 +196,7 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
 
   useEffect(() => {
     const canvas = canvasRef.current;
-    if (!canvas || !isInitialized) return;
+    if (!canvas) return;
 
     const handleMouseMove = (e: MouseEvent | TouchEvent) => {
       lastMouseEvent.current = e;
@@ -228,8 +220,9 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
       canvas.removeEventListener('touchmove', handleMouseMove);
       canvas.removeEventListener('touchend', stopDrawing);
     };
-  }, [isDrawing, isDrawingActive, drawingTool, isInitialized]);
+  }, [isDrawing, isDrawingActive, drawingTool]);
 
+  // Create custom cursor styles
   const getCursorStyle = () => {
     if (!isDrawing) return 'default';
     

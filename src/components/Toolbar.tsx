@@ -1,6 +1,6 @@
 import React from 'react';
 import ColorPicker from './ColorPicker';
-import { Pencil, Eraser, QuestionMark } from 'lucide-react';
+import { Pencil, Eraser, HelpCircle } from 'lucide-react';
 import { Separator } from "@/components/ui/separator";
 import { Toggle } from "@/components/ui/toggle";
 import {
@@ -185,7 +185,7 @@ const Toolbar: React.FC<ToolbarProps> = ({
               className="w-10 h-10 rounded-full flex items-center justify-center text-white/70 hover:text-white hover:bg-white/10 transition-colors"
               onClick={() => {/* Add help functionality here */}}
             >
-              <QuestionMark className="w-5 h-5" />
+              <HelpCircle className="w-5 h-5" />
             </button>
           </TooltipTrigger>
           <TooltipContent>

@@ -1,6 +1,6 @@
 import React from 'react';
 import ColorPicker from './ColorPicker';
-import { Pencil, Eraser, Help } from 'lucide-react';
+import { Pencil, Eraser, CircleHelp } from 'lucide-react';
 import { Separator } from "@/components/ui/separator";
 import { Toggle } from "@/components/ui/toggle";
 import {
@@ -25,7 +25,6 @@ interface ToolbarProps {
   onDrawingToolChange: (tool: 'pen' | 'dottedLine' | 'eraser') => void;
 }
 
-// Custom dotted line arrow SVG icon component
 const DottedLineArrow = () => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -186,7 +185,7 @@ const Toolbar: React.FC<ToolbarProps> = ({
               className="w-10 h-10 rounded-full flex items-center justify-center text-white/70 hover:text-white hover:bg-white/10 transition-colors"
               onClick={() => {/* Add help functionality here */}}
             >
-              <Help className="w-5 h-5" />
+              <CircleHelp className="w-5 h-5" />
             </button>
           </TooltipTrigger>
           <TooltipContent>

@@ -105,7 +105,7 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
 
   return (
     <div className="flex flex-col h-full">
-      <div className="flex-1 relative min-h-0 mb-20 sm:mb-24 md:mb-28 lg:mb-32">
+      <div className="flex-1 relative min-h-0 mb-24 sm:mb-28 md:mb-32 lg:mb-36">
         <Court>
           <DrawingCanvas
             isDrawing={isDrawing}
@@ -133,7 +133,7 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
         </Court>
       </div>
       
-      <div className="mt-auto pb-4 sm:pb-6 md:pb-8">
+      <div className="mt-auto pb-6 sm:pb-8 md:pb-10 lg:pb-12">
         <Timeline
           currentTime={currentTime}
           duration={ANIMATION_DURATION}

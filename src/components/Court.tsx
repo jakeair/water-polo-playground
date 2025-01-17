@@ -8,9 +8,9 @@ interface CourtProps {
 
 const Court: React.FC<CourtProps> = ({ children }) => {
   return (
-    <div className="px-3 sm:px-4 md:px-6 lg:px-8 h-full pt-6 sm:pt-8 md:pt-10 lg:pt-12 mb-16 sm:mb-20 md:mb-24 lg:mb-32 xl:mb-36">
+    <div className="w-full h-full pt-6 sm:pt-8 md:pt-10 lg:pt-12 mb-16 sm:mb-20 md:mb-24 lg:mb-32 xl:mb-36">
       <div 
-        className="court relative w-full h-full"
+        className="court relative w-[90vw] max-w-[1200px] mx-auto"
         style={{ 
           maxWidth: '100%',
           margin: '0 auto',

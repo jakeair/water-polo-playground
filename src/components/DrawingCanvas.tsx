@@ -22,6 +22,7 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
   const [isDrawingActive, setIsDrawingActive] = useState(false);
   const startPointRef = useRef<{ x: number; y: number } | null>(null);
   const lastDrawRef = useRef<ImageData | null>(null);
+  const cursorCanvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -55,13 +56,34 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
     contextRef.current.lineWidth = strokeWidth;
   }, [strokeWidth]);
 
-  const drawDottedLine = (context: CanvasRenderingContext2D, from: { x: number; y: number }, to: { x: number; y: number }) => {
+  const drawArrowhead = (context: CanvasRenderingContext2D, from: { x: number; y: number }, to: { x: number; y: number }) => {
+    const headLength = 10 + strokeWidth;
+    const angle = Math.atan2(to.y - from.y, to.x - from.x);
+    
     context.beginPath();
-    context.setLineDash([5, 5]);
+    context.moveTo(
+      to.x - headLength * Math.cos(angle - Math.PI / 6),
+      to.y - headLength * Math.sin(angle - Math.PI / 6)
+    );
+    context.lineTo(to.x, to.y);
+    context.lineTo(
+      to.x - headLength * Math.cos(angle + Math.PI / 6),
+      to.y - headLength * Math.sin(angle + Math.PI / 6)
+    );
+    context.stroke();
+  };
+
+  const drawDottedLine = (context: CanvasRenderingContext2D, from: { x: number; y: number }, to: { x: number; y: number }) => {
+    const dotSpacing = 5 + strokeWidth;
+    context.beginPath();
+    context.setLineDash([dotSpacing, dotSpacing]);
     context.moveTo(from.x, from.y);
     context.lineTo(to.x, to.y);
     context.stroke();
     context.setLineDash([]);
+    
+    // Draw arrowhead
+    drawArrowhead(context, from, to);
   }
 
   const getCoordinates = (event: MouseEvent | TouchEvent): { x: number, y: number } | null => {
@@ -168,12 +190,29 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
     };
   }, [isDrawing, isDrawingActive, drawingTool]);
 
+  // Create custom cursor styles
+  const getCursorStyle = () => {
+    if (!isDrawing) return 'default';
+    
+    if (drawingTool === 'eraser') {
+      const size = strokeWidth * 2;
+      const cursor = `
+        <svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="${size/2}" cy="${size/2}" r="${size/2 - 1}" fill="rgba(255, 255, 255, 0.3)" stroke="white"/>
+        </svg>
+      `;
+      return `url('data:image/svg+xml;base64,${btoa(cursor)}') ${size/2} ${size/2}, auto`;
+    }
+    
+    return 'crosshair';
+  };
+
   return (
     <canvas
       ref={canvasRef}
       className="absolute inset-0 w-full h-full"
       style={{ 
-        cursor: isDrawing ? (drawingTool === 'eraser' ? 'crosshair' : 'crosshair') : 'default',
+        cursor: getCursorStyle(),
         pointerEvents: isDrawing ? 'auto' : 'none'
       }}
     />

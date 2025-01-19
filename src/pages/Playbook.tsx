@@ -7,6 +7,7 @@ import { cn } from '@/lib/utils';
 import Navigation from '@/components/Navigation';
 import { SidebarProvider } from '@/components/ui/sidebar';
 import { Notebook, Play } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const PlaybookPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -83,35 +84,37 @@ const PlaybookPage = () => {
             <>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
                 {paginatedPlays?.map((play) => (
-                  <Card key={play.id} className="group hover:shadow-lg transition-all duration-200 bg-white/70 backdrop-blur-sm border-blue-100">
-                    <CardHeader>
-                      <CardTitle className="text-xl text-gray-900 group-hover:text-blue-600 transition-colors">
-                        {play.title}
-                      </CardTitle>
-                      <CardDescription className="text-gray-500">
-                        Created on {new Date(play.created_at).toLocaleDateString()}
-                      </CardDescription>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
-                      <p className="text-gray-600">
-                        {play.description || 'No description provided'}
-                      </p>
-                      {play.video_url && (
-                        <div className="relative aspect-video rounded-lg overflow-hidden bg-gray-100">
-                          <video 
-                            src={play.video_url}
-                            controls
-                            className="w-full h-full object-cover"
-                          >
-                            Your browser does not support the video tag.
-                          </video>
-                          <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/20">
-                            <Play className="w-12 h-12 text-white" />
+                  <Link to={`/playbook/${play.id}`} key={play.id}>
+                    <Card className="group hover:shadow-lg transition-all duration-200 bg-white/70 backdrop-blur-sm border-blue-100">
+                      <CardHeader>
+                        <CardTitle className="text-xl text-gray-900 group-hover:text-blue-600 transition-colors">
+                          {play.title}
+                        </CardTitle>
+                        <CardDescription className="text-gray-500">
+                          Created on {new Date(play.created_at).toLocaleDateString()}
+                        </CardDescription>
+                      </CardHeader>
+                      <CardContent className="space-y-4">
+                        <p className="text-gray-600">
+                          {play.description || 'No description provided'}
+                        </p>
+                        {play.video_url && (
+                          <div className="relative aspect-video rounded-lg overflow-hidden bg-gray-100">
+                            <video 
+                              src={play.video_url}
+                              controls
+                              className="w-full h-full object-cover"
+                            >
+                              Your browser does not support the video tag.
+                            </video>
+                            <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/20">
+                              <Play className="w-12 h-12 text-white" />
+                            </div>
                           </div>
-                        </div>
-                      )}
-                    </CardContent>
-                  </Card>
+                        )}
+                      </CardContent>
+                    </Card>
+                  </Link>
                 ))}
               </div>
 

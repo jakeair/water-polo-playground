@@ -7,6 +7,7 @@ import AboutPage from '@/pages/About';
 import PricingPage from '@/pages/Pricing';
 import Auth from '@/pages/Auth';
 import PlaybookPage from '@/pages/Playbook';
+import PlayDetail from '@/pages/PlayDetail';
 import { useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { Session } from '@supabase/supabase-js';
@@ -70,6 +71,14 @@ const App = () => {
               element={
                 <ProtectedRoute>
                   <PlaybookPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/playbook/:id"
+              element={
+                <ProtectedRoute>
+                  <PlayDetail />
                 </ProtectedRoute>
               }
             />

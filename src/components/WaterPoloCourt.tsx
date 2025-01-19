@@ -104,8 +104,13 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
       ctx.clearRect(0, 0, width, height);
       ctx.drawImage(canvas, 0, 0);
 
-      // Request the next frame
-      animationFrameId.current = requestAnimationFrame(captureFrame);
+      // Request the next frame only if we haven't reached the last keyframe
+      if (currentTime < ANIMATION_DURATION && isRecording) {
+        animationFrameId.current = requestAnimationFrame(captureFrame);
+      } else if (isRecording) {
+        // Stop recording when we reach the last keyframe
+        await stopRecording();
+      }
     } catch (error) {
       console.error('Error capturing frame:', error);
       toast.error('Error recording video');
@@ -120,6 +125,7 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
     }
     
     try {
+      // Reset to beginning and pause
       setCurrentTime(0);
       setIsPlaying(false);
       
@@ -167,6 +173,7 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
     try {
       const videoBlob = await recorderRef.current.stopRecording();
       setIsRecording(false);
+      setIsPlaying(false);
       toast.success('Recording completed');
       return videoBlob;
     } catch (error) {

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import Player from './Player';
 import Timeline from './Timeline';
@@ -10,6 +10,7 @@ import { useKeyframes } from '@/hooks/useKeyframes';
 import SavePlayDialog from './SavePlayDialog';
 import { Button } from './ui/button';
 import { Save } from 'lucide-react';
+import { VideoRecorder } from '@/utils/videoRecorder';
 
 interface PlayerPosition {
   x: number;
@@ -116,9 +117,46 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
     setIsSaveDialogOpen(true);
   };
 
+  const courtRef = useRef<HTMLDivElement>(null);
+  const recorderRef = useRef<VideoRecorder>(new VideoRecorder());
+  const [isRecording, setIsRecording] = useState(false);
+
+  const startRecording = async () => {
+    if (!courtRef.current) return;
+    
+    try {
+      const stream = courtRef.current.captureStream(30); // 30 FPS
+      await recorderRef.current.startRecording(stream);
+      setIsRecording(true);
+    } catch (error) {
+      console.error('Failed to start recording:', error);
+    }
+  };
+
+  const stopRecording = async () => {
+    if (!isRecording) return;
+    
+    try {
+      const videoBlob = await recorderRef.current.stopRecording();
+      setIsRecording(false);
+      return videoBlob;
+    } catch (error) {
+      console.error('Failed to stop recording:', error);
+      setIsRecording(false);
+    }
+  };
+
+  useEffect(() => {
+    if (isPlaying && !isRecording) {
+      startRecording();
+    } else if (!isPlaying && isRecording) {
+      stopRecording();
+    }
+  }, [isPlaying]);
+
   return (
     <div className="flex flex-col h-full">
-      <div className="flex-1 relative min-h-0">
+      <div className="flex-1 relative min-h-0" ref={courtRef}>
         <Court>
           <DrawingCanvas
             isDrawing={isDrawing}
@@ -173,6 +211,7 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
         onClose={() => setIsSaveDialogOpen(false)}
         canvasData={playerPositions}
         keyframesData={keyframes}
+        onVideoRecorded={stopRecording}
       />
     </div>
   );

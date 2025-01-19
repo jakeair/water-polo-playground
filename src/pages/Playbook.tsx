@@ -6,7 +6,7 @@ import { useState } from 'react';
 import { cn } from '@/lib/utils';
 import Navigation from '@/components/Navigation';
 import { SidebarProvider } from '@/components/ui/sidebar';
-import { Notebook } from 'lucide-react';
+import { Notebook, Play } from 'lucide-react';
 
 const PlaybookPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -55,14 +55,12 @@ const PlaybookPage = () => {
   return (
     <SidebarProvider>
       <div className="min-h-screen bg-gradient-to-br from-[#F8FAFC] via-white to-[#EFF6FF]">
-        {/* Navigation Bar */}
         <div className="fixed top-0 left-0 right-0 bg-white/80 backdrop-blur-sm border-b border-blue-100 z-50">
           <div className="max-w-[1800px] mx-auto py-4 sm:py-5">
             <Navigation />
           </div>
         </div>
 
-        {/* Background pattern */}
         <div className="absolute inset-0 opacity-[0.03]">
           <div className="absolute inset-0" style={{
             backgroundImage: `radial-gradient(circle at 2px 2px, #0EA5E9 1px, transparent 0)`,
@@ -94,10 +92,24 @@ const PlaybookPage = () => {
                         Created on {new Date(play.created_at).toLocaleDateString()}
                       </CardDescription>
                     </CardHeader>
-                    <CardContent>
+                    <CardContent className="space-y-4">
                       <p className="text-gray-600">
                         {play.description || 'No description provided'}
                       </p>
+                      {play.video_url && (
+                        <div className="relative aspect-video rounded-lg overflow-hidden bg-gray-100">
+                          <video 
+                            src={play.video_url}
+                            controls
+                            className="w-full h-full object-cover"
+                          >
+                            Your browser does not support the video tag.
+                          </video>
+                          <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/20">
+                            <Play className="w-12 h-12 text-white" />
+                          </div>
+                        </div>
+                      )}
                     </CardContent>
                   </Card>
                 ))}

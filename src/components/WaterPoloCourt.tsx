@@ -5,8 +5,10 @@ import Timeline from './Timeline';
 import Ball from './Ball';
 import Court from './Court';
 import DrawingCanvas from './DrawingCanvas';
+import TeamColorPicker from './TeamColorPicker';
 import { useAnimation } from '@/hooks/useAnimation';
 import { useKeyframes } from '@/hooks/useKeyframes';
+import { useDrawingState } from '@/hooks/useDrawingState';
 
 interface PlayerPosition {
   x: number;
@@ -18,14 +20,6 @@ interface WaterPoloCourtProps {
   team2Color: string;
   onTeam1ColorChange: (color: string) => void;
   onTeam2ColorChange: (color: string) => void;
-  isDrawing: boolean;
-  onDrawingChange: (isDrawing: boolean) => void;
-  strokeColor: string;
-  onStrokeColorChange: (color: string) => void;
-  strokeWidth: number;
-  onStrokeWidthChange: (width: number) => void;
-  drawingTool: 'pen' | 'dottedLine' | 'eraser';
-  onDrawingToolChange: (tool: 'pen' | 'dottedLine' | 'eraser') => void;
 }
 
 const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
@@ -33,14 +27,6 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
   team2Color,
   onTeam1ColorChange,
   onTeam2ColorChange,
-  isDrawing,
-  onDrawingChange,
-  strokeColor,
-  onStrokeColorChange,
-  strokeWidth,
-  onStrokeWidthChange,
-  drawingTool,
-  onDrawingToolChange
 }) => {
   const [playerPositions, setPlayerPositions] = useState<{[key: string]: PlayerPosition}>({});
   const lastInterpolatedPositions = React.useRef<{[key: string]: PlayerPosition}>({});
@@ -49,6 +35,7 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
   const [isPlaying, setIsPlaying] = useState(false);
   const ANIMATION_DURATION = 2500;
 
+  const drawingState = useDrawingState();
   const { keyframes, recordKeyframe, interpolatePositions } = useKeyframes(currentTime);
 
   const updatePlayerPosition = (playerId: string, position: PlayerPosition) => {
@@ -103,7 +90,6 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
     }
   }, [currentTime]);
 
-  // Add effect to update CSS variables when team colors change
   useEffect(() => {
     document.documentElement.style.setProperty('--team1-color', team1Color);
     document.documentElement.style.setProperty('--team2-color', team2Color);
@@ -114,13 +100,14 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
       <div className="flex-1 relative min-h-0">
         <Court>
           <DrawingCanvas
-            isDrawing={isDrawing}
-            strokeColor={strokeColor}
-            strokeWidth={strokeWidth}
-            drawingTool={drawingTool}
+            isDrawing={drawingState.isDrawing}
+            strokeColor={drawingState.strokeColor}
+            strokeWidth={drawingState.strokeWidth}
+            drawingTool={drawingState.drawingTool}
           />
           <Ball position={ballPosition} onPositionChange={setBallPosition} />
           
+          {/* Team 1 Players */}
           <Player team={1} number="G" initialX={50} initialY={5} isGoalie onPositionChange={(pos) => updatePlayerPosition('1G', pos)} id="player-1G" style={{ backgroundColor: 'var(--goalie-color)' }} />
           <Player team={1} number={1} initialX={20} initialY={20} onPositionChange={(pos) => updatePlayerPosition('11', pos)} id="player-11" style={{ backgroundColor: team1Color }} />
           <Player team={1} number={2} initialX={40} initialY={20} onPositionChange={(pos) => updatePlayerPosition('12', pos)} id="player-12" style={{ backgroundColor: team1Color }} />
@@ -129,6 +116,7 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
           <Player team={1} number={5} initialX={50} initialY={30} onPositionChange={(pos) => updatePlayerPosition('15', pos)} id="player-15" style={{ backgroundColor: team1Color }} />
           <Player team={1} number={6} initialX={70} initialY={30} onPositionChange={(pos) => updatePlayerPosition('16', pos)} id="player-16" style={{ backgroundColor: team1Color }} />
 
+          {/* Team 2 Players */}
           <Player team={2} number="G" initialX={50} initialY={95} isGoalie onPositionChange={(pos) => updatePlayerPosition('2G', pos)} id="player-2G" style={{ backgroundColor: 'var(--goalie-color)' }} />
           <Player team={2} number={1} initialX={20} initialY={70} onPositionChange={(pos) => updatePlayerPosition('21', pos)} id="player-21" style={{ backgroundColor: team2Color }} />
           <Player team={2} number={2} initialX={40} initialY={70} onPositionChange={(pos) => updatePlayerPosition('22', pos)} id="player-22" style={{ backgroundColor: team2Color }} />
@@ -139,7 +127,7 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
         </Court>
       </div>
       
-      <div className="h-[5vh]" /> {/* Fixed 5% viewport height spacing */}
+      <div className="h-[5vh]" />
       
       <div>
         <Timeline

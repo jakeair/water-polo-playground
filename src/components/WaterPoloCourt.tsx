@@ -72,7 +72,7 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
       const container = containerRef.current;
       const { width, height } = container.getBoundingClientRect();
 
-      // Create a temporary canvas for recording
+      // Create a temporary canvas for recording if it doesn't exist
       if (!recordingCanvasRef.current) {
         const canvas = document.createElement('canvas');
         canvas.width = width;
@@ -87,11 +87,10 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
         scale: window.devicePixelRatio || 1,
         useCORS: true,
         allowTaint: true,
-        width: width,
-        height: height,
+        width,
+        height,
         onclone: (clonedDoc) => {
-          // Ensure only the court and drawings are captured
-          const clonedContainer = clonedDoc.querySelector('.fixed-court-container');
+          const clonedContainer = clonedDoc.querySelector('.fixed-court-container') as HTMLElement;
           if (clonedContainer) {
             clonedContainer.style.position = 'relative';
           }

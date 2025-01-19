@@ -69,18 +69,19 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
     if (!containerRef.current) return;
 
     try {
-      const courtContainer = containerRef.current.querySelector('.fixed-court-container');
-      if (!courtContainer) {
-        throw new Error('Court container not found');
+      // Get the canvas element directly
+      const canvasElement = containerRef.current.querySelector('canvas');
+      if (!canvasElement) {
+        throw new Error('Canvas element not found');
       }
 
-      // Get the actual dimensions of the court container
-      const { width, height } = courtContainer.getBoundingClientRect();
+      // Get the actual dimensions of the canvas
+      const { width, height } = canvasElement.getBoundingClientRect();
 
-      const canvas = await html2canvas(courtContainer as HTMLElement, {
+      const canvas = await html2canvas(containerRef.current, {
         backgroundColor: '#f0f9ff',
         logging: false,
-        scale: window.devicePixelRatio || 1, // Use device pixel ratio for better quality
+        scale: window.devicePixelRatio || 1,
         useCORS: true,
         allowTaint: true,
         foreignObjectRendering: true,
@@ -88,12 +89,18 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
         height: height,
         windowWidth: width,
         windowHeight: height,
+        ignoreElements: (element) => {
+          // Ignore everything except the court and canvas
+          return !element.classList.contains('fixed-court-container') && 
+                 !element.classList.contains('court') &&
+                 element.tagName !== 'CANVAS';
+        }
       });
 
       const ctx = recordingCanvasRef.current?.getContext('2d');
       if (!ctx || !recordingCanvasRef.current) return;
 
-      // Set recording canvas to match the court container dimensions
+      // Match recording canvas to source canvas dimensions
       recordingCanvasRef.current.width = width * (window.devicePixelRatio || 1);
       recordingCanvasRef.current.height = height * (window.devicePixelRatio || 1);
 
@@ -101,7 +108,7 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
       ctx.fillRect(0, 0, recordingCanvasRef.current.width, recordingCanvasRef.current.height);
       ctx.drawImage(canvas, 0, 0);
 
-      // Request the next frame immediately for smooth motion
+      // Request the next frame for smooth motion
       animationFrameId.current = requestAnimationFrame(captureFrame);
     } catch (error) {
       console.error('Error capturing frame:', error);
@@ -119,11 +126,12 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
       setCurrentTime(0);
       setIsPlaying(false);
       
-      const canvas = document.createElement('canvas');
-      const courtContainer = containerRef.current.querySelector('.fixed-court-container');
-      if (!courtContainer) throw new Error('Court container not found');
+      // Create canvas with the same dimensions as the source
+      const canvasElement = containerRef.current.querySelector('canvas');
+      if (!canvasElement) throw new Error('Canvas element not found');
 
-      const { width, height } = courtContainer.getBoundingClientRect();
+      const { width, height } = canvasElement.getBoundingClientRect();
+      const canvas = document.createElement('canvas');
       canvas.width = width * (window.devicePixelRatio || 1);
       canvas.height = height * (window.devicePixelRatio || 1);
       recordingCanvasRef.current = canvas;
@@ -133,8 +141,8 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
       // Start capturing frames
       await captureFrame();
 
-      // Configure stream with higher framerate for smoother motion
-      const stream = canvas.captureStream(60);
+      // Use 120fps for smoother motion on all devices
+      const stream = canvas.captureStream(120);
       await recorderRef.current.startRecording(stream);
       setIsRecording(true);
       

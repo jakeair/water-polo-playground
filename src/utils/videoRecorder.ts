@@ -6,10 +6,29 @@ export class VideoRecorder {
     try {
       this.recordedChunks = [];
       
-      // Configure for high quality recording
+      // Try different codecs for better mobile compatibility
+      const mimeTypes = [
+        'video/webm;codecs=vp9',
+        'video/webm;codecs=vp8',
+        'video/webm'
+      ];
+
+      let selectedMimeType = '';
+      for (const mimeType of mimeTypes) {
+        if (MediaRecorder.isTypeSupported(mimeType)) {
+          selectedMimeType = mimeType;
+          break;
+        }
+      }
+
+      if (!selectedMimeType) {
+        throw new Error('No supported mime type found for this device');
+      }
+
+      // Configure for high quality recording with device-specific optimizations
       const options: MediaRecorderOptions = {
-        mimeType: 'video/webm;codecs=vp9',
-        videoBitsPerSecond: 8000000 // 8 Mbps for high quality
+        mimeType: selectedMimeType,
+        videoBitsPerSecond: 12000000 // 12 Mbps for higher quality
       };
 
       this.mediaRecorder = new MediaRecorder(stream, options);
@@ -20,8 +39,8 @@ export class VideoRecorder {
         }
       };
 
-      // Collect data more frequently for smoother recording
-      this.mediaRecorder.start(16.67); // ~60fps (1000ms / 60)
+      // Collect data more frequently for 120fps recording
+      this.mediaRecorder.start(8.33); // ~120fps (1000ms / 120)
       console.log('Started recording with high quality settings');
     } catch (error) {
       console.error('Error starting recording:', error);

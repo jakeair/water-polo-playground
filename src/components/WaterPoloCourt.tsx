@@ -61,6 +61,7 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
 
   const handleRecordKeyframe = () => {
     recordKeyframe(playerPositions, ballPosition);
+    toast.success('Keyframe recorded');
   };
 
   const captureFrame = async () => {
@@ -69,8 +70,10 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
     try {
       const canvas = await html2canvas(courtRef.current, {
         backgroundColor: null,
-        logging: false, // Disable logging for better performance
-        scale: 1, // Adjust scale for better performance if needed
+        logging: false,
+        scale: 1,
+        useCORS: true,
+        allowTaint: true
       });
       
       const ctx = recordingCanvasRef.current.getContext('2d');
@@ -87,28 +90,35 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
   };
 
   const startRecording = async () => {
-    if (!courtRef.current) return;
+    if (!courtRef.current || !keyframes.length) {
+      toast.error('No keyframes to record');
+      return;
+    }
     
     try {
-      // Create recording canvas if it doesn't exist
-      if (!recordingCanvasRef.current) {
-        const canvas = document.createElement('canvas');
-        const rect = courtRef.current.getBoundingClientRect();
-        canvas.width = rect.width;
-        canvas.height = rect.height;
-        recordingCanvasRef.current = canvas;
-      }
+      // Reset timeline to start
+      setCurrentTime(0);
+      
+      // Create recording canvas
+      const canvas = document.createElement('canvas');
+      const rect = courtRef.current.getBoundingClientRect();
+      canvas.width = rect.width;
+      canvas.height = rect.height;
+      recordingCanvasRef.current = canvas;
 
-      // Start capturing frames
+      // Start capture and recording
       await captureFrame();
-
-      const stream = recordingCanvasRef.current.captureStream(30); // 30 FPS
+      const stream = recordingCanvasRef.current.captureStream(30);
       await recorderRef.current.startRecording(stream);
       setIsRecording(true);
+      
+      // Start playback
+      setIsPlaying(true);
       toast.success('Started recording');
     } catch (error) {
       console.error('Failed to start recording:', error);
       toast.error('Failed to start recording');
+      setIsRecording(false);
     }
   };
 
@@ -173,14 +183,17 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
   }, [currentTime]);
 
   useEffect(() => {
-    if (isPlaying && !isRecording) {
-      startRecording();
-    } else if (!isPlaying && isRecording) {
+    if (!isPlaying && isRecording) {
       stopRecording();
     }
-  }, [isPlaying]);
+  }, [isPlaying, isRecording]);
 
   const handleSaveClick = () => {
+    if (!keyframes.length) {
+      toast.error('Add some keyframes before saving');
+      return;
+    }
+    startRecording();
     setIsSaveDialogOpen(true);
   };
 
@@ -220,6 +233,7 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
         <Button
           onClick={handleSaveClick}
           className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700"
+          disabled={isRecording}
         >
           <Save className="w-4 h-4" />
           Save Play
@@ -238,7 +252,11 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
 
       <SavePlayDialog
         isOpen={isSaveDialogOpen}
-        onClose={() => setIsSaveDialogOpen(false)}
+        onClose={() => {
+          setIsSaveDialogOpen(false);
+          setIsRecording(false);
+          setIsPlaying(false);
+        }}
         canvasData={playerPositions}
         keyframesData={keyframes}
         onVideoRecorded={stopRecording}

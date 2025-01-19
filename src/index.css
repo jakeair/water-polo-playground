@@ -32,10 +32,10 @@
 
 .fixed-court-container {
   position: fixed;
-  top: 10vh;
+  top: 0vh;  /* Changed from 10vh to 0vh to extend upward */
   left: calc(4rem + 1px);
   right: 1rem;
-  bottom: 14vh;
+  bottom: 4vh;  /* Changed from 14vh to 4vh to extend downward */
   padding: 1rem;
   z-index: 0;
   contain: layout style paint;

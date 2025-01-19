@@ -141,25 +141,22 @@
   position: absolute;
   width: clamp(20px, 3.9vw, 40px);
   aspect-ratio: 1;
-  background: linear-gradient(145deg, #FFA500, #FF8C00);
-  border: clamp(1px, 0.2vw, 2px) solid #FFD700;
+  background-image: url('/lovable-uploads/eb065d48-f6c0-4300-bfa4-de01815e115f.png');
+  background-size: cover;
+  background-position: center;
   border-radius: 50%;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2),
-              inset -2px -2px 6px rgba(0, 0, 0, 0.1),
-              inset 2px 2px 6px rgba(255, 255, 255, 0.3);
   cursor: grab;
   will-change: transform, left, top;
   touch-action: none;
   transform: translate(-50%, -50%);
   transition: transform 0.2s ease-out;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
 }
 
 .ball:active {
   cursor: grabbing;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2),
-              inset -1px -1px 4px rgba(0, 0, 0, 0.1),
-              inset 1px 1px 4px rgba(255, 255, 255, 0.3);
   transform: translate(-50%, -50%) scale(0.95);
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
 }
 
 .ball:hover {

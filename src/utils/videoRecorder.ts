@@ -7,7 +7,7 @@ export class VideoRecorder {
       this.recordedChunks = [];
       this.mediaRecorder = new MediaRecorder(stream, {
         mimeType: 'video/webm;codecs=vp8,opus',
-        videoBitsPerSecond: 2500000 // 2.5 Mbps for better quality
+        videoBitsPerSecond: 5000000 // 5 Mbps for better quality
       });
 
       this.mediaRecorder.ondataavailable = (event) => {

@@ -68,19 +68,48 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
     if (!courtRef.current || !recordingCanvasRef.current) return;
 
     try {
-      const canvas = await html2canvas(courtRef.current, {
-        backgroundColor: null,
+      // Find the court element within the container
+      const courtElement = courtRef.current.querySelector('.court');
+      if (!courtElement) {
+        throw new Error('Court element not found');
+      }
+
+      const canvas = await html2canvas(courtElement as HTMLElement, {
+        backgroundColor: '#f0f9ff', // Match the court background color
         logging: false,
-        scale: 1,
+        scale: 2, // Increased scale for better quality
         useCORS: true,
-        allowTaint: true
+        allowTaint: true,
+        width: courtElement.clientWidth,
+        height: courtElement.clientHeight,
+        onclone: (clonedDoc) => {
+          // Ensure the cloned element maintains the correct dimensions
+          const clonedCourt = clonedDoc.querySelector('.court');
+          if (clonedCourt) {
+            (clonedCourt as HTMLElement).style.width = `${courtElement.clientWidth}px`;
+            (clonedCourt as HTMLElement).style.height = `${courtElement.clientHeight}px`;
+          }
+        }
       });
       
       const ctx = recordingCanvasRef.current.getContext('2d');
       if (!ctx) return;
 
+      // Clear previous frame
       ctx.clearRect(0, 0, recordingCanvasRef.current.width, recordingCanvasRef.current.height);
-      ctx.drawImage(canvas, 0, 0, recordingCanvasRef.current.width, recordingCanvasRef.current.height);
+      
+      // Draw new frame centered in the recording canvas
+      const scale = Math.min(
+        recordingCanvasRef.current.width / canvas.width,
+        recordingCanvasRef.current.height / canvas.height
+      );
+      
+      const x = (recordingCanvasRef.current.width - canvas.width * scale) / 2;
+      const y = (recordingCanvasRef.current.height - canvas.height * scale) / 2;
+      
+      ctx.fillStyle = '#f0f9ff';
+      ctx.fillRect(0, 0, recordingCanvasRef.current.width, recordingCanvasRef.current.height);
+      ctx.drawImage(canvas, x, y, canvas.width * scale, canvas.height * scale);
       
       animationFrameId.current = requestAnimationFrame(captureFrame);
     } catch (error) {
@@ -99,11 +128,16 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
       // Reset timeline to start
       setCurrentTime(0);
       
-      // Create recording canvas
+      // Get court element dimensions
+      const courtElement = courtRef.current.querySelector('.court');
+      if (!courtElement) {
+        throw new Error('Court element not found');
+      }
+
+      // Create recording canvas with fixed dimensions
       const canvas = document.createElement('canvas');
-      const rect = courtRef.current.getBoundingClientRect();
-      canvas.width = rect.width;
-      canvas.height = rect.height;
+      canvas.width = 1280; // Fixed width for consistent video quality
+      canvas.height = 720; // 16:9 aspect ratio
       recordingCanvasRef.current = canvas;
 
       // Start capture and recording

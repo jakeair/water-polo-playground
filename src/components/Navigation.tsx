@@ -22,9 +22,9 @@ const Navigation = () => {
               to="/" 
               className={`flex items-center gap-1 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full ${
                 isActive('/') 
-                  ? 'bg-blue-100 text-blue-900 font-medium backdrop-blur-md' 
-                  : 'text-gray-600 hover:text-gray-900 hover:bg-blue-50 backdrop-blur-sm'
-              } border border-blue-200 transition-all`}
+                  ? 'bg-blue-50 text-blue-700 font-medium backdrop-blur-md' 
+                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50 backdrop-blur-sm'
+              } border border-gray-200 transition-all`}
             >
               <Home className="h-4 w-4 sm:h-5 sm:w-5" />
               <span className="hidden sm:inline">Home</span>
@@ -41,9 +41,9 @@ const Navigation = () => {
               to="/plays" 
               className={`flex items-center gap-1 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full ${
                 isActive('/plays') 
-                  ? 'bg-blue-100 text-blue-900 font-medium backdrop-blur-md' 
-                  : 'text-gray-600 hover:text-gray-900 hover:bg-blue-50 backdrop-blur-sm'
-              } border border-blue-200 transition-all`}
+                  ? 'bg-blue-50 text-blue-700 font-medium backdrop-blur-md' 
+                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50 backdrop-blur-sm'
+              } border border-gray-200 transition-all`}
             >
               <Layout className="h-4 w-4 sm:h-5 sm:w-5" />
               <span className="hidden sm:inline">Whiteboard</span>
@@ -60,9 +60,9 @@ const Navigation = () => {
               to="/about" 
               className={`flex items-center gap-1 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full ${
                 isActive('/about') 
-                  ? 'bg-blue-100 text-blue-900 font-medium backdrop-blur-md' 
-                  : 'text-gray-600 hover:text-gray-900 hover:bg-blue-50 backdrop-blur-sm'
-              } border border-blue-200 transition-all`}
+                  ? 'bg-blue-50 text-blue-700 font-medium backdrop-blur-md' 
+                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50 backdrop-blur-sm'
+              } border border-gray-200 transition-all`}
             >
               <Info className="h-4 w-4 sm:h-5 sm:w-5" />
               <span className="hidden sm:inline">About</span>

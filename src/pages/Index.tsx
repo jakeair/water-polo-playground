@@ -11,14 +11,14 @@ const Index = () => {
   const [team1Color, setTeam1Color] = useState('#3b82f6');
   const [team2Color, setTeam2Color] = useState('#ef4444');
   const [isDrawing, setIsDrawing] = useState(false);
-  const [strokeColor, setStrokeColor] = useState('#ffffff');
+  const [strokeColor, setStrokeColor] = useState('#000000');
   const [strokeWidth, setStrokeWidth] = useState(2);
   const [drawingTool, setDrawingTool] = useState<'pen' | 'dottedLine' | 'eraser'>('pen');
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800 text-white">
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white text-gray-900">
       {/* Navigation Bar */}
-      <div className="fixed top-0 left-0 right-0 bg-gray-900/80 backdrop-blur-sm border-b border-white/10 z-50 h-16">
+      <div className="fixed top-0 left-0 right-0 bg-white/80 backdrop-blur-sm border-b border-gray-200 z-50 h-16">
         <div className="max-w-screen-2xl mx-auto px-4 h-full flex items-center justify-between">
           <Link to="/" className="flex items-center space-x-4 group">
             <img 
@@ -36,7 +36,7 @@ const Index = () => {
         <div className="h-full w-full flex">
           <SidebarProvider>
             {/* Left Toolbar - Always Compact */}
-            <div className="w-16 flex-shrink-0 bg-black/20 border-r border-white/10">
+            <div className="w-16 flex-shrink-0 bg-gray-50/90 border-r border-gray-200">
               <div className="h-full flex flex-col items-center p-2 gap-2">
                 <Toolbar
                   team1Color={team1Color}
@@ -59,7 +59,7 @@ const Index = () => {
             </div>
 
             {/* Main Court Area */}
-            <div className="flex-1 relative flex flex-col overflow-hidden p-2 md:p-6">
+            <div className="flex-1 relative flex flex-col overflow-hidden p-2 md:p-6 bg-gray-50">
               <div className="flex-1 min-h-0 flex items-center justify-center w-full">
                 <WaterPoloCourt
                   team1Color={team1Color}

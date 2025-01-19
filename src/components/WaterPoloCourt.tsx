@@ -266,15 +266,6 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
       <div className="h-[5vh]" />
       
       <div className="flex items-center gap-4 px-4 mb-4">
-        <Button
-          onClick={handleSaveClick}
-          className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700"
-          disabled={isRecording}
-        >
-          <Save className="w-4 h-4" />
-          Save Play
-        </Button>
-        
         <Timeline
           currentTime={currentTime}
           duration={ANIMATION_DURATION}

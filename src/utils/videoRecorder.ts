@@ -6,10 +6,10 @@ export class VideoRecorder {
     try {
       this.recordedChunks = [];
       
-      // Optimize video encoding settings based on device capabilities
+      // Configure for high quality recording
       const options: MediaRecorderOptions = {
-        mimeType: 'video/webm;codecs=vp9,opus',
-        videoBitsPerSecond: window.innerWidth < 768 ? 2500000 : 8000000 // Lower bitrate for mobile
+        mimeType: 'video/webm;codecs=vp9',
+        videoBitsPerSecond: 8000000 // 8 Mbps for high quality
       };
 
       this.mediaRecorder = new MediaRecorder(stream, options);
@@ -20,8 +20,9 @@ export class VideoRecorder {
         }
       };
 
-      this.mediaRecorder.start(20); // Collect data more frequently
-      console.log('Started recording with optimized settings');
+      // Collect data more frequently for smoother recording
+      this.mediaRecorder.start(16.67); // ~60fps (1000ms / 60)
+      console.log('Started recording with high quality settings');
     } catch (error) {
       console.error('Error starting recording:', error);
       throw error;

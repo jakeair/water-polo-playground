@@ -2,15 +2,16 @@ export class VideoRecorder {
   private mediaRecorder: MediaRecorder | null = null;
   private recordedChunks: Blob[] = [];
 
-  async startRecording(stream: MediaStream) {
+  async startRecording(stream: MediaStream, options?: MediaRecorderOptions) {
     try {
       this.recordedChunks = [];
       
-      // Try different codecs for better mobile compatibility
+      // Try different codecs for better compatibility
       const mimeTypes = [
-        'video/webm;codecs=vp9',
-        'video/webm;codecs=vp8',
-        'video/webm'
+        'video/webm;codecs=vp9,opus',
+        'video/webm;codecs=vp8,opus',
+        'video/webm',
+        'video/mp4'
       ];
 
       let selectedMimeType = '';
@@ -22,16 +23,17 @@ export class VideoRecorder {
       }
 
       if (!selectedMimeType) {
-        throw new Error('No supported mime type found for this device');
+        throw new Error('No supported video format found for this device');
       }
 
-      // Configure for high quality recording with device-specific optimizations
-      const options: MediaRecorderOptions = {
+      // Configure for high quality recording
+      const recorderOptions: MediaRecorderOptions = {
         mimeType: selectedMimeType,
-        videoBitsPerSecond: 12000000 // 12 Mbps for higher quality
+        videoBitsPerSecond: 8000000, // 8 Mbps
+        ...options
       };
 
-      this.mediaRecorder = new MediaRecorder(stream, options);
+      this.mediaRecorder = new MediaRecorder(stream, recorderOptions);
 
       this.mediaRecorder.ondataavailable = (event) => {
         if (event.data && event.data.size > 0) {
@@ -39,9 +41,9 @@ export class VideoRecorder {
         }
       };
 
-      // Collect data more frequently for 120fps recording
+      // Collect data more frequently for smoother recording
       this.mediaRecorder.start(8.33); // ~120fps (1000ms / 120)
-      console.log('Started recording with high quality settings');
+      console.log('Started recording with codec:', selectedMimeType);
     } catch (error) {
       console.error('Error starting recording:', error);
       throw error;
@@ -58,7 +60,7 @@ export class VideoRecorder {
       this.mediaRecorder.onstop = () => {
         try {
           const blob = new Blob(this.recordedChunks, {
-            type: 'video/webm'
+            type: this.mediaRecorder?.mimeType || 'video/webm'
           });
           console.log('Recording stopped, blob size:', blob.size);
           resolve(blob);

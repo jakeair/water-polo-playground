@@ -69,50 +69,48 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
     if (!containerRef.current) return;
 
     try {
-      // Get the canvas element directly
-      const canvasElement = containerRef.current.querySelector('canvas');
-      if (!canvasElement) {
-        throw new Error('Canvas element not found');
+      const container = containerRef.current;
+      const { width, height } = container.getBoundingClientRect();
+
+      // Create a temporary canvas for recording
+      if (!recordingCanvasRef.current) {
+        const canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+        recordingCanvasRef.current = canvas;
       }
 
-      // Get the actual dimensions of the canvas
-      const { width, height } = canvasElement.getBoundingClientRect();
-
-      const canvas = await html2canvas(containerRef.current, {
+      // Use html2canvas to capture the entire container
+      const canvas = await html2canvas(container, {
         backgroundColor: '#f0f9ff',
         logging: false,
         scale: window.devicePixelRatio || 1,
         useCORS: true,
         allowTaint: true,
-        foreignObjectRendering: true,
         width: width,
         height: height,
-        windowWidth: width,
-        windowHeight: height,
-        ignoreElements: (element) => {
-          // Ignore everything except the court and canvas
-          return !element.classList.contains('fixed-court-container') && 
-                 !element.classList.contains('court') &&
-                 element.tagName !== 'CANVAS';
+        onclone: (clonedDoc) => {
+          // Ensure only the court and drawings are captured
+          const clonedContainer = clonedDoc.querySelector('.fixed-court-container');
+          if (clonedContainer) {
+            clonedContainer.style.position = 'relative';
+          }
         }
       });
 
-      const ctx = recordingCanvasRef.current?.getContext('2d');
-      if (!ctx || !recordingCanvasRef.current) return;
+      const ctx = recordingCanvasRef.current.getContext('2d');
+      if (!ctx) return;
 
-      // Match recording canvas to source canvas dimensions
-      recordingCanvasRef.current.width = width * (window.devicePixelRatio || 1);
-      recordingCanvasRef.current.height = height * (window.devicePixelRatio || 1);
-
-      ctx.fillStyle = '#f0f9ff';
-      ctx.fillRect(0, 0, recordingCanvasRef.current.width, recordingCanvasRef.current.height);
+      // Clear and draw the new frame
+      ctx.clearRect(0, 0, width, height);
       ctx.drawImage(canvas, 0, 0);
 
-      // Request the next frame for smooth motion
+      // Request the next frame
       animationFrameId.current = requestAnimationFrame(captureFrame);
     } catch (error) {
       console.error('Error capturing frame:', error);
       toast.error('Error recording video');
+      stopRecording();
     }
   };
 
@@ -126,14 +124,13 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
       setCurrentTime(0);
       setIsPlaying(false);
       
-      // Create canvas with the same dimensions as the source
-      const canvasElement = containerRef.current.querySelector('canvas');
-      if (!canvasElement) throw new Error('Canvas element not found');
+      const container = containerRef.current;
+      const { width, height } = container.getBoundingClientRect();
 
-      const { width, height } = canvasElement.getBoundingClientRect();
+      // Create and setup recording canvas
       const canvas = document.createElement('canvas');
-      canvas.width = width * (window.devicePixelRatio || 1);
-      canvas.height = height * (window.devicePixelRatio || 1);
+      canvas.width = width;
+      canvas.height = height;
       recordingCanvasRef.current = canvas;
 
       await new Promise(resolve => setTimeout(resolve, 100));
@@ -141,16 +138,22 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
       // Start capturing frames
       await captureFrame();
 
-      // Use 120fps for smoother motion on all devices
-      const stream = canvas.captureStream(120);
-      await recorderRef.current.startRecording(stream);
-      setIsRecording(true);
+      // Configure stream with high quality settings
+      const stream = canvas.captureStream(120); // 120fps for smoother motion
       
+      // Configure recorder with high quality settings
+      const options = {
+        mimeType: 'video/webm;codecs=vp9,opus',
+        videoBitsPerSecond: 8000000, // 8 Mbps for high quality
+      };
+
+      await recorderRef.current.startRecording(stream, options);
+      setIsRecording(true);
       setIsPlaying(true);
       toast.success('Started recording');
     } catch (error) {
       console.error('Failed to start recording:', error);
-      toast.error('Failed to start recording');
+      toast.error('Failed to start recording. Please try a different browser or device.');
       setIsRecording(false);
     }
   };

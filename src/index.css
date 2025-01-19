@@ -55,13 +55,14 @@
   position: absolute;
   width: clamp(20%, 23%, 25%);
   height: clamp(4%, 6%, 8%);
-  border: clamp(2px, 0.4vw, 4px) solid #FF4D4D;
-  background-color: #ffdde1;
+  background: linear-gradient(to bottom, #ffdde1 0%, #ee9ca7 100%);
+  border: clamp(2px, 0.4vw, 4px) solid #d23f57;
   border-radius: clamp(4px, 0.8vw, 8px);
   display: flex;
   justify-content: center;
   align-items: center;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2),
+              inset 0 2px 4px rgba(255, 255, 255, 0.3);
   overflow: hidden;
   left: 50%;
   transform: translateX(-50%);
@@ -73,11 +74,11 @@
   width: 100%;
   height: 100%;
   background-image: 
-    linear-gradient(to right, rgba(0, 0, 0, 0.15) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(0, 0, 0, 0.15) 1px, transparent 1px);
+    linear-gradient(to right, rgba(0, 0, 0, 0.2) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.2) 1px, transparent 1px);
   background-size: 8% 8%;
   opacity: 0.95;
-  box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.1);
+  box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.15);
 }
 
 .goal-top {
@@ -114,8 +115,10 @@
   user-select: none;
   font-size: clamp(10px, 1.5vw, 20px);
   transform-origin: center;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  border: clamp(1px, 0.2vw, 2px) solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2),
+              inset 0 2px 4px rgba(255, 255, 255, 0.3);
+  border: clamp(1px, 0.2vw, 2px) solid rgba(255, 255, 255, 0.3);
+  background: linear-gradient(145deg, var(--team1-color), color-mix(in srgb, var(--team1-color), black 20%));
   will-change: transform, left, top;
   touch-action: none;
   -webkit-user-select: none;
@@ -126,8 +129,13 @@
   transition: transform 0.1s cubic-bezier(0.2, 0, 0, 1);
 }
 
-.player.team1 { background-color: var(--team1-color); }
-.player.team2 { background-color: var(--team2-color); }
+.player.team1 { 
+  background: linear-gradient(145deg, var(--team1-color), color-mix(in srgb, var(--team1-color), black 20%));
+}
+
+.player.team2 { 
+  background: linear-gradient(145deg, var(--team2-color), color-mix(in srgb, var(--team2-color), black 20%));
+}
 
 .ball {
   position: absolute;
@@ -136,7 +144,9 @@
   background: linear-gradient(145deg, #FFA500, #FF8C00);
   border: clamp(1px, 0.2vw, 2px) solid #FFD700;
   border-radius: 50%;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2),
+              inset -2px -2px 6px rgba(0, 0, 0, 0.1),
+              inset 2px 2px 6px rgba(255, 255, 255, 0.3);
   cursor: grab;
   will-change: transform, left, top;
   touch-action: none;
@@ -146,7 +156,9 @@
 
 .ball:active {
   cursor: grabbing;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2),
+              inset -1px -1px 4px rgba(0, 0, 0, 0.1),
+              inset 1px 1px 4px rgba(255, 255, 255, 0.3);
   transform: translate(-50%, -50%) scale(0.95);
 }
 

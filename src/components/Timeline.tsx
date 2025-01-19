@@ -1,7 +1,7 @@
 import React from 'react';
 import { Slider } from "@/components/ui/slider";
 import { Button } from "@/components/ui/button";
-import { PlayCircle, PauseCircle, Plus } from "lucide-react";
+import { PlayCircle, PauseCircle } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 interface TimelineProps {
@@ -17,11 +17,9 @@ interface TimelineProps {
 const Timeline: React.FC<TimelineProps> = ({
   currentTime,
   duration = 2500,
-  keyframes,
   isPlaying,
   onTimeChange,
   onPlayPause,
-  onRecordKeyframe
 }) => {
   return (
     <div className="w-full space-y-2 p-3 rounded-lg bg-white border border-gray-200 shadow-lg fixed bottom-2 left-0 right-0 mx-auto max-w-[calc(100%-2rem)]">
@@ -56,37 +54,9 @@ const Timeline: React.FC<TimelineProps> = ({
             className="py-1"
           />
         </div>
-
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button 
-                variant="outline"
-                size="default"
-                onClick={onRecordKeyframe}
-                className="w-10 h-10 rounded-full border-red-200 hover:bg-red-50 hover:border-red-300 transition-all duration-200 border-2"
-              >
-                <Plus className="h-6 w-6 text-red-500" />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>Add Keyframe</p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
       </div>
 
       <div className="relative h-1.5 w-full bg-gray-100 rounded-full overflow-hidden">
-        {keyframes.map((time, index) => (
-          <div
-            key={index}
-            className="absolute w-1.5 h-full bg-red-500"
-            style={{ 
-              left: `${(time / duration) * 100}%`,
-              transform: 'translateX(-50%)',
-            }}
-          />
-        ))}
         <div 
           className="absolute h-full w-0.5 bg-blue-500"
           style={{ 

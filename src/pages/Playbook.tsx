@@ -7,10 +7,12 @@ import { cn } from '@/lib/utils';
 import Navigation from '@/components/Navigation';
 import { SidebarProvider } from '@/components/ui/sidebar';
 import { Notebook } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const PlaybookPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6;
+  const navigate = useNavigate();
 
   const { data: plays, isLoading } = useQuery({
     queryKey: ['plays'],
@@ -52,6 +54,10 @@ const PlaybookPage = () => {
     }
   };
 
+  const handlePlayClick = (playId: string) => {
+    navigate(`/plays/${playId}`);
+  };
+
   return (
     <SidebarProvider>
       <div className="min-h-screen bg-gradient-to-br from-[#F8FAFC] via-white to-[#EFF6FF]">
@@ -85,7 +91,11 @@ const PlaybookPage = () => {
             <>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
                 {paginatedPlays?.map((play) => (
-                  <Card key={play.id} className="group hover:shadow-lg transition-all duration-200 bg-white/70 backdrop-blur-sm border-blue-100">
+                  <Card 
+                    key={play.id} 
+                    className="group hover:shadow-lg transition-all duration-200 bg-white/70 backdrop-blur-sm border-blue-100 cursor-pointer"
+                    onClick={() => handlePlayClick(play.id)}
+                  >
                     <CardHeader>
                       <CardTitle className="text-xl text-gray-900 group-hover:text-blue-600 transition-colors">
                         {play.title}

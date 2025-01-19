@@ -3,6 +3,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from '@/components/ui/pagination';
 import { useState } from 'react';
+import { cn } from '@/lib/utils';
 
 const PlaybookPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -32,6 +33,18 @@ const PlaybookPage = () => {
   const totalPages = plays ? Math.ceil(plays.length / itemsPerPage) : 0;
   const startIndex = (currentPage - 1) * itemsPerPage;
   const paginatedPlays = plays?.slice(startIndex, startIndex + itemsPerPage);
+
+  const handlePrevious = () => {
+    if (currentPage > 1) {
+      setCurrentPage(p => p - 1);
+    }
+  };
+
+  const handleNext = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(p => p + 1);
+    }
+  };
 
   return (
     <div className="container mx-auto py-8">
@@ -65,9 +78,11 @@ const PlaybookPage = () => {
             <Pagination>
               <PaginationContent>
                 <PaginationItem>
-                  <PaginationPrevious 
-                    onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
-                    disabled={currentPage === 1}
+                  <PaginationPrevious
+                    onClick={handlePrevious}
+                    className={cn(
+                      currentPage === 1 && "pointer-events-none opacity-50"
+                    )}
                   />
                 </PaginationItem>
                 {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
@@ -82,8 +97,10 @@ const PlaybookPage = () => {
                 ))}
                 <PaginationItem>
                   <PaginationNext
-                    onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
-                    disabled={currentPage === totalPages}
+                    onClick={handleNext}
+                    className={cn(
+                      currentPage === totalPages && "pointer-events-none opacity-50"
+                    )}
                   />
                 </PaginationItem>
               </PaginationContent>

@@ -74,23 +74,24 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
         throw new Error('Court element not found');
       }
 
+      // Set background color and remove any gradients temporarily
+      const originalBackground = (courtElement as HTMLElement).style.background;
+      (courtElement as HTMLElement).style.background = '#f0f9ff';
+
       const canvas = await html2canvas(courtElement as HTMLElement, {
-        backgroundColor: '#f0f9ff', // Match the court background color
+        backgroundColor: '#f0f9ff',
         logging: false,
-        scale: 2, // Increased scale for better quality
+        scale: 2,
         useCORS: true,
         allowTaint: true,
+        foreignObjectRendering: true,
+        removeContainer: true,
         width: courtElement.clientWidth,
         height: courtElement.clientHeight,
-        onclone: (clonedDoc) => {
-          // Ensure the cloned element maintains the correct dimensions
-          const clonedCourt = clonedDoc.querySelector('.court');
-          if (clonedCourt) {
-            (clonedCourt as HTMLElement).style.width = `${courtElement.clientWidth}px`;
-            (clonedCourt as HTMLElement).style.height = `${courtElement.clientHeight}px`;
-          }
-        }
       });
+
+      // Restore original background
+      (courtElement as HTMLElement).style.background = originalBackground;
       
       const ctx = recordingCanvasRef.current.getContext('2d');
       if (!ctx) return;
@@ -98,7 +99,7 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
       // Clear previous frame
       ctx.clearRect(0, 0, recordingCanvasRef.current.width, recordingCanvasRef.current.height);
       
-      // Draw new frame centered in the recording canvas
+      // Calculate scaling while maintaining aspect ratio
       const scale = Math.min(
         recordingCanvasRef.current.width / canvas.width,
         recordingCanvasRef.current.height / canvas.height
@@ -107,8 +108,11 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
       const x = (recordingCanvasRef.current.width - canvas.width * scale) / 2;
       const y = (recordingCanvasRef.current.height - canvas.height * scale) / 2;
       
+      // Draw white background
       ctx.fillStyle = '#f0f9ff';
       ctx.fillRect(0, 0, recordingCanvasRef.current.width, recordingCanvasRef.current.height);
+      
+      // Draw the captured frame
       ctx.drawImage(canvas, x, y, canvas.width * scale, canvas.height * scale);
       
       animationFrameId.current = requestAnimationFrame(captureFrame);
@@ -127,22 +131,20 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
     try {
       // Reset timeline to start
       setCurrentTime(0);
+      setIsPlaying(false);
       
-      // Get court element dimensions
-      const courtElement = courtRef.current.querySelector('.court');
-      if (!courtElement) {
-        throw new Error('Court element not found');
-      }
-
       // Create recording canvas with fixed dimensions
       const canvas = document.createElement('canvas');
-      canvas.width = 1280; // Fixed width for consistent video quality
-      canvas.height = 720; // 16:9 aspect ratio
+      canvas.width = 1920; // Increased width for better quality
+      canvas.height = 1080; // 16:9 aspect ratio
       recordingCanvasRef.current = canvas;
+
+      // Wait a brief moment for the timeline to reset
+      await new Promise(resolve => setTimeout(resolve, 100));
 
       // Start capture and recording
       await captureFrame();
-      const stream = recordingCanvasRef.current.captureStream(30);
+      const stream = canvas.captureStream(60); // Increased FPS
       await recorderRef.current.startRecording(stream);
       setIsRecording(true);
       

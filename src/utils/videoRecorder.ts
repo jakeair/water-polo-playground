@@ -6,8 +6,8 @@ export class VideoRecorder {
     try {
       this.recordedChunks = [];
       this.mediaRecorder = new MediaRecorder(stream, {
-        mimeType: 'video/webm;codecs=vp8,opus',
-        videoBitsPerSecond: 5000000 // 5 Mbps for better quality
+        mimeType: 'video/webm;codecs=vp9,opus',
+        videoBitsPerSecond: 8000000 // 8 Mbps for high quality
       });
 
       this.mediaRecorder.ondataavailable = (event) => {
@@ -16,7 +16,7 @@ export class VideoRecorder {
         }
       };
 
-      this.mediaRecorder.start(100); // Collect data every 100ms
+      this.mediaRecorder.start(20); // Collect data more frequently
       console.log('Started recording');
     } catch (error) {
       console.error('Error starting recording:', error);

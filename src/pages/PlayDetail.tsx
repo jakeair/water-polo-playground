@@ -85,15 +85,24 @@ const PlayDetail = () => {
             {play.video_url && (
               <div>
                 <h2 className="text-xl font-semibold text-gray-900 mb-4">Play Animation</h2>
-                <div className="aspect-video rounded-lg overflow-hidden bg-gray-100">
+                <div className="aspect-video rounded-lg overflow-hidden bg-gray-100 shadow-lg">
                   <video 
                     src={play.video_url}
                     controls
-                    className="w-full h-full object-cover"
+                    autoPlay
+                    loop
+                    className="w-full h-full object-contain"
                   >
                     Your browser does not support the video tag.
                   </video>
                 </div>
+              </div>
+            )}
+
+            {!play.video_url && (
+              <div className="text-center py-8 bg-gray-50 rounded-lg">
+                <Play className="w-12 h-12 text-gray-400 mx-auto mb-2" />
+                <p className="text-gray-600">No video recording available for this play</p>
               </div>
             )}
           </div>

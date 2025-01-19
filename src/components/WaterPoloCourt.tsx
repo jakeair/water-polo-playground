@@ -13,11 +13,6 @@ import { Save } from 'lucide-react';
 import { VideoRecorder } from '@/utils/videoRecorder';
 import html2canvas from 'html2canvas';
 
-interface PlayerPosition {
-  x: number;
-  y: number;
-}
-
 interface WaterPoloCourtProps {
   team1Color: string;
   team2Color: string;
@@ -36,19 +31,13 @@ interface WaterPoloCourtProps {
 const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
   team1Color,
   team2Color,
-  onTeam1ColorChange,
-  onTeam2ColorChange,
   isDrawing,
-  onDrawingChange,
   strokeColor,
-  onStrokeColorChange,
   strokeWidth,
-  onStrokeWidthChange,
   drawingTool,
-  onDrawingToolChange
 }) => {
-  const [playerPositions, setPlayerPositions] = useState<{[key: string]: PlayerPosition}>({});
-  const lastInterpolatedPositions = React.useRef<{[key: string]: PlayerPosition}>({});
+  const [playerPositions, setPlayerPositions] = useState<{[key: string]: { x: number; y: number }}>({});
+  const lastInterpolatedPositions = useRef<{[key: string]: { x: number; y: number }}>({});
   const [ballPosition, setBallPosition] = useState({ x: 50, y: 50 });
   const [currentTime, setCurrentTime] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -63,7 +52,7 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
 
   const { keyframes, recordKeyframe, interpolatePositions } = useKeyframes(currentTime);
 
-  const updatePlayerPosition = (playerId: string, position: PlayerPosition) => {
+  const updatePlayerPosition = (playerId: string, position: { x: number; y: number }) => {
     setPlayerPositions(prev => ({
       ...prev,
       [playerId]: position
@@ -99,10 +88,11 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
     
     // Create recording canvas if it doesn't exist
     if (!recordingCanvasRef.current) {
-      recordingCanvasRef.current = document.createElement('canvas');
+      const canvas = document.createElement('canvas');
       const rect = courtRef.current.getBoundingClientRect();
-      recordingCanvasRef.current.width = rect.width;
-      recordingCanvasRef.current.height = rect.height;
+      canvas.width = rect.width;
+      canvas.height = rect.height;
+      recordingCanvasRef.current = canvas;
     }
 
     // Start capturing frames

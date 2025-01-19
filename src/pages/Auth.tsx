@@ -38,6 +38,8 @@ const Auth = () => {
           return 'Please verify your email address before signing in.';
         case 'user_not_found':
           return 'No user found with these credentials.';
+        case 'weak_password':
+          return 'Password should be at least 6 characters long.';
         case 'invalid_grant':
           return 'Invalid login credentials.';
         default:

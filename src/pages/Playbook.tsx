@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from '@/components/ui/pagination';
@@ -6,12 +6,26 @@ import { useState } from 'react';
 import { cn } from '@/lib/utils';
 import Navigation from '@/components/Navigation';
 import { SidebarProvider } from '@/components/ui/sidebar';
-import { Notebook, Play } from 'lucide-react';
+import { Notebook, Play, Trash2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import { toast } from 'sonner';
 
 const PlaybookPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
+  const [playToDelete, setPlayToDelete] = useState<string | null>(null);
   const itemsPerPage = 6;
+  const queryClient = useQueryClient();
 
   const { data: plays, isLoading } = useQuery({
     queryKey: ['plays'],
@@ -25,6 +39,27 @@ const PlaybookPage = () => {
       return data;
     },
   });
+
+  const handleDelete = async () => {
+    if (!playToDelete) return;
+
+    try {
+      const { error } = await supabase
+        .from('plays')
+        .delete()
+        .eq('id', playToDelete);
+
+      if (error) throw error;
+
+      toast.success('Play deleted successfully');
+      queryClient.invalidateQueries({ queryKey: ['plays'] });
+    } catch (error) {
+      console.error('Error deleting play:', error);
+      toast.error('Failed to delete play');
+    } finally {
+      setPlayToDelete(null);
+    }
+  };
 
   if (isLoading) {
     return (
@@ -84,8 +119,19 @@ const PlaybookPage = () => {
             <>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
                 {paginatedPlays?.map((play) => (
-                  <Link to={`/playbook/${play.id}`} key={play.id}>
-                    <Card className="group hover:shadow-lg transition-all duration-200 bg-white/70 backdrop-blur-sm border-blue-100">
+                  <Card key={play.id} className="group relative hover:shadow-lg transition-all duration-200 bg-white/70 backdrop-blur-sm border-blue-100">
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="absolute top-2 right-2 text-gray-400 hover:text-red-500 hover:bg-red-50"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setPlayToDelete(play.id);
+                      }}
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                    <Link to={`/playbook/${play.id}`}>
                       <CardHeader>
                         <CardTitle className="text-xl text-gray-900 group-hover:text-blue-600 transition-colors">
                           {play.title}
@@ -113,8 +159,8 @@ const PlaybookPage = () => {
                           </div>
                         )}
                       </CardContent>
-                    </Card>
-                  </Link>
+                    </Link>
+                  </Card>
                 ))}
               </div>
 
@@ -159,6 +205,23 @@ const PlaybookPage = () => {
           )}
         </main>
       </div>
+
+      <AlertDialog open={!!playToDelete} onOpenChange={() => setPlayToDelete(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This action cannot be undone. This will permanently delete the play from your playbook.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={handleDelete} className="bg-red-500 hover:bg-red-600">
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </SidebarProvider>
   );
 };

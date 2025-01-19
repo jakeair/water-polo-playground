@@ -5,7 +5,6 @@ interface DrawingCanvasProps {
   strokeColor: string;
   strokeWidth: number;
   drawingTool: 'pen' | 'dottedLine' | 'eraser';
-  isHalfCourt?: boolean;
 }
 
 const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
@@ -13,7 +12,6 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
   strokeColor,
   strokeWidth,
   drawingTool,
-  isHalfCourt = false,
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const contextRef = useRef<CanvasRenderingContext2D | null>(null);
@@ -33,10 +31,7 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
       if (!containerRef.current) return;
       const { width, height } = containerRef.current.getBoundingClientRect();
       if (width > 0 && height > 0) {
-        setDimensions({ 
-          width, 
-          height: isHalfCourt ? height / 2 : height 
-        });
+        setDimensions({ width, height });
       }
     };
 
@@ -47,7 +42,7 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
 
     resizeObserver.observe(containerRef.current);
     return () => resizeObserver.disconnect();
-  }, [isHalfCourt]);
+  }, []);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -256,7 +251,7 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
   return (
     <div 
       ref={containerRef} 
-      className={`absolute inset-0 w-full ${isHalfCourt ? 'h-1/2' : 'h-full'}`}
+      className="absolute inset-0 w-full h-full"
       style={{ minHeight: '200px' }}
     >
       <canvas

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Slider } from "@/components/ui/slider";
 import { Button } from "@/components/ui/button";
-import { PlayCircle, PauseCircle, Plus } from "lucide-react";
+import { PlayCircle, PauseCircle, Plus, Save } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 interface TimelineProps {
@@ -12,6 +12,8 @@ interface TimelineProps {
   onTimeChange: (value: number) => void;
   onPlayPause: () => void;
   onRecordKeyframe: () => void;
+  onSave: () => void;
+  isRecording?: boolean;
 }
 
 const Timeline: React.FC<TimelineProps> = ({
@@ -21,7 +23,9 @@ const Timeline: React.FC<TimelineProps> = ({
   isPlaying,
   onTimeChange,
   onPlayPause,
-  onRecordKeyframe
+  onRecordKeyframe,
+  onSave,
+  isRecording = false
 }) => {
   return (
     <div className="w-full space-y-2 p-3 rounded-lg bg-white border border-gray-200 shadow-lg fixed bottom-2 left-0 right-0 mx-auto max-w-[calc(100%-2rem)]">
@@ -71,6 +75,23 @@ const Timeline: React.FC<TimelineProps> = ({
             </TooltipTrigger>
             <TooltipContent>
               <p>Add Keyframe</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                onClick={onSave}
+                className="w-10 h-10 rounded-full hover:bg-blue-50 transition-all duration-300 border-2"
+                disabled={isRecording}
+              >
+                <Save className="h-5 w-5 text-blue-600" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Save Play</p>
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>

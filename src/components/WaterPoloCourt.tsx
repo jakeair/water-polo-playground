@@ -8,8 +8,6 @@ import DrawingCanvas from './DrawingCanvas';
 import { useAnimation } from '@/hooks/useAnimation';
 import { useKeyframes } from '@/hooks/useKeyframes';
 import SavePlayDialog from './SavePlayDialog';
-import { Button } from './ui/button';
-import { Save } from 'lucide-react';
 import { VideoRecorder } from '@/utils/videoRecorder';
 import html2canvas from 'html2canvas';
 import { toast } from 'sonner';
@@ -265,26 +263,17 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
       
       <div className="h-[5vh]" />
       
-      <div className="flex items-center gap-4 px-4 mb-4">
-        <Button
-          onClick={handleSaveClick}
-          className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700"
-          disabled={isRecording}
-        >
-          <Save className="w-4 h-4" />
-          Save Play
-        </Button>
-        
-        <Timeline
-          currentTime={currentTime}
-          duration={ANIMATION_DURATION}
-          keyframes={keyframes.map(kf => kf.time)}
-          isPlaying={isPlaying}
-          onTimeChange={setCurrentTime}
-          onPlayPause={() => setIsPlaying(!isPlaying)}
-          onRecordKeyframe={handleRecordKeyframe}
-        />
-      </div>
+      <Timeline
+        currentTime={currentTime}
+        duration={ANIMATION_DURATION}
+        keyframes={keyframes.map(kf => kf.time)}
+        isPlaying={isPlaying}
+        onTimeChange={setCurrentTime}
+        onPlayPause={() => setIsPlaying(!isPlaying)}
+        onRecordKeyframe={handleRecordKeyframe}
+        onSave={handleSaveClick}
+        isRecording={isRecording}
+      />
 
       <SavePlayDialog
         isOpen={isSaveDialogOpen}

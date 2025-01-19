@@ -1,31 +1,22 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { gsap } from 'gsap';
+import React, { useState, useRef } from 'react';
 import Player from './Player';
-import Timeline from './Timeline';
 import Ball from './Ball';
 import Court from './Court';
 import DrawingCanvas from './DrawingCanvas';
 import { useAnimation } from '@/hooks/useAnimation';
 import { useKeyframes } from '@/hooks/useKeyframes';
 import SavePlayDialog from './SavePlayDialog';
-import { VideoRecorder } from '@/utils/videoRecorder';
-import html2canvas from 'html2canvas';
-import { toast } from 'sonner';
 import { useIsMobile } from '@/hooks/use-mobile';
+import VideoRecorder from './VideoRecorder';
+import KeyframeManager from './KeyframeManager';
 
 interface WaterPoloCourtProps {
   team1Color: string;
   team2Color: string;
-  onTeam1ColorChange: (color: string) => void;
-  onTeam2ColorChange: (color: string) => void;
   isDrawing: boolean;
-  onDrawingChange: (isDrawing: boolean) => void;
   strokeColor: string;
-  onStrokeColorChange: (color: string) => void;
   strokeWidth: number;
-  onStrokeWidthChange: (width: number) => void;
   drawingTool: 'pen' | 'dottedLine' | 'eraser';
-  onDrawingToolChange: (tool: 'pen' | 'dottedLine' | 'eraser') => void;
 }
 
 const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
@@ -37,18 +28,12 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
   drawingTool,
 }) => {
   const [playerPositions, setPlayerPositions] = useState<{[key: string]: { x: number; y: number }}>({});
-  const lastInterpolatedPositions = useRef<{[key: string]: { x: number; y: number }}>({});
   const [ballPosition, setBallPosition] = useState({ x: 50, y: 50 });
   const [currentTime, setCurrentTime] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isSaveDialogOpen, setIsSaveDialogOpen] = useState(false);
-  const ANIMATION_DURATION = 2500;
-  const courtRef = useRef<HTMLDivElement>(null);
-  const recorderRef = useRef<VideoRecorder>(new VideoRecorder());
   const [isRecording, setIsRecording] = useState(false);
-  const recordingCanvasRef = useRef<HTMLCanvasElement | null>(null);
-  const animationFrameId = useRef<number>();
-  const isMobile = useIsMobile();
+  const ANIMATION_DURATION = 2500;
   const containerRef = useRef<HTMLDivElement>(null);
 
   const { keyframes, recordKeyframe, interpolatePositions } = useKeyframes(currentTime);
@@ -62,111 +47,6 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
 
   const handleRecordKeyframe = () => {
     recordKeyframe(playerPositions, ballPosition);
-    toast.success('Keyframe recorded');
-  };
-
-  const captureFrame = async () => {
-    if (!containerRef.current) return;
-
-    try {
-      const container = containerRef.current;
-      const canvas = await html2canvas(container, {
-        backgroundColor: '#f0f9ff',
-        logging: false,
-        scale: window.devicePixelRatio || 1,
-        useCORS: true,
-        allowTaint: true,
-        onclone: (clonedDoc) => {
-          const clonedContainer = clonedDoc.querySelector('.fixed-court-container') as HTMLElement;
-          if (clonedContainer) {
-            clonedContainer.style.position = 'relative';
-          }
-        }
-      });
-
-      if (!recordingCanvasRef.current) return;
-      const ctx = recordingCanvasRef.current.getContext('2d');
-      if (!ctx) return;
-
-      const { width, height } = container.getBoundingClientRect();
-      ctx.clearRect(0, 0, width, height);
-      ctx.drawImage(canvas, 0, 0);
-
-      // Continue recording until we reach the end
-      if (currentTime < ANIMATION_DURATION && isRecording) {
-        animationFrameId.current = requestAnimationFrame(captureFrame);
-      } else if (isRecording) {
-        await stopRecording();
-      }
-    } catch (error) {
-      console.error('Error capturing frame:', error);
-      toast.error('Error recording video');
-      stopRecording();
-    }
-  };
-
-  const startRecording = async () => {
-    if (!containerRef.current || !keyframes.length) {
-      toast.error('No keyframes to record');
-      return;
-    }
-    
-    try {
-      // Reset to beginning
-      setCurrentTime(0);
-      
-      const container = containerRef.current;
-      const { width, height } = container.getBoundingClientRect();
-
-      // Create and setup recording canvas
-      const canvas = document.createElement('canvas');
-      canvas.width = width;
-      canvas.height = height;
-      recordingCanvasRef.current = canvas;
-
-      await new Promise(resolve => setTimeout(resolve, 100));
-
-      // Start capturing frames
-      await captureFrame();
-
-      // Configure stream with high quality settings
-      const stream = canvas.captureStream(60); // 60fps for smooth motion
-      
-      // Configure recorder with high quality settings
-      const options = {
-        mimeType: 'video/webm;codecs=vp9,opus',
-        videoBitsPerSecond: 8000000, // 8 Mbps for high quality
-      };
-
-      await recorderRef.current.startRecording(stream, options);
-      setIsRecording(true);
-      setIsPlaying(true); // Start playing the animation
-      toast.success('Started recording');
-    } catch (error) {
-      console.error('Failed to start recording:', error);
-      toast.error('Failed to start recording. Please try a different browser or device.');
-      setIsRecording(false);
-    }
-  };
-
-  const stopRecording = async () => {
-    if (!isRecording) return;
-    
-    if (animationFrameId.current) {
-      cancelAnimationFrame(animationFrameId.current);
-    }
-
-    try {
-      const videoBlob = await recorderRef.current.stopRecording();
-      setIsRecording(false);
-      setIsPlaying(false);
-      toast.success('Recording completed');
-      return videoBlob;
-    } catch (error) {
-      console.error('Failed to stop recording:', error);
-      toast.error('Failed to stop recording');
-      setIsRecording(false);
-    }
   };
 
   const animate = () => {
@@ -184,50 +64,29 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
 
   useAnimation(isPlaying, animate);
 
-  useEffect(() => {
+  React.useEffect(() => {
     const interpolated = interpolatePositions(currentTime);
     if (interpolated) {
       const { positions, ballPosition: newBallPosition } = interpolated;
-      
-      Object.entries(positions).forEach(([playerId, position]) => {
-        const lastPos = lastInterpolatedPositions.current[playerId];
-        if (lastPos && (lastPos.x !== position.x || lastPos.y !== position.y)) {
-          gsap.to(`#player-${playerId}`, {
-            left: `${position.x}%`,
-            top: `${position.y}%`,
-            duration: 0.1,
-            ease: "power2.out"
-          });
-        }
-      });
-      
-      lastInterpolatedPositions.current = positions;
       setPlayerPositions(positions);
-      
       if (newBallPosition) {
         setBallPosition(newBallPosition);
       }
     }
   }, [currentTime]);
 
-  useEffect(() => {
-    if (!isPlaying && isRecording) {
-      stopRecording();
-    }
-  }, [isPlaying, isRecording]);
-
   const handleSaveClick = () => {
     if (!keyframes.length) {
       toast.error('Add some keyframes before saving');
       return;
     }
-    startRecording();
+    setCurrentTime(0);
     setIsSaveDialogOpen(true);
   };
 
   return (
     <div className="flex flex-col h-full" ref={containerRef}>
-      <div className="flex-1 relative min-h-0" ref={courtRef}>
+      <div className="flex-1 relative min-h-0">
         <Court>
           <DrawingCanvas
             isDrawing={isDrawing}
@@ -237,6 +96,7 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
           />
           <Ball position={ballPosition} onPositionChange={setBallPosition} />
           
+          {/* Team 1 Players */}
           <Player team={1} number="G" initialX={50} initialY={5} isGoalie onPositionChange={(pos) => updatePlayerPosition('1G', pos)} id="player-1G" style={{ backgroundColor: 'var(--goalie-color)' }} />
           <Player team={1} number={1} initialX={20} initialY={20} onPositionChange={(pos) => updatePlayerPosition('11', pos)} id="player-11" style={{ backgroundColor: team1Color }} />
           <Player team={1} number={2} initialX={40} initialY={20} onPositionChange={(pos) => updatePlayerPosition('12', pos)} id="player-12" style={{ backgroundColor: team1Color }} />
@@ -245,6 +105,7 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
           <Player team={1} number={5} initialX={50} initialY={30} onPositionChange={(pos) => updatePlayerPosition('15', pos)} id="player-15" style={{ backgroundColor: team1Color }} />
           <Player team={1} number={6} initialX={70} initialY={30} onPositionChange={(pos) => updatePlayerPosition('16', pos)} id="player-16" style={{ backgroundColor: team1Color }} />
 
+          {/* Team 2 Players */}
           <Player team={2} number="G" initialX={50} initialY={95} isGoalie onPositionChange={(pos) => updatePlayerPosition('2G', pos)} id="player-2G" style={{ backgroundColor: 'var(--goalie-color)' }} />
           <Player team={2} number={1} initialX={20} initialY={70} onPositionChange={(pos) => updatePlayerPosition('21', pos)} id="player-21" style={{ backgroundColor: team2Color }} />
           <Player team={2} number={2} initialX={40} initialY={70} onPositionChange={(pos) => updatePlayerPosition('22', pos)} id="player-22" style={{ backgroundColor: team2Color }} />
@@ -255,18 +116,29 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
         </Court>
       </div>
       
-      <div className="h-[5vh]" />
-      
-      <Timeline
+      <KeyframeManager
         currentTime={currentTime}
         duration={ANIMATION_DURATION}
-        keyframes={keyframes.map(kf => kf.time)}
+        keyframes={keyframes}
         isPlaying={isPlaying}
+        isRecording={isRecording}
         onTimeChange={setCurrentTime}
         onPlayPause={() => setIsPlaying(!isPlaying)}
         onRecordKeyframe={handleRecordKeyframe}
         onSave={handleSaveClick}
+      />
+
+      <VideoRecorder
+        containerRef={containerRef}
+        currentTime={currentTime}
+        duration={ANIMATION_DURATION}
         isRecording={isRecording}
+        setIsRecording={setIsRecording}
+        setIsPlaying={setIsPlaying}
+        onRecordingComplete={(blob) => {
+          setIsSaveDialogOpen(true);
+          setIsRecording(false);
+        }}
       />
 
       <SavePlayDialog
@@ -278,7 +150,21 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
         }}
         canvasData={playerPositions}
         keyframesData={keyframes}
-        onVideoRecorded={stopRecording}
+        onVideoRecorded={async () => {
+          if (!isRecording) {
+            setCurrentTime(0);
+            setIsRecording(true);
+            return new Promise((resolve) => {
+              const checkRecording = setInterval(() => {
+                if (!isRecording) {
+                  clearInterval(checkRecording);
+                  resolve(undefined);
+                }
+              }, 100);
+            });
+          }
+          return undefined;
+        }}
       />
     </div>
   );

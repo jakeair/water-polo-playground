@@ -11,6 +11,7 @@ import SavePlayDialog from './SavePlayDialog';
 import { VideoRecorder } from '@/utils/videoRecorder';
 import html2canvas from 'html2canvas';
 import { toast } from 'sonner';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface WaterPoloCourtProps {
   team1Color: string;
@@ -47,6 +48,8 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
   const [isRecording, setIsRecording] = useState(false);
   const recordingCanvasRef = useRef<HTMLCanvasElement | null>(null);
   const animationFrameId = useRef<number>();
+  const isMobile = useIsMobile();
+  const containerRef = useRef<HTMLDivElement>(null);
 
   const { keyframes, recordKeyframe, interpolatePositions } = useKeyframes(currentTime);
 
@@ -63,55 +66,47 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
   };
 
   const captureFrame = async () => {
-    if (!courtRef.current || !recordingCanvasRef.current) return;
+    if (!containerRef.current || !recordingCanvasRef.current) return;
 
     try {
-      // Find the court element within the container
-      const courtElement = courtRef.current.querySelector('.court');
-      if (!courtElement) {
-        throw new Error('Court element not found');
+      const courtContainer = containerRef.current.querySelector('.fixed-court-container');
+      if (!courtContainer) {
+        throw new Error('Court container not found');
       }
 
-      // Set background color and remove any gradients temporarily
-      const originalBackground = (courtElement as HTMLElement).style.background;
-      (courtElement as HTMLElement).style.background = '#f0f9ff';
+      const scale = isMobile ? 1 : 2;
 
-      const canvas = await html2canvas(courtElement as HTMLElement, {
+      const canvas = await html2canvas(courtContainer as HTMLElement, {
         backgroundColor: '#f0f9ff',
         logging: false,
-        scale: 2,
+        scale: scale,
         useCORS: true,
         allowTaint: true,
         foreignObjectRendering: true,
-        removeContainer: true,
-        width: courtElement.clientWidth,
-        height: courtElement.clientHeight,
+        width: courtContainer.clientWidth,
+        height: courtContainer.clientHeight,
+        windowWidth: courtContainer.clientWidth,
+        windowHeight: courtContainer.clientHeight,
       });
 
-      // Restore original background
-      (courtElement as HTMLElement).style.background = originalBackground;
-      
       const ctx = recordingCanvasRef.current.getContext('2d');
       if (!ctx) return;
 
-      // Clear previous frame
       ctx.clearRect(0, 0, recordingCanvasRef.current.width, recordingCanvasRef.current.height);
       
-      // Calculate scaling while maintaining aspect ratio
-      const scale = Math.min(
-        recordingCanvasRef.current.width / canvas.width,
-        recordingCanvasRef.current.height / canvas.height
-      );
+      recordingCanvasRef.current.width = isMobile ? 1280 : 1920;
+      recordingCanvasRef.current.height = (recordingCanvasRef.current.width * courtContainer.clientHeight) / courtContainer.clientWidth;
       
-      const x = (recordingCanvasRef.current.width - canvas.width * scale) / 2;
-      const y = (recordingCanvasRef.current.height - canvas.height * scale) / 2;
-      
-      // Draw white background
       ctx.fillStyle = '#f0f9ff';
       ctx.fillRect(0, 0, recordingCanvasRef.current.width, recordingCanvasRef.current.height);
       
-      // Draw the captured frame
-      ctx.drawImage(canvas, x, y, canvas.width * scale, canvas.height * scale);
+      ctx.drawImage(
+        canvas,
+        0,
+        0,
+        recordingCanvasRef.current.width,
+        recordingCanvasRef.current.height
+      );
       
       animationFrameId.current = requestAnimationFrame(captureFrame);
     } catch (error) {
@@ -121,32 +116,27 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
   };
 
   const startRecording = async () => {
-    if (!courtRef.current || !keyframes.length) {
+    if (!containerRef.current || !keyframes.length) {
       toast.error('No keyframes to record');
       return;
     }
     
     try {
-      // Reset timeline to start
       setCurrentTime(0);
       setIsPlaying(false);
       
-      // Create recording canvas with fixed dimensions
       const canvas = document.createElement('canvas');
-      canvas.width = 1920; // Increased width for better quality
-      canvas.height = 1080; // 16:9 aspect ratio
+      canvas.width = isMobile ? 1280 : 1920;
+      canvas.height = isMobile ? 720 : 1080;
       recordingCanvasRef.current = canvas;
 
-      // Wait a brief moment for the timeline to reset
       await new Promise(resolve => setTimeout(resolve, 100));
 
-      // Start capture and recording
       await captureFrame();
-      const stream = canvas.captureStream(60); // Increased FPS
+      const stream = canvas.captureStream(isMobile ? 30 : 60);
       await recorderRef.current.startRecording(stream);
       setIsRecording(true);
       
-      // Start playback
       setIsPlaying(true);
       toast.success('Started recording');
     } catch (error) {
@@ -232,7 +222,7 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
   };
 
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col h-full" ref={containerRef}>
       <div className="flex-1 relative min-h-0" ref={courtRef}>
         <Court>
           <DrawingCanvas

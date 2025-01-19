@@ -5,10 +5,14 @@ export class VideoRecorder {
   async startRecording(stream: MediaStream) {
     try {
       this.recordedChunks = [];
-      this.mediaRecorder = new MediaRecorder(stream, {
+      
+      // Optimize video encoding settings based on device capabilities
+      const options: MediaRecorderOptions = {
         mimeType: 'video/webm;codecs=vp9,opus',
-        videoBitsPerSecond: 8000000 // 8 Mbps for high quality
-      });
+        videoBitsPerSecond: window.innerWidth < 768 ? 2500000 : 8000000 // Lower bitrate for mobile
+      };
+
+      this.mediaRecorder = new MediaRecorder(stream, options);
 
       this.mediaRecorder.ondataavailable = (event) => {
         if (event.data && event.data.size > 0) {
@@ -17,7 +21,7 @@ export class VideoRecorder {
       };
 
       this.mediaRecorder.start(20); // Collect data more frequently
-      console.log('Started recording');
+      console.log('Started recording with optimized settings');
     } catch (error) {
       console.error('Error starting recording:', error);
       throw error;

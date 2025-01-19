@@ -9,7 +9,6 @@ import { useAnimation } from '@/hooks/useAnimation';
 import { useKeyframes } from '@/hooks/useKeyframes';
 import SavePlayDialog from './SavePlayDialog';
 import { Button } from './ui/button';
-import { Save } from 'lucide-react';
 import { VideoRecorder } from '@/utils/videoRecorder';
 import html2canvas from 'html2canvas';
 import { toast } from 'sonner';
@@ -59,22 +58,15 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
     }));
   };
 
-  const handleRecordKeyframe = () => {
-    recordKeyframe(playerPositions, ballPosition);
-    toast.success('Keyframe recorded');
-  };
-
   const captureFrame = async () => {
     if (!courtRef.current || !recordingCanvasRef.current) return;
 
     try {
-      // Find the court element within the container
       const courtElement = courtRef.current.querySelector('.court');
       if (!courtElement) {
         throw new Error('Court element not found');
       }
 
-      // Set background color and remove any gradients temporarily
       const originalBackground = (courtElement as HTMLElement).style.background;
       (courtElement as HTMLElement).style.background = '#f0f9ff';
 
@@ -90,16 +82,13 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
         height: courtElement.clientHeight,
       });
 
-      // Restore original background
       (courtElement as HTMLElement).style.background = originalBackground;
       
       const ctx = recordingCanvasRef.current.getContext('2d');
       if (!ctx) return;
 
-      // Clear previous frame
       ctx.clearRect(0, 0, recordingCanvasRef.current.width, recordingCanvasRef.current.height);
       
-      // Calculate scaling while maintaining aspect ratio
       const scale = Math.min(
         recordingCanvasRef.current.width / canvas.width,
         recordingCanvasRef.current.height / canvas.height
@@ -108,11 +97,9 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
       const x = (recordingCanvasRef.current.width - canvas.width * scale) / 2;
       const y = (recordingCanvasRef.current.height - canvas.height * scale) / 2;
       
-      // Draw white background
       ctx.fillStyle = '#f0f9ff';
       ctx.fillRect(0, 0, recordingCanvasRef.current.width, recordingCanvasRef.current.height);
       
-      // Draw the captured frame
       ctx.drawImage(canvas, x, y, canvas.width * scale, canvas.height * scale);
       
       animationFrameId.current = requestAnimationFrame(captureFrame);
@@ -123,32 +110,22 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
   };
 
   const startRecording = async () => {
-    if (!courtRef.current || !keyframes.length) {
-      toast.error('No keyframes to record');
-      return;
-    }
-    
     try {
-      // Reset timeline to start
       setCurrentTime(0);
       setIsPlaying(false);
       
-      // Create recording canvas with fixed dimensions
       const canvas = document.createElement('canvas');
-      canvas.width = 1920; // Increased width for better quality
-      canvas.height = 1080; // 16:9 aspect ratio
+      canvas.width = 1920;
+      canvas.height = 1080;
       recordingCanvasRef.current = canvas;
 
-      // Wait a brief moment for the timeline to reset
       await new Promise(resolve => setTimeout(resolve, 100));
 
-      // Start capture and recording
       await captureFrame();
-      const stream = canvas.captureStream(60); // Increased FPS
+      const stream = canvas.captureStream(60);
       await recorderRef.current.startRecording(stream);
       setIsRecording(true);
       
-      // Start playback
       setIsPlaying(true);
       toast.success('Started recording');
     } catch (error) {
@@ -224,15 +201,6 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
     }
   }, [isPlaying, isRecording]);
 
-  const handleSaveClick = () => {
-    if (!keyframes.length) {
-      toast.error('Add some keyframes before saving');
-      return;
-    }
-    startRecording();
-    setIsSaveDialogOpen(true);
-  };
-
   return (
     <div className="flex flex-col h-full">
       <div className="flex-1 relative min-h-0" ref={courtRef}>
@@ -269,11 +237,9 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
         <Timeline
           currentTime={currentTime}
           duration={ANIMATION_DURATION}
-          keyframes={keyframes.map(kf => kf.time)}
           isPlaying={isPlaying}
           onTimeChange={setCurrentTime}
           onPlayPause={() => setIsPlaying(!isPlaying)}
-          onRecordKeyframe={handleRecordKeyframe}
         />
       </div>
 

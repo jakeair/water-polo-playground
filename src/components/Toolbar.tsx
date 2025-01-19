@@ -1,6 +1,6 @@
 import React from 'react';
 import ColorPicker from './ColorPicker';
-import { Pencil, Eraser, Save } from 'lucide-react';
+import { Pencil, Eraser, BookmarkPlus } from 'lucide-react';
 import { Separator } from "@/components/ui/separator";
 import { Toggle } from "@/components/ui/toggle";
 import { Button } from "@/components/ui/button";
@@ -85,7 +85,6 @@ const Toolbar: React.FC<ToolbarProps> = ({
 
       {/* Drawing Tools */}
       <div className="flex flex-col items-center gap-2 flex-1">
-        {/* Pen Tool */}
         <Toggle 
           pressed={isDrawing && drawingTool === 'pen'} 
           onPressedChange={(pressed) => {
@@ -115,8 +114,6 @@ const Toolbar: React.FC<ToolbarProps> = ({
             />
           </div>
         )}
-
-        {/* Dotted Line Tool */}
         <Toggle 
           pressed={isDrawing && drawingTool === 'dottedLine'} 
           onPressedChange={(pressed) => {
@@ -146,8 +143,6 @@ const Toolbar: React.FC<ToolbarProps> = ({
             />
           </div>
         )}
-
-        {/* Eraser Tool */}
         <Toggle 
           pressed={isDrawing && drawingTool === 'eraser'} 
           onPressedChange={(pressed) => {
@@ -185,7 +180,7 @@ const Toolbar: React.FC<ToolbarProps> = ({
           disabled={isRecording}
           aria-label="Save play"
         >
-          <Save className="w-4 h-4" />
+          <BookmarkPlus className="w-4 h-4" />
         </Button>
 
         {/* Help Component at Bottom */}

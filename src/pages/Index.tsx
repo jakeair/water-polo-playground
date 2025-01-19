@@ -15,9 +15,10 @@ const Index = () => {
   const [strokeWidth, setStrokeWidth] = useState(2);
   const [drawingTool, setDrawingTool] = useState<'pen' | 'dottedLine' | 'eraser'>('pen');
   const [isRecording, setIsRecording] = useState(false);
+  const [isSaveDialogOpen, setIsSaveDialogOpen] = useState(false);
 
   const handleSavePlay = () => {
-    // This will be handled by WaterPoloCourt component
+    setIsSaveDialogOpen(true);
   };
 
   return (

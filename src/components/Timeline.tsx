@@ -7,11 +7,11 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 interface TimelineProps {
   currentTime: number;
   duration: number;
-  keyframes: number[];
   isPlaying: boolean;
   onTimeChange: (value: number) => void;
   onPlayPause: () => void;
-  onRecordKeyframe: () => void;
+  keyframes?: number[];
+  onRecordKeyframe?: () => void;
 }
 
 const Timeline: React.FC<TimelineProps> = ({

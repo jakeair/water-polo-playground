@@ -12,6 +12,7 @@ import { Button } from './ui/button';
 import { Save } from 'lucide-react';
 import { VideoRecorder } from '@/utils/videoRecorder';
 import html2canvas from 'html2canvas';
+import { toast } from 'sonner';
 
 interface WaterPoloCourtProps {
   team1Color: string;
@@ -43,7 +44,6 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
   const [isPlaying, setIsPlaying] = useState(false);
   const [isSaveDialogOpen, setIsSaveDialogOpen] = useState(false);
   const ANIMATION_DURATION = 2500;
-  const canvasRef = useRef<HTMLCanvasElement>(null);
   const courtRef = useRef<HTMLDivElement>(null);
   const recorderRef = useRef<VideoRecorder>(new VideoRecorder());
   const [isRecording, setIsRecording] = useState(false);
@@ -69,6 +69,8 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
     try {
       const canvas = await html2canvas(courtRef.current, {
         backgroundColor: null,
+        logging: false, // Disable logging for better performance
+        scale: 1, // Adjust scale for better performance if needed
       });
       
       const ctx = recordingCanvasRef.current.getContext('2d');
@@ -80,30 +82,33 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
       animationFrameId.current = requestAnimationFrame(captureFrame);
     } catch (error) {
       console.error('Error capturing frame:', error);
+      toast.error('Error recording video');
     }
   };
 
   const startRecording = async () => {
     if (!courtRef.current) return;
     
-    // Create recording canvas if it doesn't exist
-    if (!recordingCanvasRef.current) {
-      const canvas = document.createElement('canvas');
-      const rect = courtRef.current.getBoundingClientRect();
-      canvas.width = rect.width;
-      canvas.height = rect.height;
-      recordingCanvasRef.current = canvas;
-    }
-
-    // Start capturing frames
-    captureFrame();
-
     try {
+      // Create recording canvas if it doesn't exist
+      if (!recordingCanvasRef.current) {
+        const canvas = document.createElement('canvas');
+        const rect = courtRef.current.getBoundingClientRect();
+        canvas.width = rect.width;
+        canvas.height = rect.height;
+        recordingCanvasRef.current = canvas;
+      }
+
+      // Start capturing frames
+      await captureFrame();
+
       const stream = recordingCanvasRef.current.captureStream(30); // 30 FPS
       await recorderRef.current.startRecording(stream);
       setIsRecording(true);
+      toast.success('Started recording');
     } catch (error) {
       console.error('Failed to start recording:', error);
+      toast.error('Failed to start recording');
     }
   };
 
@@ -117,9 +122,11 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
     try {
       const videoBlob = await recorderRef.current.stopRecording();
       setIsRecording(false);
+      toast.success('Recording completed');
       return videoBlob;
     } catch (error) {
       console.error('Failed to stop recording:', error);
+      toast.error('Failed to stop recording');
       setIsRecording(false);
     }
   };
@@ -164,11 +171,6 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
       }
     }
   }, [currentTime]);
-
-  useEffect(() => {
-    document.documentElement.style.setProperty('--team1-color', team1Color);
-    document.documentElement.style.setProperty('--team2-color', team2Color);
-  }, [team1Color, team2Color]);
 
   useEffect(() => {
     if (isPlaying && !isRecording) {

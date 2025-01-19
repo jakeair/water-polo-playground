@@ -3,18 +3,24 @@ export class VideoRecorder {
   private recordedChunks: Blob[] = [];
 
   async startRecording(stream: MediaStream) {
-    this.recordedChunks = [];
-    this.mediaRecorder = new MediaRecorder(stream, {
-      mimeType: 'video/webm'
-    });
+    try {
+      this.recordedChunks = [];
+      this.mediaRecorder = new MediaRecorder(stream, {
+        mimeType: 'video/webm;codecs=vp8,opus'
+      });
 
-    this.mediaRecorder.ondataavailable = (event) => {
-      if (event.data.size > 0) {
-        this.recordedChunks.push(event.data);
-      }
-    };
+      this.mediaRecorder.ondataavailable = (event) => {
+        if (event.data && event.data.size > 0) {
+          this.recordedChunks.push(event.data);
+        }
+      };
 
-    this.mediaRecorder.start();
+      this.mediaRecorder.start(100); // Collect data every 100ms
+      console.log('Started recording');
+    } catch (error) {
+      console.error('Error starting recording:', error);
+      throw error;
+    }
   }
 
   async stopRecording(): Promise<Blob> {
@@ -25,10 +31,16 @@ export class VideoRecorder {
       }
 
       this.mediaRecorder.onstop = () => {
-        const blob = new Blob(this.recordedChunks, {
-          type: 'video/webm'
-        });
-        resolve(blob);
+        try {
+          const blob = new Blob(this.recordedChunks, {
+            type: 'video/webm'
+          });
+          console.log('Recording stopped, blob size:', blob.size);
+          resolve(blob);
+        } catch (error) {
+          console.error('Error creating blob:', error);
+          reject(error);
+        }
       };
 
       this.mediaRecorder.stop();

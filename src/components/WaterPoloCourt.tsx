@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { gsap } from 'gsap';
 import Player from './Player';
 import Timeline from './Timeline';
@@ -77,7 +77,7 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
 
   useAnimation(isPlaying, animate);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const interpolated = interpolatePositions(currentTime);
     if (interpolated) {
       const { positions, ballPosition: newBallPosition } = interpolated;
@@ -102,6 +102,12 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
       }
     }
   }, [currentTime]);
+
+  // Add effect to update CSS variables when team colors change
+  useEffect(() => {
+    document.documentElement.style.setProperty('--team1-color', team1Color);
+    document.documentElement.style.setProperty('--team2-color', team2Color);
+  }, [team1Color, team2Color]);
 
   return (
     <div className="flex flex-col h-full">

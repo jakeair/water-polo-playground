@@ -14,12 +14,12 @@ const Navigation = () => {
   const isActive = (path: string) => location.pathname === path;
 
   return (
-    <nav className="flex items-center gap-2 sm:gap-6">
-      <Link to="/" className="flex items-center space-x-4 group mr-6">
+    <nav className="flex items-center gap-2 sm:gap-6 px-4">
+      <Link to="/" className="flex items-center mr-auto">
         <img 
           src="/lovable-uploads/03fa9e59-b51a-4476-a756-03b48791d259.png" 
           alt="Logo" 
-          className="h-8 w-auto opacity-90 transition-all duration-200 group-hover:opacity-100"
+          className="h-8 w-auto opacity-90 transition-all duration-200 hover:opacity-100"
         />
       </Link>
       

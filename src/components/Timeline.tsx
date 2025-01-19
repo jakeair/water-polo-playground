@@ -24,20 +24,20 @@ const Timeline: React.FC<TimelineProps> = ({
   onRecordKeyframe
 }) => {
   return (
-    <div className="w-full space-y-3 p-4 rounded-lg bg-white border border-gray-200 shadow-lg fixed bottom-4 left-0 right-0 mx-auto max-w-[calc(100%-2rem)]">
+    <div className="w-full space-y-2 p-3 rounded-lg bg-white border border-gray-200 shadow-lg fixed bottom-2 left-0 right-0 mx-auto max-w-[calc(100%-2rem)]">
       <div className="flex items-center gap-3">
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild>
               <Button 
                 variant="outline" 
-                size="lg"
+                size="default"
                 onClick={onPlayPause}
-                className="w-12 h-12 rounded-full hover:bg-blue-50 transition-all duration-300 border-2"
+                className="w-10 h-10 rounded-full hover:bg-blue-50 transition-all duration-300 border-2"
               >
                 {isPlaying ? 
-                  <PauseCircle className="h-7 w-7 text-blue-600" /> : 
-                  <PlayCircle className="h-7 w-7 text-blue-600" />
+                  <PauseCircle className="h-6 w-6 text-blue-600" /> : 
+                  <PlayCircle className="h-6 w-6 text-blue-600" />
                 }
               </Button>
             </TooltipTrigger>
@@ -53,7 +53,7 @@ const Timeline: React.FC<TimelineProps> = ({
             max={duration}
             step={1}
             onValueChange={(value) => onTimeChange(value[0])}
-            className="py-2"
+            className="py-1"
           />
         </div>
 
@@ -62,11 +62,11 @@ const Timeline: React.FC<TimelineProps> = ({
             <TooltipTrigger asChild>
               <Button 
                 variant="outline"
-                size="lg"
+                size="default"
                 onClick={onRecordKeyframe}
-                className="w-12 h-12 rounded-full border-red-200 hover:bg-red-50 hover:border-red-300 transition-all duration-200 border-2"
+                className="w-10 h-10 rounded-full border-red-200 hover:bg-red-50 hover:border-red-300 transition-all duration-200 border-2"
               >
-                <Plus className="h-7 w-7 text-red-500" />
+                <Plus className="h-6 w-6 text-red-500" />
               </Button>
             </TooltipTrigger>
             <TooltipContent>
@@ -76,11 +76,11 @@ const Timeline: React.FC<TimelineProps> = ({
         </TooltipProvider>
       </div>
 
-      <div className="relative h-2 w-full bg-gray-100 rounded-full overflow-hidden">
+      <div className="relative h-1.5 w-full bg-gray-100 rounded-full overflow-hidden">
         {keyframes.map((time, index) => (
           <div
             key={index}
-            className="absolute w-2 h-full bg-red-500"
+            className="absolute w-1.5 h-full bg-red-500"
             style={{ 
               left: `${(time / duration) * 100}%`,
               transform: 'translateX(-50%)',
@@ -88,7 +88,7 @@ const Timeline: React.FC<TimelineProps> = ({
           />
         ))}
         <div 
-          className="absolute h-full w-1 bg-blue-500"
+          className="absolute h-full w-0.5 bg-blue-500"
           style={{ 
             left: `${(currentTime / duration) * 100}%`,
             transform: 'translateX(-50%)',

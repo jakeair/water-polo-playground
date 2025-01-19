@@ -8,10 +8,9 @@ import DrawingCanvas from './DrawingCanvas';
 import { useAnimation } from '@/hooks/useAnimation';
 import { useKeyframes } from '@/hooks/useKeyframes';
 import SavePlayDialog from './SavePlayDialog';
-import { Button } from './ui/button';
-import { VideoRecorder } from '@/utils/videoRecorder';
-import html2canvas from 'html2canvas';
 import { toast } from 'sonner';
+import html2canvas from 'html2canvas';
+import { VideoRecorder } from '@/utils/videoRecorder';
 
 interface WaterPoloCourtProps {
   team1Color: string;
@@ -169,6 +168,10 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
 
   useAnimation(isPlaying, animate);
 
+  const handleRecordKeyframe = () => {
+    recordKeyframe(playerPositions, ballPosition);
+  };
+
   useEffect(() => {
     const interpolated = interpolatePositions(currentTime);
     if (interpolated) {
@@ -240,6 +243,8 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
           isPlaying={isPlaying}
           onTimeChange={setCurrentTime}
           onPlayPause={() => setIsPlaying(!isPlaying)}
+          keyframes={keyframes}
+          onRecordKeyframe={handleRecordKeyframe}
         />
       </div>
 

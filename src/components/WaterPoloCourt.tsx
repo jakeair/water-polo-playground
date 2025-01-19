@@ -11,6 +11,7 @@ import SavePlayDialog from './SavePlayDialog';
 import { Button } from './ui/button';
 import { Save } from 'lucide-react';
 import { VideoRecorder } from '@/utils/videoRecorder';
+import html2canvas from 'html2canvas';
 
 interface PlayerPosition {
   x: number;
@@ -53,6 +54,12 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
   const [isPlaying, setIsPlaying] = useState(false);
   const [isSaveDialogOpen, setIsSaveDialogOpen] = useState(false);
   const ANIMATION_DURATION = 2500;
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const courtRef = useRef<HTMLDivElement>(null);
+  const recorderRef = useRef<VideoRecorder>(new VideoRecorder());
+  const [isRecording, setIsRecording] = useState(false);
+  const recordingCanvasRef = useRef<HTMLCanvasElement | null>(null);
+  const animationFrameId = useRef<number>();
 
   const { keyframes, recordKeyframe, interpolatePositions } = useKeyframes(currentTime);
 
@@ -65,6 +72,66 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
 
   const handleRecordKeyframe = () => {
     recordKeyframe(playerPositions, ballPosition);
+  };
+
+  const captureFrame = async () => {
+    if (!courtRef.current || !recordingCanvasRef.current) return;
+
+    try {
+      const canvas = await html2canvas(courtRef.current, {
+        backgroundColor: null,
+      });
+      
+      const ctx = recordingCanvasRef.current.getContext('2d');
+      if (!ctx) return;
+
+      ctx.clearRect(0, 0, recordingCanvasRef.current.width, recordingCanvasRef.current.height);
+      ctx.drawImage(canvas, 0, 0, recordingCanvasRef.current.width, recordingCanvasRef.current.height);
+      
+      animationFrameId.current = requestAnimationFrame(captureFrame);
+    } catch (error) {
+      console.error('Error capturing frame:', error);
+    }
+  };
+
+  const startRecording = async () => {
+    if (!courtRef.current) return;
+    
+    // Create recording canvas if it doesn't exist
+    if (!recordingCanvasRef.current) {
+      recordingCanvasRef.current = document.createElement('canvas');
+      const rect = courtRef.current.getBoundingClientRect();
+      recordingCanvasRef.current.width = rect.width;
+      recordingCanvasRef.current.height = rect.height;
+    }
+
+    // Start capturing frames
+    captureFrame();
+
+    try {
+      const stream = recordingCanvasRef.current.captureStream(30); // 30 FPS
+      await recorderRef.current.startRecording(stream);
+      setIsRecording(true);
+    } catch (error) {
+      console.error('Failed to start recording:', error);
+    }
+  };
+
+  const stopRecording = async () => {
+    if (!isRecording) return;
+    
+    if (animationFrameId.current) {
+      cancelAnimationFrame(animationFrameId.current);
+    }
+
+    try {
+      const videoBlob = await recorderRef.current.stopRecording();
+      setIsRecording(false);
+      return videoBlob;
+    } catch (error) {
+      console.error('Failed to stop recording:', error);
+      setIsRecording(false);
+    }
   };
 
   const animate = () => {
@@ -113,39 +180,6 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
     document.documentElement.style.setProperty('--team2-color', team2Color);
   }, [team1Color, team2Color]);
 
-  const handleSaveClick = () => {
-    setIsSaveDialogOpen(true);
-  };
-
-  const courtRef = useRef<HTMLDivElement>(null);
-  const recorderRef = useRef<VideoRecorder>(new VideoRecorder());
-  const [isRecording, setIsRecording] = useState(false);
-
-  const startRecording = async () => {
-    if (!courtRef.current) return;
-    
-    try {
-      const stream = courtRef.current.captureStream(30); // 30 FPS
-      await recorderRef.current.startRecording(stream);
-      setIsRecording(true);
-    } catch (error) {
-      console.error('Failed to start recording:', error);
-    }
-  };
-
-  const stopRecording = async () => {
-    if (!isRecording) return;
-    
-    try {
-      const videoBlob = await recorderRef.current.stopRecording();
-      setIsRecording(false);
-      return videoBlob;
-    } catch (error) {
-      console.error('Failed to stop recording:', error);
-      setIsRecording(false);
-    }
-  };
-
   useEffect(() => {
     if (isPlaying && !isRecording) {
       startRecording();
@@ -153,6 +187,10 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
       stopRecording();
     }
   }, [isPlaying]);
+
+  const handleSaveClick = () => {
+    setIsSaveDialogOpen(true);
+  };
 
   return (
     <div className="flex flex-col h-full">

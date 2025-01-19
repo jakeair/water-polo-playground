@@ -2,7 +2,7 @@ export class VideoRecorder {
   private mediaRecorder: MediaRecorder | null = null;
   private chunks: Blob[] = [];
 
-  async startRecording(stream: MediaStream) {
+  async startRecording(stream: MediaStream): Promise<void> {
     this.chunks = [];
     this.mediaRecorder = new MediaRecorder(stream);
     
@@ -17,7 +17,10 @@ export class VideoRecorder {
 
   stopRecording(): Promise<Blob> {
     return new Promise((resolve) => {
-      if (!this.mediaRecorder) return;
+      if (!this.mediaRecorder) {
+        resolve(new Blob());
+        return;
+      }
 
       this.mediaRecorder.onstop = () => {
         const blob = new Blob(this.chunks, { type: 'video/webm' });

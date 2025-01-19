@@ -1,9 +1,8 @@
 import React from 'react';
 import ColorPicker from './ColorPicker';
-import { Pencil, Eraser, BookmarkPlus } from 'lucide-react';
+import { Pencil, Eraser } from 'lucide-react';
 import { Separator } from "@/components/ui/separator";
 import { Toggle } from "@/components/ui/toggle";
-import { Button } from "@/components/ui/button";
 import Help from './Help';
 
 interface ToolbarProps {
@@ -19,8 +18,6 @@ interface ToolbarProps {
   onStrokeWidthChange: (width: number) => void;
   drawingTool: 'pen' | 'dottedLine' | 'eraser';
   onDrawingToolChange: (tool: 'pen' | 'dottedLine' | 'eraser') => void;
-  onSavePlay: () => void;
-  isRecording: boolean;
 }
 
 const DottedLineArrow = () => (
@@ -53,8 +50,6 @@ const Toolbar: React.FC<ToolbarProps> = ({
   onStrokeWidthChange,
   drawingTool,
   onDrawingToolChange,
-  onSavePlay,
-  isRecording,
 }) => {
   const getStrokeWidthRange = (tool: 'pen' | 'dottedLine' | 'eraser') => {
     switch (tool) {
@@ -85,6 +80,7 @@ const Toolbar: React.FC<ToolbarProps> = ({
 
       {/* Drawing Tools */}
       <div className="flex flex-col items-center gap-2 flex-1">
+        {/* Pen Tool */}
         <Toggle 
           pressed={isDrawing && drawingTool === 'pen'} 
           onPressedChange={(pressed) => {
@@ -114,6 +110,8 @@ const Toolbar: React.FC<ToolbarProps> = ({
             />
           </div>
         )}
+
+        {/* Dotted Line Tool */}
         <Toggle 
           pressed={isDrawing && drawingTool === 'dottedLine'} 
           onPressedChange={(pressed) => {
@@ -143,6 +141,8 @@ const Toolbar: React.FC<ToolbarProps> = ({
             />
           </div>
         )}
+
+        {/* Eraser Tool */}
         <Toggle 
           pressed={isDrawing && drawingTool === 'eraser'} 
           onPressedChange={(pressed) => {
@@ -171,22 +171,8 @@ const Toolbar: React.FC<ToolbarProps> = ({
           </div>
         )}
 
-        <Separator className="bg-white/10" />
-
-        {/* Save Play Button */}
-        <Button
-          onClick={onSavePlay}
-          className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 w-10 h-10 p-0"
-          disabled={isRecording}
-          aria-label="Save play"
-        >
-          <BookmarkPlus className="w-4 h-4" />
-        </Button>
-
         {/* Help Component at Bottom */}
-        <div className="mt-auto">
-          <Help />
-        </div>
+        <Help />
       </div>
     </div>
   );

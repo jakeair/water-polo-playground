@@ -14,12 +14,6 @@ const Index = () => {
   const [strokeColor, setStrokeColor] = useState('#000000');
   const [strokeWidth, setStrokeWidth] = useState(2);
   const [drawingTool, setDrawingTool] = useState<'pen' | 'dottedLine' | 'eraser'>('pen');
-  const [isRecording, setIsRecording] = useState(false);
-  const [isSaveDialogOpen, setIsSaveDialogOpen] = useState(false);
-
-  const handleSavePlay = () => {
-    setIsSaveDialogOpen(true);
-  };
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white text-gray-900">
@@ -57,9 +51,10 @@ const Index = () => {
                   onStrokeWidthChange={setStrokeWidth}
                   drawingTool={drawingTool}
                   onDrawingToolChange={setDrawingTool}
-                  onSavePlay={handleSavePlay}
-                  isRecording={isRecording}
                 />
+                <div className="mt-auto">
+                  <Help />
+                </div>
               </div>
             </div>
 

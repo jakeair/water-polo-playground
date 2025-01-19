@@ -32,16 +32,22 @@ const SavePlayDialog: React.FC<SavePlayDialogProps> = ({
 
     setIsSaving(true);
     try {
+      const { data: { user } } = await supabase.auth.getUser();
+      
+      if (!user) {
+        toast.error("You must be logged in to save plays");
+        return;
+      }
+
       const { error } = await supabase
         .from('plays')
-        .insert([
-          {
-            title,
-            description,
-            canvas_data: canvasData,
-            keyframes: keyframesData,
-          }
-        ]);
+        .insert({
+          title,
+          description,
+          canvas_data: canvasData,
+          keyframes: keyframesData,
+          user_id: user.id
+        });
 
       if (error) throw error;
 

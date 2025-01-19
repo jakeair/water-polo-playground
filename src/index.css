@@ -31,15 +31,14 @@
 }
 
 .fixed-court-container {
-  position: absolute;  /* Changed from fixed to absolute */
-  top: 0;
+  position: fixed;
+  top: 0vh;  /* Changed from 10vh to 0vh to extend upward */
   left: calc(4rem + 1px);
   right: 1rem;
-  min-height: 100vh;  /* Added min-height */
+  bottom: 4vh;  /* Changed from 14vh to 4vh to extend downward */
   padding: 1rem;
   z-index: 0;
   contain: layout style paint;
-  overflow-y: auto;  /* Added overflow-y */
 }
 
 .court {
@@ -49,7 +48,7 @@
   border-radius: clamp(6px, 1vw, 12px);
   overflow: visible;
   width: 100%;
-  height: 100vh;  /* Set a fixed height */
+  height: 100%;
   transition: all 0.3s ease;
   contain: layout style paint;
   will-change: transform;

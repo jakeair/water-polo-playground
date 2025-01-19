@@ -6,7 +6,16 @@ import { useDrawingState } from '@/hooks/useDrawingState';
 const Index = () => {
   const [team1Color, setTeam1Color] = useState('#3b82f6');
   const [team2Color, setTeam2Color] = useState('#ef4444');
-  const drawingState = useDrawingState();
+  const {
+    isDrawing,
+    strokeColor,
+    strokeWidth,
+    drawingTool,
+    setIsDrawing,
+    setStrokeColor,
+    setStrokeWidth,
+    setDrawingTool
+  } = useDrawingState();
 
   return (
     <div className="flex h-screen">
@@ -16,7 +25,14 @@ const Index = () => {
           team2Color={team2Color}
           onTeam1ColorChange={setTeam1Color}
           onTeam2ColorChange={setTeam2Color}
-          {...drawingState}
+          isDrawing={isDrawing}
+          strokeColor={strokeColor}
+          strokeWidth={strokeWidth}
+          drawingTool={drawingTool}
+          onDrawingChange={setIsDrawing}
+          onStrokeColorChange={setStrokeColor}
+          onStrokeWidthChange={setStrokeWidth}
+          onDrawingToolChange={setDrawingTool}
         />
       </aside>
       

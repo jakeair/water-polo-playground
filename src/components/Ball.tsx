@@ -102,21 +102,10 @@ const Ball: React.FC<BallProps> = ({ position, onPositionChange }) => {
         left: `${position.x}%`,
         top: `${position.y}%`,
         cursor: isDragging.current ? 'grabbing' : 'grab',
-        willChange: 'transform, left, top',
-        transform: `translate(-50%, -50%)`,
       }}
       onMouseDown={handleMouseDown}
       onTouchStart={handleTouchStart}
-    >
-      <img 
-        src="/lovable-uploads/eb065d48-f6c0-4300-bfa4-de01815e115f.png"
-        alt="Ball"
-        width={40}
-        height={40}
-        loading="lazy"
-        className="w-full h-full object-cover rounded-full"
-      />
-    </div>
+    />
   );
 };
 

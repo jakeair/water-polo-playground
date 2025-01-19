@@ -32,13 +32,12 @@
 
 .fixed-court-container {
   position: fixed;
-  top: 0vh;  /* Changed from 10vh to 0vh to extend upward */
+  top: 10vh;
   left: calc(4rem + 1px);
   right: 1rem;
-  bottom: 4vh;  /* Changed from 14vh to 4vh to extend downward */
+  bottom: 14vh;
   padding: 1rem;
   z-index: 0;
-  contain: layout style paint;
 }
 
 .court {
@@ -50,8 +49,6 @@
   width: 100%;
   height: 100%;
   transition: all 0.3s ease;
-  contain: layout style paint;
-  will-change: transform;
 }
 
 .goal {
@@ -70,7 +67,6 @@
   left: 50%;
   transform: translateX(-50%);
   z-index: 10;
-  contain: layout style paint;
 }
 
 .goal-net {
@@ -83,7 +79,6 @@
   background-size: 8% 8%;
   opacity: 0.95;
   box-shadow: inset 0 0 30px rgba(59, 130, 246, 0.15);
-  contain: strict;
 }
 
 .goal-top {
@@ -100,7 +95,6 @@
   position: absolute;
   width: 100%;
   height: clamp(1px, 0.3vw, 3px);
-  contain: layout paint;
 }
 
 .two-meter-line { border-top: 3px dashed rgba(239, 68, 68, 0.6); }
@@ -133,7 +127,6 @@
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
   transition: transform 0.1s cubic-bezier(0.2, 0, 0, 1);
-  contain: layout style paint;
 }
 
 .player.team1 { 
@@ -148,12 +141,16 @@
   position: absolute;
   width: clamp(20px, 3.9vw, 40px);
   aspect-ratio: 1;
+  background-image: url('/lovable-uploads/eb065d48-f6c0-4300-bfa4-de01815e115f.png');
+  background-size: cover;
+  background-position: center;
+  border-radius: 50%;
   cursor: grab;
   will-change: transform, left, top;
   touch-action: none;
+  transform: translate(-50%, -50%);
   transition: transform 0.2s ease-out;
   filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
-  contain: layout style paint;
 }
 
 .ball:active {

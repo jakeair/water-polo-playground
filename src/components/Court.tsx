@@ -6,7 +6,7 @@ interface CourtProps {
   height?: number;
 }
 
-const Court: React.FC<CourtProps> = React.memo(({ children }) => {
+const Court: React.FC<CourtProps> = ({ children }) => {
   return (
     <div className="fixed-court-container">
       <div 
@@ -36,8 +36,6 @@ const Court: React.FC<CourtProps> = React.memo(({ children }) => {
       </div>
     </div>
   );
-});
-
-Court.displayName = 'Court';
+};
 
 export default Court;

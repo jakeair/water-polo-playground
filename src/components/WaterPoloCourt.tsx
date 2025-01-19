@@ -1,44 +1,61 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
+import { gsap } from 'gsap';
 import Player from './Player';
+import Timeline from './Timeline';
 import Ball from './Ball';
 import Court from './Court';
 import DrawingCanvas from './DrawingCanvas';
 import { useAnimation } from '@/hooks/useAnimation';
 import { useKeyframes } from '@/hooks/useKeyframes';
 import SavePlayDialog from './SavePlayDialog';
-import { useIsMobile } from '@/hooks/use-mobile';
-import VideoRecorder from './VideoRecorder';
-import KeyframeManager from './KeyframeManager';
+import { Button } from './ui/button';
+import { Save } from 'lucide-react';
+
+interface PlayerPosition {
+  x: number;
+  y: number;
+}
 
 interface WaterPoloCourtProps {
   team1Color: string;
   team2Color: string;
+  onTeam1ColorChange: (color: string) => void;
+  onTeam2ColorChange: (color: string) => void;
   isDrawing: boolean;
+  onDrawingChange: (isDrawing: boolean) => void;
   strokeColor: string;
+  onStrokeColorChange: (color: string) => void;
   strokeWidth: number;
+  onStrokeWidthChange: (width: number) => void;
   drawingTool: 'pen' | 'dottedLine' | 'eraser';
+  onDrawingToolChange: (tool: 'pen' | 'dottedLine' | 'eraser') => void;
 }
 
 const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
   team1Color,
   team2Color,
+  onTeam1ColorChange,
+  onTeam2ColorChange,
   isDrawing,
+  onDrawingChange,
   strokeColor,
+  onStrokeColorChange,
   strokeWidth,
+  onStrokeWidthChange,
   drawingTool,
+  onDrawingToolChange
 }) => {
-  const [playerPositions, setPlayerPositions] = useState<{[key: string]: { x: number; y: number }}>({});
+  const [playerPositions, setPlayerPositions] = useState<{[key: string]: PlayerPosition}>({});
+  const lastInterpolatedPositions = React.useRef<{[key: string]: PlayerPosition}>({});
   const [ballPosition, setBallPosition] = useState({ x: 50, y: 50 });
   const [currentTime, setCurrentTime] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isSaveDialogOpen, setIsSaveDialogOpen] = useState(false);
-  const [isRecording, setIsRecording] = useState(false);
   const ANIMATION_DURATION = 2500;
-  const containerRef = useRef<HTMLDivElement>(null);
 
   const { keyframes, recordKeyframe, interpolatePositions } = useKeyframes(currentTime);
 
-  const updatePlayerPosition = (playerId: string, position: { x: number; y: number }) => {
+  const updatePlayerPosition = (playerId: string, position: PlayerPosition) => {
     setPlayerPositions(prev => ({
       ...prev,
       [playerId]: position
@@ -64,28 +81,43 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
 
   useAnimation(isPlaying, animate);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const interpolated = interpolatePositions(currentTime);
     if (interpolated) {
       const { positions, ballPosition: newBallPosition } = interpolated;
+      
+      Object.entries(positions).forEach(([playerId, position]) => {
+        const lastPos = lastInterpolatedPositions.current[playerId];
+        if (lastPos && (lastPos.x !== position.x || lastPos.y !== position.y)) {
+          gsap.to(`#player-${playerId}`, {
+            left: `${position.x}%`,
+            top: `${position.y}%`,
+            duration: 0.1,
+            ease: "power2.out"
+          });
+        }
+      });
+      
+      lastInterpolatedPositions.current = positions;
       setPlayerPositions(positions);
+      
       if (newBallPosition) {
         setBallPosition(newBallPosition);
       }
     }
   }, [currentTime]);
 
+  useEffect(() => {
+    document.documentElement.style.setProperty('--team1-color', team1Color);
+    document.documentElement.style.setProperty('--team2-color', team2Color);
+  }, [team1Color, team2Color]);
+
   const handleSaveClick = () => {
-    if (!keyframes.length) {
-      toast.error('Add some keyframes before saving');
-      return;
-    }
-    setCurrentTime(0);
     setIsSaveDialogOpen(true);
   };
 
   return (
-    <div className="flex flex-col h-full" ref={containerRef}>
+    <div className="flex flex-col h-full">
       <div className="flex-1 relative min-h-0">
         <Court>
           <DrawingCanvas
@@ -96,7 +128,6 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
           />
           <Ball position={ballPosition} onPositionChange={setBallPosition} />
           
-          {/* Team 1 Players */}
           <Player team={1} number="G" initialX={50} initialY={5} isGoalie onPositionChange={(pos) => updatePlayerPosition('1G', pos)} id="player-1G" style={{ backgroundColor: 'var(--goalie-color)' }} />
           <Player team={1} number={1} initialX={20} initialY={20} onPositionChange={(pos) => updatePlayerPosition('11', pos)} id="player-11" style={{ backgroundColor: team1Color }} />
           <Player team={1} number={2} initialX={40} initialY={20} onPositionChange={(pos) => updatePlayerPosition('12', pos)} id="player-12" style={{ backgroundColor: team1Color }} />
@@ -105,7 +136,6 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
           <Player team={1} number={5} initialX={50} initialY={30} onPositionChange={(pos) => updatePlayerPosition('15', pos)} id="player-15" style={{ backgroundColor: team1Color }} />
           <Player team={1} number={6} initialX={70} initialY={30} onPositionChange={(pos) => updatePlayerPosition('16', pos)} id="player-16" style={{ backgroundColor: team1Color }} />
 
-          {/* Team 2 Players */}
           <Player team={2} number="G" initialX={50} initialY={95} isGoalie onPositionChange={(pos) => updatePlayerPosition('2G', pos)} id="player-2G" style={{ backgroundColor: 'var(--goalie-color)' }} />
           <Player team={2} number={1} initialX={20} initialY={70} onPositionChange={(pos) => updatePlayerPosition('21', pos)} id="player-21" style={{ backgroundColor: team2Color }} />
           <Player team={2} number={2} initialX={40} initialY={70} onPositionChange={(pos) => updatePlayerPosition('22', pos)} id="player-22" style={{ backgroundColor: team2Color }} />
@@ -116,55 +146,33 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
         </Court>
       </div>
       
-      <KeyframeManager
-        currentTime={currentTime}
-        duration={ANIMATION_DURATION}
-        keyframes={keyframes}
-        isPlaying={isPlaying}
-        isRecording={isRecording}
-        onTimeChange={setCurrentTime}
-        onPlayPause={() => setIsPlaying(!isPlaying)}
-        onRecordKeyframe={handleRecordKeyframe}
-        onSave={handleSaveClick}
-      />
-
-      <VideoRecorder
-        containerRef={containerRef}
-        currentTime={currentTime}
-        duration={ANIMATION_DURATION}
-        isRecording={isRecording}
-        setIsRecording={setIsRecording}
-        setIsPlaying={setIsPlaying}
-        onRecordingComplete={(blob) => {
-          setIsSaveDialogOpen(true);
-          setIsRecording(false);
-        }}
-      />
+      <div className="h-[5vh]" />
+      
+      <div className="flex items-center gap-4 px-4 mb-4">
+        <Button
+          onClick={handleSaveClick}
+          className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700"
+        >
+          <Save className="w-4 h-4" />
+          Save Play
+        </Button>
+        
+        <Timeline
+          currentTime={currentTime}
+          duration={ANIMATION_DURATION}
+          keyframes={keyframes.map(kf => kf.time)}
+          isPlaying={isPlaying}
+          onTimeChange={setCurrentTime}
+          onPlayPause={() => setIsPlaying(!isPlaying)}
+          onRecordKeyframe={handleRecordKeyframe}
+        />
+      </div>
 
       <SavePlayDialog
         isOpen={isSaveDialogOpen}
-        onClose={() => {
-          setIsSaveDialogOpen(false);
-          setIsRecording(false);
-          setIsPlaying(false);
-        }}
+        onClose={() => setIsSaveDialogOpen(false)}
         canvasData={playerPositions}
         keyframesData={keyframes}
-        onVideoRecorded={async () => {
-          if (!isRecording) {
-            setCurrentTime(0);
-            setIsRecording(true);
-            return new Promise((resolve) => {
-              const checkRecording = setInterval(() => {
-                if (!isRecording) {
-                  clearInterval(checkRecording);
-                  resolve(undefined);
-                }
-              }, 100);
-            });
-          }
-          return undefined;
-        }}
       />
     </div>
   );

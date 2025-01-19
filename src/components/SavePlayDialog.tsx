@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -12,7 +12,6 @@ interface SavePlayDialogProps {
   onClose: () => void;
   canvasData: any;
   keyframesData: any;
-  onVideoRecorded: () => Promise<Blob | undefined>;
 }
 
 const SavePlayDialog: React.FC<SavePlayDialogProps> = ({
@@ -20,11 +19,10 @@ const SavePlayDialog: React.FC<SavePlayDialogProps> = ({
   onClose,
   canvasData,
   keyframesData,
-  onVideoRecorded
 }) => {
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [isSaving, setIsSaving] = useState(false);
+  const [title, setTitle] = React.useState("");
+  const [description, setDescription] = React.useState("");
+  const [isSaving, setIsSaving] = React.useState(false);
 
   const handleSave = async () => {
     if (!title.trim()) {
@@ -41,25 +39,6 @@ const SavePlayDialog: React.FC<SavePlayDialogProps> = ({
         return;
       }
 
-      // Get the recorded video blob
-      const videoBlob = await onVideoRecorded();
-      let videoUrl = null;
-
-      if (videoBlob) {
-        const fileName = `${crypto.randomUUID()}.webm`;
-        const { data: uploadData, error: uploadError } = await supabase.storage
-          .from('team-assets')
-          .upload(fileName, videoBlob);
-
-        if (uploadError) throw uploadError;
-
-        const { data: { publicUrl } } = supabase.storage
-          .from('team-assets')
-          .getPublicUrl(fileName);
-
-        videoUrl = publicUrl;
-      }
-
       const { error } = await supabase
         .from('plays')
         .insert({
@@ -67,8 +46,7 @@ const SavePlayDialog: React.FC<SavePlayDialogProps> = ({
           description,
           canvas_data: canvasData,
           keyframes: keyframesData,
-          user_id: user.id,
-          video_url: videoUrl
+          user_id: user.id
         });
 
       if (error) throw error;

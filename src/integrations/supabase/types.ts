@@ -19,7 +19,6 @@ export type Database = {
           title: string
           updated_at: string
           user_id: string
-          video_url: string | null
         }
         Insert: {
           canvas_data: Json
@@ -30,7 +29,6 @@ export type Database = {
           title: string
           updated_at?: string
           user_id: string
-          video_url?: string | null
         }
         Update: {
           canvas_data?: Json
@@ -41,7 +39,6 @@ export type Database = {
           title?: string
           updated_at?: string
           user_id?: string
-          video_url?: string | null
         }
         Relationships: []
       }

@@ -33,7 +33,7 @@ const Auth = () => {
     if (error instanceof AuthApiError) {
       switch (error.code) {
         case 'invalid_credentials':
-          return 'Invalid email or password. Please check your credentials and try again.';
+          return 'The email or password you entered is incorrect. Please try again.';
         case 'email_not_confirmed':
           return 'Please verify your email address before signing in.';
         case 'user_not_found':
@@ -41,7 +41,7 @@ const Auth = () => {
         case 'weak_password':
           return 'Password should be at least 6 characters long.';
         case 'invalid_grant':
-          return 'Invalid login credentials.';
+          return 'The email or password you entered is incorrect. Please try again.';
         default:
           return error.message;
       }

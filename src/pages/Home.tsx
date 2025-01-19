@@ -8,34 +8,27 @@ import { Play, Info, ArrowRight, Trophy, Users, Zap } from 'lucide-react';
 const Home = () => {
   return (
     <SidebarProvider>
-      <div className="relative min-h-screen w-full bg-gradient-to-br from-blue-50 via-white to-blue-50">
+      <div className="relative min-h-screen w-full bg-gradient-to-br from-[#F8FAFC] via-white to-[#EFF6FF]">
         {/* Navigation Bar */}
         <div className="fixed top-0 left-0 right-0 bg-white/80 backdrop-blur-sm border-b border-blue-100 z-50">
-          <div className="max-w-[1800px] mx-auto px-6 sm:px-8 py-3 sm:py-4 flex items-center justify-between">
-            <Link to="/" className="flex items-center space-x-4 group">
-              <img 
-                src="/lovable-uploads/909e2d5e-f8a8-493f-9d95-f0d86ecd99be.png" 
-                alt="Logo" 
-                className="h-12 sm:h-14 w-auto opacity-90 transition-all duration-200 group-hover:opacity-100"
-              />
-            </Link>
+          <div className="max-w-[1800px] mx-auto py-4 sm:py-5">
             <Navigation />
           </div>
         </div>
 
         {/* Background pattern */}
-        <div className="absolute inset-0 opacity-5">
+        <div className="absolute inset-0 opacity-[0.03]">
           <div className="absolute inset-0" style={{
-            backgroundImage: `radial-gradient(circle at 2px 2px, #3b82f6 1px, transparent 0)`,
+            backgroundImage: `radial-gradient(circle at 2px 2px, #0EA5E9 1px, transparent 0)`,
             backgroundSize: '40px 40px'
           }} />
         </div>
 
         <main className="relative flex flex-col items-center justify-center min-h-screen px-4 sm:px-6 md:px-8 lg:px-16 max-w-[1400px] mx-auto pt-24 sm:pt-28">
-          <div className="w-full space-y-8 sm:space-y-12 md:space-y-16 lg:space-y-20 pt-12 sm:pt-16">
+          <div className="w-full space-y-12 sm:space-y-16 md:space-y-20 lg:space-y-24 pt-12 sm:pt-16">
             <div className="space-y-6 sm:space-y-8 text-center animate-fade-in">
-              <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold bg-gradient-to-r from-blue-600 via-blue-500 to-blue-400 text-transparent bg-clip-text leading-[1.15] px-2 sm:px-4">
-                Elevate Your Water Polo Strategy
+              <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-blue-500 to-blue-400 leading-[1.15] px-2 sm:px-4">
+                Professional Water Polo Strategy Software
               </h1>
               <p className="text-lg sm:text-xl md:text-2xl text-gray-600 max-w-3xl mx-auto leading-relaxed px-2">
                 Create, animate, and share professional water polo strategies. Used by top coaches and teams worldwide.
@@ -44,7 +37,7 @@ const Home = () => {
                 <Link to="/plays">
                   <Button 
                     size="lg" 
-                    className="w-full sm:w-auto group bg-[#0a65ae] hover:bg-[#085490] text-white gap-2 sm:gap-3 px-6 sm:px-8 py-5 sm:py-6 text-base sm:text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-200"
+                    className="w-full sm:w-auto group bg-blue-600 hover:bg-blue-700 text-white gap-2 sm:gap-3 px-6 sm:px-8 py-5 sm:py-6 text-base sm:text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-200"
                   >
                     <Play className="w-5 h-5 sm:w-6 sm:h-6" />
                     Start Creating Plays
@@ -54,7 +47,7 @@ const Home = () => {
                 <Button 
                   variant="outline" 
                   size="lg" 
-                  className="w-full sm:w-auto border-2 border-[#0a65ae]/30 text-[#0a65ae] hover:bg-[#0a65ae]/10 gap-2 sm:gap-3 px-6 sm:px-8 py-5 sm:py-6 text-base sm:text-lg font-medium backdrop-blur-sm"
+                  className="w-full sm:w-auto border-2 border-blue-200 text-blue-600 hover:bg-blue-50 gap-2 sm:gap-3 px-6 sm:px-8 py-5 sm:py-6 text-base sm:text-lg font-medium backdrop-blur-sm"
                 >
                   View Pricing
                 </Button>

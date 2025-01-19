@@ -52,9 +52,6 @@ const Index = () => {
                   drawingTool={drawingTool}
                   onDrawingToolChange={setDrawingTool}
                 />
-                <div className="mt-auto">
-                  <Help />
-                </div>
               </div>
             </div>
 
@@ -64,16 +61,10 @@ const Index = () => {
                 <WaterPoloCourt
                   team1Color={team1Color}
                   team2Color={team2Color}
-                  onTeam1ColorChange={setTeam1Color}
-                  onTeam2ColorChange={setTeam2Color}
                   isDrawing={isDrawing}
-                  onDrawingChange={setIsDrawing}
                   strokeColor={strokeColor}
-                  onStrokeColorChange={setStrokeColor}
                   strokeWidth={strokeWidth}
-                  onStrokeWidthChange={setStrokeWidth}
                   drawingTool={drawingTool}
-                  onDrawingToolChange={setDrawingTool}
                 />
               </div>
             </div>

@@ -26,7 +26,7 @@ const router = createBrowserRouter([
     element: <Pricing />,
   },
   {
-    path: '/plays',
+    path: '/playbook',
     element: <Playbook />,
   },
   {

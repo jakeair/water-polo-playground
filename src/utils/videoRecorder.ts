@@ -1,30 +1,33 @@
 export class VideoRecorder {
   private mediaRecorder: MediaRecorder | null = null;
-  private chunks: Blob[] = [];
+  private recordedChunks: Blob[] = [];
 
-  async startRecording(stream: MediaStream): Promise<void> {
-    this.chunks = [];
-    this.mediaRecorder = new MediaRecorder(stream);
-    
-    this.mediaRecorder.ondataavailable = (e) => {
-      if (e.data.size > 0) {
-        this.chunks.push(e.data);
+  async startRecording(stream: MediaStream) {
+    this.recordedChunks = [];
+    this.mediaRecorder = new MediaRecorder(stream, {
+      mimeType: 'video/webm'
+    });
+
+    this.mediaRecorder.ondataavailable = (event) => {
+      if (event.data.size > 0) {
+        this.recordedChunks.push(event.data);
       }
     };
 
     this.mediaRecorder.start();
   }
 
-  stopRecording(): Promise<Blob> {
-    return new Promise((resolve) => {
+  async stopRecording(): Promise<Blob> {
+    return new Promise((resolve, reject) => {
       if (!this.mediaRecorder) {
-        resolve(new Blob());
+        reject(new Error('No recording in progress'));
         return;
       }
 
       this.mediaRecorder.onstop = () => {
-        const blob = new Blob(this.chunks, { type: 'video/webm' });
-        this.chunks = [];
+        const blob = new Blob(this.recordedChunks, {
+          type: 'video/webm'
+        });
         resolve(blob);
       };
 

@@ -70,25 +70,12 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
 
     try {
       const container = containerRef.current;
-      const { width, height } = container.getBoundingClientRect();
-
-      // Create a temporary canvas for recording if it doesn't exist
-      if (!recordingCanvasRef.current) {
-        const canvas = document.createElement('canvas');
-        canvas.width = width;
-        canvas.height = height;
-        recordingCanvasRef.current = canvas;
-      }
-
-      // Use html2canvas to capture the entire container
       const canvas = await html2canvas(container, {
         backgroundColor: '#f0f9ff',
         logging: false,
         scale: window.devicePixelRatio || 1,
         useCORS: true,
         allowTaint: true,
-        width,
-        height,
         onclone: (clonedDoc) => {
           const clonedContainer = clonedDoc.querySelector('.fixed-court-container') as HTMLElement;
           if (clonedContainer) {
@@ -97,18 +84,18 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
         }
       });
 
+      if (!recordingCanvasRef.current) return;
       const ctx = recordingCanvasRef.current.getContext('2d');
       if (!ctx) return;
 
-      // Clear and draw the new frame
+      const { width, height } = container.getBoundingClientRect();
       ctx.clearRect(0, 0, width, height);
       ctx.drawImage(canvas, 0, 0);
 
-      // Request the next frame only if we haven't reached the last keyframe
+      // Continue recording until we reach the end
       if (currentTime < ANIMATION_DURATION && isRecording) {
         animationFrameId.current = requestAnimationFrame(captureFrame);
       } else if (isRecording) {
-        // Stop recording when we reach the last keyframe
         await stopRecording();
       }
     } catch (error) {
@@ -125,9 +112,8 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
     }
     
     try {
-      // Reset to beginning and pause
+      // Reset to beginning
       setCurrentTime(0);
-      setIsPlaying(false);
       
       const container = containerRef.current;
       const { width, height } = container.getBoundingClientRect();
@@ -144,7 +130,7 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
       await captureFrame();
 
       // Configure stream with high quality settings
-      const stream = canvas.captureStream(120); // 120fps for smoother motion
+      const stream = canvas.captureStream(60); // 60fps for smooth motion
       
       // Configure recorder with high quality settings
       const options = {
@@ -154,7 +140,7 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
 
       await recorderRef.current.startRecording(stream, options);
       setIsRecording(true);
-      setIsPlaying(true);
+      setIsPlaying(true); // Start playing the animation
       toast.success('Started recording');
     } catch (error) {
       console.error('Failed to start recording:', error);

@@ -7,6 +7,9 @@ import Court from './Court';
 import DrawingCanvas from './DrawingCanvas';
 import { useAnimation } from '@/hooks/useAnimation';
 import { useKeyframes } from '@/hooks/useKeyframes';
+import SavePlayDialog from './SavePlayDialog';
+import { Button } from './ui/button';
+import { Save } from 'lucide-react';
 
 interface PlayerPosition {
   x: number;
@@ -47,6 +50,7 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
   const [ballPosition, setBallPosition] = useState({ x: 50, y: 50 });
   const [currentTime, setCurrentTime] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [isSaveDialogOpen, setIsSaveDialogOpen] = useState(false);
   const ANIMATION_DURATION = 2500;
 
   const { keyframes, recordKeyframe, interpolatePositions } = useKeyframes(currentTime);
@@ -103,11 +107,14 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
     }
   }, [currentTime]);
 
-  // Add effect to update CSS variables when team colors change
   useEffect(() => {
     document.documentElement.style.setProperty('--team1-color', team1Color);
     document.documentElement.style.setProperty('--team2-color', team2Color);
   }, [team1Color, team2Color]);
+
+  const handleSaveClick = () => {
+    setIsSaveDialogOpen(true);
+  };
 
   return (
     <div className="flex flex-col h-full">
@@ -139,9 +146,17 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
         </Court>
       </div>
       
-      <div className="h-[5vh]" /> {/* Fixed 5% viewport height spacing */}
+      <div className="h-[5vh]" />
       
-      <div>
+      <div className="flex items-center gap-4 px-4 mb-4">
+        <Button
+          onClick={handleSaveClick}
+          className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700"
+        >
+          <Save className="w-4 h-4" />
+          Save Play
+        </Button>
+        
         <Timeline
           currentTime={currentTime}
           duration={ANIMATION_DURATION}
@@ -152,6 +167,13 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
           onRecordKeyframe={handleRecordKeyframe}
         />
       </div>
+
+      <SavePlayDialog
+        isOpen={isSaveDialogOpen}
+        onClose={() => setIsSaveDialogOpen(false)}
+        canvasData={playerPositions}
+        keyframesData={keyframes}
+      />
     </div>
   );
 };

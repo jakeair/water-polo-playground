@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Home, Layout, Info, LogOut } from 'lucide-react';
+import { Home, Layout, Info, LogOut, Notebook } from 'lucide-react';
 import {
   Tooltip,
   TooltipContent,
@@ -69,6 +69,25 @@ const Navigation = () => {
           </TooltipTrigger>
           <TooltipContent>
             <p>Open Whiteboard</p>
+          </TooltipContent>
+        </Tooltip>
+
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Link 
+              to="/playbook" 
+              className={`flex items-center gap-1 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full ${
+                isActive('/playbook') 
+                  ? 'bg-blue-600 text-white font-medium shadow-md' 
+                  : 'text-gray-700 hover:text-blue-600 hover:bg-blue-50'
+              } border border-transparent hover:border-blue-100 transition-all`}
+            >
+              <Notebook className="h-4 w-4 sm:h-5 sm:w-5" />
+              <span className="hidden sm:inline font-medium">Playbook</span>
+            </Link>
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>View Playbook</p>
           </TooltipContent>
         </Tooltip>
 

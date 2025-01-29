@@ -17,8 +17,8 @@ const Home = () => {
         </div>
 
         <main className="relative flex flex-col items-center justify-center min-h-screen px-4 sm:px-6 max-w-[1400px] mx-auto">
-          <div className="w-full space-y-6 text-center animate-fade-in">
-            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-blue-500 to-blue-400 leading-[1.15]">
+          <div className="w-full space-y-8 text-center animate-fade-in">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-blue-500 to-blue-400 leading-[1.15] mb-8">
               Water Polo Strategy
             </h1>
             
@@ -27,7 +27,7 @@ const Home = () => {
             </h2>
             
             <p className="text-lg sm:text-xl text-gray-500 italic">
-              Yes, it's actually free. Like, "we-promise-no-credit-card-ever" free. 🏊‍♂️
+              Beta version - Free forever. No credit card needed. Ever. 🏊‍♂️
             </p>
 
             <div className="pt-8">

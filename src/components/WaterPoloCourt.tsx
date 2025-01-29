@@ -51,6 +51,7 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
   const [currentTime, setCurrentTime] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isSaveDialogOpen, setIsSaveDialogOpen] = useState(false);
+  const [selectedBall, setSelectedBall] = useState('default');
   const ANIMATION_DURATION = 2500;
 
   const { keyframes, recordKeyframe, interpolatePositions } = useKeyframes(currentTime);
@@ -126,7 +127,11 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
             strokeWidth={strokeWidth}
             drawingTool={drawingTool}
           />
-          <Ball position={ballPosition} onPositionChange={setBallPosition} />
+          <Ball 
+            position={ballPosition} 
+            onPositionChange={setBallPosition} 
+            ballStyle={selectedBall}
+          />
           
           <Player team={1} number="G" initialX={50} initialY={5} isGoalie onPositionChange={(pos) => updatePlayerPosition('1G', pos)} id="player-1G" style={{ backgroundColor: 'var(--goalie-color)' }} />
           <Player team={1} number={1} initialX={20} initialY={20} onPositionChange={(pos) => updatePlayerPosition('11', pos)} id="player-11" style={{ backgroundColor: team1Color }} />

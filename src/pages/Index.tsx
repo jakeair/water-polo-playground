@@ -14,6 +14,7 @@ const Index = () => {
   const [strokeColor, setStrokeColor] = useState('#000000');
   const [strokeWidth, setStrokeWidth] = useState(2);
   const [drawingTool, setDrawingTool] = useState<'pen' | 'dottedLine' | 'eraser'>('pen');
+  const [selectedBall, setSelectedBall] = useState('default');
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white text-gray-900">
@@ -51,10 +52,9 @@ const Index = () => {
                   onStrokeWidthChange={setStrokeWidth}
                   drawingTool={drawingTool}
                   onDrawingToolChange={setDrawingTool}
+                  selectedBall={selectedBall}
+                  onBallChange={setSelectedBall}
                 />
-                <div className="mt-auto">
-                  <Help />
-                </div>
               </div>
             </div>
 
@@ -74,6 +74,8 @@ const Index = () => {
                   onStrokeWidthChange={setStrokeWidth}
                   drawingTool={drawingTool}
                   onDrawingToolChange={setDrawingTool}
+                  selectedBall={selectedBall}
+                  onBallChange={setSelectedBall}
                 />
               </div>
             </div>

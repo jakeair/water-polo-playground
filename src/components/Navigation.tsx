@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Home, Layout, Info, Notebook, Clock } from 'lucide-react';
+import { Layout, Info, Notebook, Clock } from 'lucide-react';
 import {
   Tooltip,
   TooltipContent,
@@ -18,25 +18,6 @@ const Navigation = () => {
       <nav className="flex items-center h-16 px-4 max-w-[1800px] mx-auto">
         <div className="flex items-center gap-1 sm:gap-2 ml-auto">
           <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Link 
-                  to="/" 
-                  className={`flex items-center gap-1 px-2 sm:px-3 py-1.5 rounded-full transition-all ${
-                    isActive('/') 
-                      ? 'bg-blue-600 text-white shadow-md' 
-                      : 'text-gray-700 hover:text-blue-600 hover:bg-blue-50'
-                  }`}
-                >
-                  <Home className="h-4 w-4 sm:h-5 sm:w-5" />
-                  <span className="hidden sm:inline text-sm font-medium">Home</span>
-                </Link>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>Go to Home</p>
-              </TooltipContent>
-            </Tooltip>
-
             <Tooltip>
               <TooltipTrigger asChild>
                 <Link 

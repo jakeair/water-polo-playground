@@ -28,10 +28,10 @@ const Home = () => {
           <div className="w-full space-y-12 sm:space-y-16 md:space-y-20 lg:space-y-24 pt-12 sm:pt-16">
             <div className="space-y-6 sm:space-y-8 text-center animate-fade-in">
               <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-blue-500 to-blue-400 leading-[1.15] px-2 sm:px-4">
-                Professional Water Polo Strategy Software
+                Free Water Polo Strategy Tools
               </h1>
               <p className="text-lg sm:text-xl md:text-2xl text-gray-600 max-w-3xl mx-auto leading-relaxed px-2">
-                Create, animate, and share professional water polo strategies. Used by top coaches and teams worldwide.
+                Create awesome water polo plays without spending a dime. No credit card needed, no hidden fees, just pure aquatic strategy goodness. Forever free, because we're cool like that! 🏊‍♂️
               </p>
               <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center items-center pt-4">
                 <Link to="/plays">
@@ -49,7 +49,7 @@ const Home = () => {
                   size="lg" 
                   className="w-full sm:w-auto border-2 border-blue-200 text-blue-600 hover:bg-blue-50 gap-2 sm:gap-3 px-6 sm:px-8 py-5 sm:py-6 text-base sm:text-lg font-medium backdrop-blur-sm"
                 >
-                  View Pricing
+                  See Why It's Free
                 </Button>
               </div>
             </div>
@@ -81,34 +81,34 @@ const Home = () => {
             </div>
 
             <div className="text-center space-y-6 sm:space-y-8 animate-fade-in px-2 sm:px-4" style={{ animationDelay: '400ms' }}>
-              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900">Trusted by Leading Teams</h2>
-              <div className="flex flex-wrap justify-center gap-4 sm:gap-8 items-center opacity-60">
-                <span className="text-lg sm:text-xl text-gray-800 font-semibold">Olympic Teams</span>
-                <span className="text-lg sm:text-xl text-gray-800 font-semibold">NCAA Programs</span>
-                <span className="text-lg sm:text-xl text-gray-800 font-semibold">Club Teams</span>
-                <span className="text-lg sm:text-xl text-gray-800 font-semibold">National Teams</span>
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900">No Catches, Just Splashes!</h2>
+              <div className="flex flex-wrap justify-center gap-4 sm:gap-8 items-center opacity-80">
+                <span className="text-lg sm:text-xl text-gray-800 font-semibold">✨ Free Forever</span>
+                <span className="text-lg sm:text-xl text-gray-800 font-semibold">🎯 No Hidden Fees</span>
+                <span className="text-lg sm:text-xl text-gray-800 font-semibold">🚀 All Features Included</span>
+                <span className="text-lg sm:text-xl text-gray-800 font-semibold">🌊 Just Dive In!</span>
               </div>
             </div>
 
             {/* CTA Section */}
             <div className="bg-white/80 backdrop-blur-md border border-blue-100 rounded-xl sm:rounded-2xl p-6 sm:p-8 md:p-12 text-center space-y-4 sm:space-y-6 mx-2 sm:mx-4 animate-fade-in" style={{ animationDelay: '600ms' }}>
-              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900">Ready to Transform Your Strategy?</h2>
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900">Ready to Make a Splash?</h2>
               <p className="text-base sm:text-lg md:text-xl text-gray-600 max-w-2xl mx-auto">
-                Join the elite teams using our platform to develop winning strategies.
+                Join thousands of water polo enthusiasts who've already dived into our free tools. No strings attached, just pure strategy fun!
               </p>
               <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center pt-2 sm:pt-4">
                 <Button 
                   size="lg" 
                   className="w-full sm:w-auto bg-[#0a65ae] hover:bg-[#085490] text-white gap-2 px-6 sm:px-8 py-5 sm:py-6 text-base sm:text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-200"
                 >
-                  Start Free Trial
+                  Start Creating (It's Free!)
                 </Button>
                 <Button 
                   variant="outline" 
                   size="lg" 
                   className="w-full sm:w-auto border-2 border-[#0a65ae]/30 text-[#0a65ae] hover:bg-[#0a65ae]/10 gap-2 px-6 sm:px-8 py-5 sm:py-6 text-base sm:text-lg font-medium backdrop-blur-sm"
                 >
-                  Watch Demo
+                  See How It Works
                 </Button>
               </div>
             </div>

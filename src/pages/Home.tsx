@@ -27,7 +27,7 @@ const Home = () => {
             </h2>
             
             <p className="text-lg sm:text-xl text-gray-500 italic">
-              Beta version - Free forever. No credit card needed. Ever. 🏊‍♂️
+              Beta version 0.69
             </p>
 
             <div className="pt-8">

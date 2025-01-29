@@ -87,7 +87,6 @@ const Player: React.FC<PlayerProps> = ({
     setIsDragging(false);
   };
 
-  // Mouse event handlers
   const handleMouseDown = (e: React.MouseEvent) => {
     handleStart(e.clientX, e.clientY);
     e.preventDefault();
@@ -97,7 +96,6 @@ const Player: React.FC<PlayerProps> = ({
     handleMove(e.clientX, e.clientY);
   };
 
-  // Touch event handlers
   const handleTouchStart = (e: React.TouchEvent) => {
     const touch = e.touches[0];
     handleStart(touch.clientX, touch.clientY);
@@ -135,10 +133,14 @@ const Player: React.FC<PlayerProps> = ({
         cursor: isDragging ? 'grabbing' : 'grab',
         transform: `translate(-50%, -50%) ${isDragging ? 'scale(1.05)' : 'scale(1)'}`,
         zIndex: isDragging ? 100 : isGoalie ? 50 : 1,
+        userSelect: 'none',
+        WebkitUserSelect: 'none',
+        WebkitTouchCallout: 'none',
         ...style
       }}
       onMouseDown={handleMouseDown}
       onTouchStart={handleTouchStart}
+      aria-label={`Player ${number} Team ${team}`}
     >
       {number}
     </div>

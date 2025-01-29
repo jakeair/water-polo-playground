@@ -45,40 +45,42 @@ const Ball: React.FC<BallProps> = ({ position, onPositionChange }) => {
     isDragging.current = false;
   };
 
-  // Mouse event handlers
   const handleMouseDown = (e: React.MouseEvent) => {
-    handleStart(e.clientX, e.clientY);
     e.preventDefault();
+    handleStart(e.clientX, e.clientY);
   };
 
   const handleMouseMove = (e: MouseEvent) => {
     handleMove(e.clientX, e.clientY);
   };
 
-  // Touch event handlers
   const handleTouchStart = (e: React.TouchEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
     const touch = e.touches[0];
     handleStart(touch.clientX, touch.clientY);
-    e.preventDefault();
   };
 
   const handleTouchMove = (e: TouchEvent) => {
+    e.preventDefault();
     const touch = e.touches[0];
     handleMove(touch.clientX, touch.clientY);
   };
 
   React.useEffect(() => {
     if (isDragging.current) {
-      window.addEventListener('mousemove', handleMouseMove);
+      window.addEventListener('mousemove', handleMouseMove, { passive: false });
       window.addEventListener('mouseup', handleEnd);
-      window.addEventListener('touchmove', handleTouchMove);
+      window.addEventListener('touchmove', handleTouchMove, { passive: false });
       window.addEventListener('touchend', handleEnd);
+      window.addEventListener('touchcancel', handleEnd);
     }
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('mouseup', handleEnd);
       window.removeEventListener('touchmove', handleTouchMove);
       window.removeEventListener('touchend', handleEnd);
+      window.removeEventListener('touchcancel', handleEnd);
     };
   }, [isDragging.current]);
 
@@ -102,9 +104,15 @@ const Ball: React.FC<BallProps> = ({ position, onPositionChange }) => {
         left: `${position.x}%`,
         top: `${position.y}%`,
         cursor: isDragging.current ? 'grabbing' : 'grab',
+        userSelect: 'none',
+        WebkitUserSelect: 'none',
+        WebkitTouchCallout: 'none',
+        touchAction: 'none'
       }}
       onMouseDown={handleMouseDown}
       onTouchStart={handleTouchStart}
+      onContextMenu={(e) => e.preventDefault()}
+      aria-label="Water polo ball"
     />
   );
 };

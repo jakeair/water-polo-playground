@@ -88,8 +88,8 @@ const Player: React.FC<PlayerProps> = ({
   };
 
   const handleMouseDown = (e: React.MouseEvent) => {
-    handleStart(e.clientX, e.clientY);
     e.preventDefault();
+    handleStart(e.clientX, e.clientY);
   };
 
   const handleMouseMove = (e: MouseEvent) => {
@@ -97,28 +97,32 @@ const Player: React.FC<PlayerProps> = ({
   };
 
   const handleTouchStart = (e: React.TouchEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
     const touch = e.touches[0];
     handleStart(touch.clientX, touch.clientY);
-    e.preventDefault();
   };
 
   const handleTouchMove = (e: TouchEvent) => {
+    e.preventDefault();
     const touch = e.touches[0];
     handleMove(touch.clientX, touch.clientY);
   };
 
   useEffect(() => {
     if (isDragging) {
-      window.addEventListener('mousemove', handleMouseMove, { passive: true });
+      window.addEventListener('mousemove', handleMouseMove, { passive: false });
       window.addEventListener('mouseup', handleEnd);
-      window.addEventListener('touchmove', handleTouchMove, { passive: true });
+      window.addEventListener('touchmove', handleTouchMove, { passive: false });
       window.addEventListener('touchend', handleEnd);
+      window.addEventListener('touchcancel', handleEnd);
     }
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('mouseup', handleEnd);
       window.removeEventListener('touchmove', handleTouchMove);
       window.removeEventListener('touchend', handleEnd);
+      window.removeEventListener('touchcancel', handleEnd);
     };
   }, [isDragging]);
 
@@ -136,10 +140,12 @@ const Player: React.FC<PlayerProps> = ({
         userSelect: 'none',
         WebkitUserSelect: 'none',
         WebkitTouchCallout: 'none',
+        touchAction: 'none',
         ...style
       }}
       onMouseDown={handleMouseDown}
       onTouchStart={handleTouchStart}
+      onContextMenu={(e) => e.preventDefault()}
       aria-label={`Player ${number} Team ${team}`}
     >
       {number}

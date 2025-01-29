@@ -172,7 +172,9 @@ const Toolbar: React.FC<ToolbarProps> = ({
         )}
 
         {/* Help Component at Bottom */}
-        <Help />
+        <div className="mt-auto">
+          <Help />
+        </div>
       </div>
     </div>
   );

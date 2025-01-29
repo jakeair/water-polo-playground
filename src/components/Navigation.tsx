@@ -1,25 +1,17 @@
 import React from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Home, Layout, Info, LogOut, Notebook } from 'lucide-react';
+import { Link, useLocation } from 'react-router-dom';
+import { Home, Layout, Info, Notebook } from 'lucide-react';
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { supabase } from '@/integrations/supabase/client';
-import { Button } from './ui/button';
 
 const Navigation = () => {
   const location = useLocation();
-  const navigate = useNavigate();
 
   const isActive = (path: string) => location.pathname === path;
-
-  const handleSignOut = async () => {
-    await supabase.auth.signOut();
-    navigate('/auth');
-  };
 
   return (
     <div className="fixed top-0 left-0 right-0 bg-white/80 backdrop-blur-sm border-b border-gray-200 z-50">
@@ -109,22 +101,6 @@ const Navigation = () => {
               </TooltipTrigger>
               <TooltipContent>
                 <p>About Us</p>
-              </TooltipContent>
-            </Tooltip>
-
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={handleSignOut}
-                  className="ml-1 text-gray-700 hover:text-blue-600 hover:bg-blue-50"
-                >
-                  <LogOut className="h-4 w-4 sm:h-5 sm:w-5" />
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>Sign Out</p>
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>

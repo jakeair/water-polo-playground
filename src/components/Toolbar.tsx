@@ -1,16 +1,9 @@
 import React from 'react';
 import ColorPicker from './ColorPicker';
-import { Pencil, Eraser, Circle } from 'lucide-react';
+import { Pencil, Eraser } from 'lucide-react';
 import { Separator } from "@/components/ui/separator";
 import { Toggle } from "@/components/ui/toggle";
 import Help from './Help';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 
 interface ToolbarProps {
   team1Color: string;
@@ -25,8 +18,6 @@ interface ToolbarProps {
   onStrokeWidthChange: (width: number) => void;
   drawingTool: 'pen' | 'dottedLine' | 'eraser';
   onDrawingToolChange: (tool: 'pen' | 'dottedLine' | 'eraser') => void;
-  selectedBall: string;
-  onBallChange: (ball: string) => void;
 }
 
 const DottedLineArrow = () => (
@@ -59,8 +50,6 @@ const Toolbar: React.FC<ToolbarProps> = ({
   onStrokeWidthChange,
   drawingTool,
   onDrawingToolChange,
-  selectedBall,
-  onBallChange,
 }) => {
   const getStrokeWidthRange = (tool: 'pen' | 'dottedLine' | 'eraser') => {
     switch (tool) {
@@ -77,35 +66,6 @@ const Toolbar: React.FC<ToolbarProps> = ({
       <div className="mb-2">
         <Help />
       </div>
-
-      {/* Ball Selector */}
-      <div className="flex flex-col items-center gap-2">
-        <Select value={selectedBall} onValueChange={onBallChange}>
-          <SelectTrigger className="w-full">
-            <SelectValue placeholder="Select ball style" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="default">
-              <div className="flex items-center gap-2">
-                <Circle className="w-4 h-4" />
-                <span>Default Ball</span>
-              </div>
-            </SelectItem>
-            <SelectItem value="bag">
-              <div className="flex items-center gap-2">
-                <img 
-                  src="/lovable-uploads/c652984e-99be-409b-aa53-533b658dcd2b.png" 
-                  alt="Bag Ball" 
-                  className="w-4 h-4 object-contain"
-                />
-                <span>Yellow Bag</span>
-              </div>
-            </SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
-
-      <Separator className="bg-white/10" />
 
       {/* Team Colors */}
       <div className="flex flex-col items-center gap-2">

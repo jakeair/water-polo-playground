@@ -29,8 +29,6 @@ interface WaterPoloCourtProps {
   onStrokeWidthChange: (width: number) => void;
   drawingTool: 'pen' | 'dottedLine' | 'eraser';
   onDrawingToolChange: (tool: 'pen' | 'dottedLine' | 'eraser') => void;
-  selectedBall: string;
-  onBallChange: (ball: string) => void;
 }
 
 const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
@@ -45,9 +43,7 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
   strokeWidth,
   onStrokeWidthChange,
   drawingTool,
-  onDrawingToolChange,
-  selectedBall,
-  onBallChange
+  onDrawingToolChange
 }) => {
   const [playerPositions, setPlayerPositions] = useState<{[key: string]: PlayerPosition}>({});
   const lastInterpolatedPositions = React.useRef<{[key: string]: PlayerPosition}>({});
@@ -55,6 +51,7 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
   const [currentTime, setCurrentTime] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isSaveDialogOpen, setIsSaveDialogOpen] = useState(false);
+  const ANIMATION_DURATION = 2500;
 
   const { keyframes, recordKeyframe, interpolatePositions } = useKeyframes(currentTime);
 
@@ -74,7 +71,7 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
 
     setCurrentTime(prev => {
       const next = prev + 1;
-      if (next >= 2500) {
+      if (next >= ANIMATION_DURATION) {
         setIsPlaying(false);
         return prev;
       }
@@ -129,11 +126,7 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
             strokeWidth={strokeWidth}
             drawingTool={drawingTool}
           />
-          <Ball 
-            position={ballPosition} 
-            onPositionChange={setBallPosition} 
-            ballStyle={selectedBall}
-          />
+          <Ball position={ballPosition} onPositionChange={setBallPosition} />
           
           <Player team={1} number="G" initialX={50} initialY={5} isGoalie onPositionChange={(pos) => updatePlayerPosition('1G', pos)} id="player-1G" style={{ backgroundColor: 'var(--goalie-color)' }} />
           <Player team={1} number={1} initialX={20} initialY={20} onPositionChange={(pos) => updatePlayerPosition('11', pos)} id="player-11" style={{ backgroundColor: team1Color }} />
@@ -166,7 +159,7 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
         
         <Timeline
           currentTime={currentTime}
-          duration={2500}
+          duration={ANIMATION_DURATION}
           keyframes={keyframes.map(kf => kf.time)}
           isPlaying={isPlaying}
           onTimeChange={setCurrentTime}

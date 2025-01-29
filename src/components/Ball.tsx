@@ -4,10 +4,9 @@ import { gsap } from 'gsap';
 interface BallProps {
   position: { x: number; y: number };
   onPositionChange: (position: { x: number; y: number }) => void;
-  ballStyle?: string;
 }
 
-const Ball: React.FC<BallProps> = ({ position, onPositionChange, ballStyle = 'default' }) => {
+const Ball: React.FC<BallProps> = ({ position, onPositionChange }) => {
   const ballRef = useRef<HTMLDivElement>(null);
   const isDragging = useRef(false);
   const startPos = useRef({ x: 0, y: 0 });
@@ -83,23 +82,6 @@ const Ball: React.FC<BallProps> = ({ position, onPositionChange, ballStyle = 'de
     };
   }, [isDragging.current]);
 
-  const getBallStyle = () => {
-    switch (ballStyle) {
-      case 'bag':
-        return {
-          backgroundImage: `url('/lovable-uploads/c652984e-99be-409b-aa53-533b658dcd2b.png')`,
-          backgroundSize: 'contain',
-          backgroundColor: 'transparent',
-        };
-      default:
-        return {
-          backgroundImage: `url('/lovable-uploads/eb065d48-f6c0-4300-bfa4-de01815e115f.png')`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-        };
-    }
-  };
-
   React.useEffect(() => {
     if (ballRef.current) {
       gsap.to(ballRef.current, {
@@ -120,7 +102,6 @@ const Ball: React.FC<BallProps> = ({ position, onPositionChange, ballStyle = 'de
         left: `${position.x}%`,
         top: `${position.y}%`,
         cursor: isDragging.current ? 'grabbing' : 'grab',
-        ...getBallStyle(),
       }}
       onMouseDown={handleMouseDown}
       onTouchStart={handleTouchStart}

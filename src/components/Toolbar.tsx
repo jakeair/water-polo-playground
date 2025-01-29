@@ -62,6 +62,11 @@ const Toolbar: React.FC<ToolbarProps> = ({
 
   return (
     <div className="flex flex-col gap-3 w-full h-full max-w-[280px] mx-auto lg:max-w-[320px]">
+      {/* Help Component at Top */}
+      <div className="mb-2">
+        <Help />
+      </div>
+
       {/* Team Colors */}
       <div className="flex flex-col items-center gap-2">
         <ColorPicker
@@ -170,11 +175,6 @@ const Toolbar: React.FC<ToolbarProps> = ({
             />
           </div>
         )}
-
-        {/* Help Component at Bottom */}
-        <div className="mt-auto">
-          <Help />
-        </div>
       </div>
     </div>
   );

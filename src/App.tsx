@@ -5,7 +5,6 @@ import Index from '@/pages/Index';
 import Home from '@/pages/Home';
 import AboutPage from '@/pages/About';
 import PricingPage from '@/pages/Pricing';
-import PlaybookPage from '@/pages/Playbook';
 
 // Initialize the query client outside of the component
 const queryClient = new QueryClient({
@@ -25,7 +24,6 @@ const App = () => {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/plays" element={<Index />} />
-            <Route path="/playbook" element={<PlaybookPage />} />
             <Route path="/about" element={<AboutPage />} />
             <Route path="/pricing" element={<PricingPage />} />
           </Routes>

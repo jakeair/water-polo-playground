@@ -12,7 +12,7 @@ const Court: React.FC<CourtProps> = ({ children }) => {
       <div 
         className="court"
         style={{ 
-          maxWidth: '100%',
+          maxWidth: '1200px',
           margin: '0 auto',
           overflow: 'visible',
         }}

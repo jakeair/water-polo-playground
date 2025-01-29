@@ -29,6 +29,8 @@ interface WaterPoloCourtProps {
   onStrokeWidthChange: (width: number) => void;
   drawingTool: 'pen' | 'dottedLine' | 'eraser';
   onDrawingToolChange: (tool: 'pen' | 'dottedLine' | 'eraser') => void;
+  selectedBall: string;
+  onBallChange: (ball: string) => void;
 }
 
 const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
@@ -43,7 +45,9 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
   strokeWidth,
   onStrokeWidthChange,
   drawingTool,
-  onDrawingToolChange
+  onDrawingToolChange,
+  selectedBall,
+  onBallChange
 }) => {
   const [playerPositions, setPlayerPositions] = useState<{[key: string]: PlayerPosition}>({});
   const lastInterpolatedPositions = React.useRef<{[key: string]: PlayerPosition}>({});
@@ -51,8 +55,6 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
   const [currentTime, setCurrentTime] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isSaveDialogOpen, setIsSaveDialogOpen] = useState(false);
-  const [selectedBall, setSelectedBall] = useState('default');
-  const ANIMATION_DURATION = 2500;
 
   const { keyframes, recordKeyframe, interpolatePositions } = useKeyframes(currentTime);
 
@@ -72,7 +74,7 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
 
     setCurrentTime(prev => {
       const next = prev + 1;
-      if (next >= ANIMATION_DURATION) {
+      if (next >= 2500) {
         setIsPlaying(false);
         return prev;
       }
@@ -164,7 +166,7 @@ const WaterPoloCourt: React.FC<WaterPoloCourtProps> = ({
         
         <Timeline
           currentTime={currentTime}
-          duration={ANIMATION_DURATION}
+          duration={2500}
           keyframes={keyframes.map(kf => kf.time)}
           isPlaying={isPlaying}
           onTimeChange={setCurrentTime}

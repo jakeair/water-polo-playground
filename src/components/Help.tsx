@@ -17,9 +17,9 @@ const Help = () => {
         <Button 
           variant="ghost" 
           size="icon"
-          className="w-10 h-10 rounded-lg bg-blue-500 hover:bg-blue-600"
+          className="w-12 h-12 rounded-lg bg-blue-500 hover:bg-blue-600 border-2 border-blue-500"
         >
-          <HelpCircle className="w-6 h-6 text-white" />
+          <HelpCircle className="w-8 h-8 text-white" />
         </Button>
       </DialogTrigger>
       <DialogContent className="max-w-3xl max-h-[80vh] bg-white border-gray-200">

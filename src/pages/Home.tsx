@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { SidebarProvider } from '@/components/ui/sidebar';
-import Navigation from '@/components/Navigation';
 import { Button } from '@/components/ui/button';
 import { Play } from 'lucide-react';
 
@@ -9,9 +8,6 @@ const Home = () => {
   return (
     <SidebarProvider>
       <div className="relative min-h-screen w-full bg-gradient-to-br from-[#F8FAFC] via-white to-[#EFF6FF]">
-        {/* Navigation Bar */}
-        <Navigation />
-
         {/* Background pattern */}
         <div className="absolute inset-0 opacity-[0.03]">
           <div className="absolute inset-0" style={{

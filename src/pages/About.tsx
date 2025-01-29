@@ -13,10 +13,7 @@ const AboutPage = () => {
       
       <div className="max-w-[1400px] mx-auto pt-28 sm:pt-32 px-4 sm:px-6">
         <div className="flex flex-col items-center justify-center min-h-[60vh] text-center">
-          <p className="text-xl sm:text-2xl text-gray-700 mb-4">
-            Hi, there.
-          </p>
-          <p className="text-lg sm:text-xl text-gray-600">
+          <p className="text-lg sm:text-xl text-gray-600 font-medium tracking-wide hover:text-blue-600 transition-colors">
             Inquiries DM @waterpolostrategy
           </p>
         </div>
